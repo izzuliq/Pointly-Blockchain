@@ -1,4 +1,4 @@
-const sql = import('mssql');
+import sql from 'mssql';
 
 const dbConfig = {
   user: 'your-username',
@@ -21,4 +21,4 @@ const connectDB = async () => {
   }
 };
 
-module.exports = { sql, connectDB };
+export { sql, connectDB };

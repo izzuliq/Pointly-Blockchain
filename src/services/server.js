@@ -1,7 +1,7 @@
-const express = import('express');
-const bodyParser = import('body-parser');
-const { connectDB } = import('./db');
-const { signUp, login } = import('./authController');
+import express from 'express';
+import bodyParser from 'body-parser';
+import { connectDB } from './db.js';
+import { signUp, login } from './SignUp.js';
 
 const app = express();
 const port = 5000; // or any port you want to use

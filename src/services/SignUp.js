@@ -1,6 +1,6 @@
-const bcrypt = import('bcryptjs');
-const jwt = import('jsonwebtoken');
-const { sql } = import('./db');
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { sql } from './db.js'; // Assuming db.js exports sql connection
 
 // Handle user sign-up
 const signUp = async (req, res) => {
@@ -22,10 +22,15 @@ const signUp = async (req, res) => {
       INSERT INTO ShopAdmins (Email, PasswordHash, Role) 
       VALUES (@Email, @PasswordHash, @Role)
     `;
-    await sql.query(query, { email, PasswordHash: hashedPassword, Role: role });
+    
+    await sql.query(query, { 
+      email, 
+      PasswordHash: hashedPassword, 
+      Role: role 
+    });
 
     // Send a success message or token
-    const token = jwt.sign({ email }, 'your-secret-key', { expiresIn: '1h' });
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Use an environment variable for the secret
     res.status(201).json({ message: 'Sign-up successful', token });
   } catch (err) {
     console.error('Sign-up error:', err);
@@ -33,7 +38,7 @@ const signUp = async (req, res) => {
   }
 };
 
-// Handle user login (optional)
+// Handle user login
 const login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -52,7 +57,7 @@ const login = async (req, res) => {
     }
 
     // Create JWT token
-    const token = jwt.sign({ email: user.Email, role: user.Role }, 'your-secret-key', { expiresIn: '1h' });
+    const token = jwt.sign({ email: user.Email, role: user.Role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ message: 'Login successful', token });
   } catch (err) {
@@ -61,4 +66,4 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { signUp, login };
+export { signUp, login };
