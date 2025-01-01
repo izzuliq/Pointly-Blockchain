@@ -1,81 +1,87 @@
 const express = require('express');
 const sql = require('mssql');
-const dotenv = require('dotenv');
 const cors = require('cors');
 
-dotenv.config();
 const app = express();
-
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
-// Database connection configuration
+// MSSQL Configuration
 const dbConfig = {
   user: 'your_username',
   password: 'your_password',
-  server: 'your_server_address',
-  database: 'MultiShopSystem',
-  options: {
-    encrypt: true,
-    trustServerCertificate: true,
-  },
+  server: 'your_server',
+  database: 'your_database',
 };
 
-// Route: Get Dashboard Data
-app.get('/dashboard', async (req, res) => {
-  // Assuming userId is sent as a query parameter (or could be decoded from a JWT)
-  const userId = req.query.userId;
-
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID is required.' });
-  }
+// Fetch User Profile and Points
+app.get('/api/dashboard/user/:userID', async (req, res) => {
+  const { userID } = req.params;
 
   try {
     const pool = await sql.connect(dbConfig);
 
-    // Fetch user profile
-    const userProfile = await pool
-      .request()
-      .input('userId', sql.Int, userId)
-      .query(
-        `SELECT Name, PictureUrl, TotalPoints, AvailablePoints 
-         FROM Users 
-         WHERE Id = @userId`
-      );
+    const result = await pool.request()
+      .input('UserID', sql.Int, userID)
+      .query(`
+        SELECT Name, Tier, PointsTotal, PointsAvailable
+        FROM Users
+        WHERE UserID = @UserID
+      `);
 
-    if (userProfile.recordset.length === 0) {
-      return res.status(404).json({ message: 'User not found.' });
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    // Fetch recent activities
-    const recentActivities = await pool
-      .request()
-      .input('userId', sql.Int, userId)
-      .query(
-        `SELECT Activity, Timestamp 
-         FROM Activities 
-         WHERE UserId = @userId 
-         ORDER BY Timestamp DESC 
-         OFFSET 0 ROWS FETCH NEXT 5 ROWS ONLY`
-      );
-
-    // Calculate progress (example logic)
-    const progress = Math.min(
-      100,
-      (userProfile.recordset[0].AvailablePoints / 1000) * 100
-    );
-
-    res.status(200).json({
-      profile: userProfile.recordset[0],
-      recentActivities: recentActivities.recordset,
-      progress,
-    });
-  } catch (err) {
-    console.error('Database error:', err);
-    res.status(500).json({ message: 'Server error.', error: err.message });
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
+// Fetch Recent Activities
+app.get('/api/dashboard/activities/:userID', async (req, res) => {
+  const { userID } = req.params;
+
+  try {
+    const pool = await sql.connect(dbConfig);
+
+    const result = await pool.request()
+      .input('UserID', sql.Int, userID)
+      .query(`
+        SELECT ActivityDescription, PointsEarned, Timestamp
+        FROM Activities
+        WHERE UserID = @UserID
+        ORDER BY Timestamp DESC
+        OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
+      `);
+
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Fetch Treasure Tiers
+app.get('/api/dashboard/tiers', async (req, res) => {
+  try {
+    const pool = await sql.connect(dbConfig);
+
+    const result = await pool.request()
+      .query(`
+        SELECT TierName, Description, Rewards
+        FROM Tiers
+      `);
+
+    res.json(result.recordset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+// Start Server
+const PORT = 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
