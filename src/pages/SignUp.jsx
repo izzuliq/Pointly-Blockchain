@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -8,7 +9,7 @@ function SignUpPage() {
   const [role, setRole] = useState('user'); // Default role is 'user'
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Simple validation to check if passwords match
@@ -17,12 +18,31 @@ function SignUpPage() {
       return;
     }
 
-    // Simulate sign-up logic (replace with actual sign-up logic)
-    if (email && password) {
-      alert(`Signed up as ${role}`);
+    try {
+      // Make a POST request to the backend API
+      const response = await axios.post('http://localhost:5000/signup', {
+        email,
+        password,
+        role,
+      });
+
+      // Handle success response
+      alert(response.data.message); // e.g., "User registered successfully"
       navigate('/login'); // Redirect to login after successful sign-up
-    } else {
-      alert('Please fill in all fields.');
+    } catch (err) {
+      // Handle error response
+      if (err.response) {
+        // Server responded with a status other than 200 range
+        alert(err.response.data.message || 'Sign-up failed');
+      } else if (err.request) {
+        // Request was made, but no response was received
+        console.error('No response from server:', err.request);
+        alert('No response from server. Please try again later.');
+      } else {
+        // Something else caused the error
+        console.error('Error during sign-up:', err.message);
+        alert('An error occurred during sign-up. Please try again later.');
+      }
     }
   };
 
