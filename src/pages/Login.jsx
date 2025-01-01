@@ -38,7 +38,7 @@ function LoginPage() {
   };  
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-start bg-purple">
+    <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">
       {/* Header Section */}
       <header className="flex flex-col items-center text-center mt-10 mb-8">
         <img src="./PointlyLogoWhite.png" alt="Company Logo" className="w-[200px] h-auto mb-4" />
