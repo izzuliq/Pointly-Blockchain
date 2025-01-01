@@ -7,23 +7,35 @@ function LoginPage() {
   const [role, setRole] = useState('user'); // Default role is 'user'
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Simulate login logic (replace with actual authentication logic)
-    if (email === "test@example.com" && password === "password") {
-      alert(`Logged in as ${role}`);
-
-      // Redirect based on the role
-      if (role === 'user') {
-        navigate('/home'); // Redirect to user home
-      } else if (role === 'vendor') {
-        navigate('/vendor-home'); // Redirect to vendor admin's home
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert('Login successful');
+  
+        // Redirect based on the role
+        if (role === 'user') {
+          navigate('/home'); // Redirect to user home
+        } else if (role === 'vendor') {
+          navigate('/vendor-home'); // Redirect to vendor home
+        }
+      } else {
+        alert(data.message || 'Login failed');
       }
-    } else {
-      alert("Invalid credentials");
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong. Please try again later.');
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple">
