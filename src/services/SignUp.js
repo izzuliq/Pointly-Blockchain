@@ -1,64 +1,64 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcryptjs');
-const sql = require('mssql');
-const cors = require('cors');
+const bcrypt = import('bcryptjs');
+const jwt = import('jsonwebtoken');
+const { sql } = import('./db');
 
-// MSSQL Configuration
-const dbConfig = {
-  user: 'your_username',
-  password: 'your_password',
-  server: 'your_server',
-  database: 'your_database',
-  options: {
-    encrypt: true,
-    trustServerCertificate: true, // For self-signed certificates
-  },
-};
-
-const app = express();
-app.use(bodyParser.json());
-app.use(cors());
-
-// API Endpoint for User Registration
-app.post('/api/signup', async (req, res) => {
+// Handle user sign-up
+const signUp = async (req, res) => {
   const { email, password, role } = req.body;
 
-  if (!email || !password || !role) {
-    return res.status(400).json({ message: 'All fields are required' });
+  try {
+    // Check if email already exists
+    const result = await sql.query`SELECT * FROM ShopAdmins WHERE Email = ${email}`;
+    if (result.recordset.length > 0) {
+      return res.status(400).json({ message: 'Email already exists.' });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    // Insert new user into ShopAdmins table
+    const query = `
+      INSERT INTO ShopAdmins (Email, PasswordHash, Role) 
+      VALUES (@Email, @PasswordHash, @Role)
+    `;
+    await sql.query(query, { email, PasswordHash: hashedPassword, Role: role });
+
+    // Send a success message or token
+    const token = jwt.sign({ email }, 'your-secret-key', { expiresIn: '1h' });
+    res.status(201).json({ message: 'Sign-up successful', token });
+  } catch (err) {
+    console.error('Sign-up error:', err);
+    res.status(500).json({ message: 'Server error' });
   }
+};
+
+// Handle user login (optional)
+const login = async (req, res) => {
+  const { email, password } = req.body;
 
   try {
-    // Hash the password
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    // Connect to the database
-    const pool = await sql.connect(dbConfig);
-
-    // Insert the user into the database
-    const result = await pool.request()
-      .input('Email', sql.NVarChar, email)
-      .input('PasswordHash', sql.NVarChar, passwordHash)
-      .input('Role', sql.NVarChar, role)
-      .query(`
-        INSERT INTO Users (Email, PasswordHash, Role) 
-        VALUES (@Email, @PasswordHash, @Role)
-      `);
-
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (err) {
-    if (err.originalError && err.originalError.info && err.originalError.info.number === 2627) {
-      // Unique constraint error
-      res.status(400).json({ message: 'Email already exists' });
-    } else {
-      console.error(err);
-      res.status(500).json({ message: 'Internal server error' });
+    const result = await sql.query`SELECT * FROM ShopAdmins WHERE Email = ${email}`;
+    if (result.recordset.length === 0) {
+      return res.status(400).json({ message: 'Email or password is incorrect' });
     }
-  }
-});
 
-// Start the server
-const PORT = 5000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+    const user = result.recordset[0];
+
+    // Check if password matches
+    const isMatch = await bcrypt.compare(password, user.PasswordHash);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Email or password is incorrect' });
+    }
+
+    // Create JWT token
+    const token = jwt.sign({ email: user.Email, role: user.Role }, 'your-secret-key', { expiresIn: '1h' });
+
+    res.json({ message: 'Login successful', token });
+  } catch (err) {
+    console.error('Login error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { signUp, login };

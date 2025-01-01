@@ -12,31 +12,36 @@ function SignUpPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    // Simple validation to check if passwords match
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
   
     try {
+      // Call the backend API for sign-up
       const response = await fetch('http://localhost:5000/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({
+          email,
+          password,
+          role,
+        }),
       });
   
       const data = await response.json();
-  
       if (response.ok) {
-        alert('Sign-up successful! Please log in.');
+        alert(`Signed up as ${role}`);
         navigate('/login');
       } else {
-        alert(data.message || 'Sign-up failed');
+        alert(data.message || 'Error during sign-up');
       }
-    } catch (error) {
-      console.error(error);
-      alert('Something went wrong. Please try again later.');
+    } catch (err) {
+      console.error('Error:', err);
+      alert('Something went wrong');
     }
-  };  
+  }; 
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple">

@@ -1,0 +1,50 @@
+-- Switch to the database
+USE RewardLoyaltySystem;
+
+CREATE TABLE Shops (
+    ShopID INT PRIMARY KEY IDENTITY(1,1), -- Unique shop ID
+    ShopName NVARCHAR(100) NOT NULL, -- Name of the shop
+    Location NVARCHAR(100), -- Location of the shop
+    ShopType NVARCHAR(50) -- Type of shop (e.g., Restaurant, Retail)
+);
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY IDENTITY(1,1), -- Unique customer ID
+    Name NVARCHAR(100) NOT NULL, -- Full name of the customer
+    Email NVARCHAR(100) UNIQUE NOT NULL, -- Unique email for login
+    TokenBalance INT DEFAULT 0 -- Total tokens the customer has
+);
+
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY IDENTITY(1,1), -- Unique transaction ID
+    ShopID INT FOREIGN KEY REFERENCES Shops(ShopID) ON DELETE CASCADE, -- Shop involved
+    CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID) ON DELETE CASCADE, -- Customer involved
+    Amount DECIMAL(10,2) NOT NULL, -- Transaction amount
+    TokensEarned INT NOT NULL, -- Tokens earned from the transaction
+    TransactionDate DATETIME DEFAULT GETDATE() -- Date and time of the transaction
+);
+
+CREATE TABLE Redemptions (
+    RedemptionID INT PRIMARY KEY IDENTITY(1,1), -- Unique redemption ID
+    CustomerID INT FOREIGN KEY REFERENCES Customers(CustomerID) ON DELETE CASCADE, -- Customer redeeming tokens
+    ShopID INT FOREIGN KEY REFERENCES Shops(ShopID) ON DELETE CASCADE, -- Shop where redemption occurred
+    TokensUsed INT NOT NULL, -- Tokens redeemed
+    RedemptionDate DATETIME DEFAULT GETDATE() -- Date and time of redemption
+);
+
+CREATE TABLE Rewards (
+    RewardID INT PRIMARY KEY IDENTITY(1,1), -- Unique reward ID
+    RewardName NVARCHAR(100) NOT NULL, -- Name of the reward
+    Description NVARCHAR(255), -- Description of the reward
+    PointsRequired INT NOT NULL, -- Tokens needed to redeem
+    ShopID INT FOREIGN KEY REFERENCES Shops(ShopID) -- Shop offering the reward (NULL for global rewards)
+);
+
+CREATE TABLE ShopAdmins (
+    AdminID INT PRIMARY KEY IDENTITY(1,1), -- Unique admin ID
+    ShopID INT FOREIGN KEY REFERENCES Shops(ShopID) ON DELETE CASCADE, -- Shop managed by the admin
+    AdminName NVARCHAR(100) NOT NULL, -- Admin's full name
+    Email NVARCHAR(100) UNIQUE NOT NULL, -- Unique email for login
+    PasswordHash NVARCHAR(255) NOT NULL, -- Encrypted password
+    Role NVARCHAR(50) DEFAULT 'Manager' -- Role (e.g., Manager, Staff)
+);
