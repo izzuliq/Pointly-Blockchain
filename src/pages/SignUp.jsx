@@ -8,23 +8,34 @@ function SignUpPage() {
   const [role, setRole] = useState('user'); // Default role is 'user'
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Simple validation to check if passwords match
+  
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-
-    // Simulate sign-up logic (replace with actual sign-up logic)
-    if (email && password) {
-      alert(`Signed up as ${role}`);
-      navigate('/login'); // Redirect to login after successful sign-up
-    } else {
-      alert('Please fill in all fields.');
+  
+    try {
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert('Sign-up successful! Please log in.');
+        navigate('/login');
+      } else {
+        alert(data.message || 'Sign-up failed');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong. Please try again later.');
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple">
