@@ -24,28 +24,28 @@ function Home() {
       <h2 className="text-3xl font-bold text-purple-dark">Why Should I Use Pointly?</h2>
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {/* Feature 1 */}
-        <div className="bg-gold-dark shadow-lg rounded-lg p-6 flex items-center">
-          <img src="./Reward.png" alt="Feature 1" className="w-28 h-28 mr-4"/>
-          <div>
-            <h3 className="text-xl font-semibold text-white">Centralized Rewards</h3>
+        <div className="bg-gold-dark shadow-lg rounded-lg p-6 flex flex-col items-center">
+          <img src="./Reward.png" alt="Feature 1" className="max-w-[300px] max-h-[300px] mb-4" />
+          <div className="text-center">
+            <h3 className="text-3xl font-semibold text-white">Centralized Rewards</h3>
             <p className="text-white">Manage all your reward points from different vendors in one convenient platform.</p>
           </div>
         </div>
 
         {/* Feature 2 */}
-        <div className="bg-gold-dark shadow-lg rounded-lg p-6 flex items-center">
-          <img src="./Redemption.png" alt="Feature 2" className="w-24 h-24 mr-4"/>
-          <div>
-            <h3 className="text-xl font-semibold text-white">Easy Redemption</h3>
+        <div className="bg-gold-dark shadow-lg rounded-lg p-6 flex flex-col items-center">
+          <img src="./Redemption.png" alt="Feature 2" className="max-w-[300px] max-h-[300px] mb-4" />
+          <div className="text-center">
+            <h3 className="text-3xl font-semibold text-white">Easy Redemption</h3>
             <p className="text-white">Easily redeem your points for rewards, discounts, and exclusive offers.</p>
           </div>
         </div>
 
         {/* Feature 3 */}
-        <div className="bg-gold-dark shadow-lg rounded-lg p-6 flex items-center">
-          <img src="./Track.png" alt="Feature 3" className="w-24 h-24 mr-4"/>
-          <div>
-            <h3 className="text-xl font-semibold text-white">Track Your Points</h3>
+        <div className="bg-gold-dark shadow-lg rounded-lg p-6 flex flex-col items-center">
+          <img src="./Track.png" alt="Feature 3" className="max-w-[300px] max-h-[300px] mb-4" />
+          <div className="text-center">
+            <h3 className="text-3xl font-semibold text-white">Track Your Points</h3>
             <p className="text-white">Keep track of your accumulated points and monitor your progress towards rewards.</p>
           </div>
         </div>
@@ -70,7 +70,7 @@ function Home() {
 
       {/* Image Section */}
       <div className="mt-12">
-        <img src="https://via.placeholder.com/600x300" alt="Pointly Illustration" className="w-full rounded-lg shadow-lg"/>
+        <img src="Banner1.png" alt="Pointly Illustration" className="w-full max-w-[1000px] max-h-[500px] rounded-lg shadow-lg"/>
       </div>
     </div>
   );

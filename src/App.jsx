@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Dashboard from './pages/Dashboard'; 
 import Rewards from './pages/Rewards'; 
 import Profile from './pages/Profile'; 
+import EditProfile from './pages/EditProfile';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/rewards" element={<Rewards />} />
+            <Route path="/editprofile" element={<EditProfile />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
         </main>

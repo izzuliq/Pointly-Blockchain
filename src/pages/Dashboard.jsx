@@ -10,12 +10,12 @@ function Dashboard() {
       {/* User Profile Section */}
       <div className="mt-6 flex items-center space-x-4">
         <img 
-          src="https://via.placeholder.com/100" 
+          src="Sarimah.png" 
           alt="User Avatar" 
           className="w-20 h-20 rounded-full object-cover"
         />
         <div>
-          <h3 className="text-xl font-semibold text-gray-800">John Doe</h3>
+          <h3 className="text-xl font-semibold text-gray-800">Sarimah Jalil</h3>
           <p className="text-gray-500">Loyalty Member</p>
         </div>
       </div>

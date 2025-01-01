@@ -42,7 +42,7 @@ function Rewards() {
           {/* Reward 2 */}
           <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
             <img 
-              src="./Sarimah.png" 
+              src="./Voucher.png" 
               alt="Gift Voucher" 
               className="max-w-[300px] max-h-[300px] object-cover mb-4 rounded-lg"  // Image with size
             />

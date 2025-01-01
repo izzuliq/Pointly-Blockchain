@@ -29,7 +29,7 @@ function ReviewsCarousel() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentReview((prevReview) => (prevReview + 1) % reviews.length);
-    }, 3000); // 3000ms = 3 seconds
+    }, 5000); // 3000ms = 3 seconds
 
     // Clean up interval on component unmount
     return () => clearInterval(interval);
