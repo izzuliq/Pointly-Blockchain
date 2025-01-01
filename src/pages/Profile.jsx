@@ -16,11 +16,13 @@ function ProfilePage() {
       <Navbar />
       <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto font-cabin">
         <h2 className="text-3xl font-cabin text-gray-800 text-center">
-          Vendor Profile
+          User Profile
         </h2>
         <p className="mt-2 text-gray-600 text-center">
           View and manage your account details.
         </p>
+
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         <div className="mt-8 flex flex-col items-center">
           {/* Profile Picture */}

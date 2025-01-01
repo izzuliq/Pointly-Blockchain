@@ -32,12 +32,14 @@ function EditProfilePage() {
     <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto text-center font-cabin">
       <h2 className="text-3xl font-cabin text-gray-800 text-center">Edit Profile</h2>
       <p className="mt-2 text-gray-600 text-center">Update your account details below.</p>
+
+      <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
       
       <div className="mt-8 flex flex-col items-center">
         {/* Profile Picture */}
         <div className="w-24 h-24 mb-4 rounded-full overflow-hidden">
           <img
-            src={profilePicture}  // Display the profile picture (either default or uploaded)
+            src={profilePicture}  
             alt="Profile"
             className="w-full h-full object-cover"
           />

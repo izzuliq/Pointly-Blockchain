@@ -13,7 +13,13 @@ function LoginPage() {
     // Simulate login logic (replace with actual authentication logic)
     if (email === "test@example.com" && password === "password") {
       alert(`Logged in as ${role}`);
-      navigate('/home'); // Redirect to home after successful login
+
+      // Redirect based on the role
+      if (role === 'user') {
+        navigate('/home'); // Redirect to user home
+      } else if (role === 'vendor') {
+        navigate('/vendor-home'); // Redirect to vendor admin's home
+      }
     } else {
       alert("Invalid credentials");
     }
@@ -60,7 +66,7 @@ function LoginPage() {
             />
           </div>
 
-          {/* Role Selection - Dropdown (optional) */}
+          {/* Role Selection - Dropdown */}
           <div className="w-full mb-4">
             <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">Select Role</label>
             <select

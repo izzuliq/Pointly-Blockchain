@@ -7,7 +7,7 @@ function Home() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col items-center justify-center h-full p-6">
+      <div className="flex flex-col items-center justify-center h-full p-6 font-cabin">
         {/* Header */}
         <img src="./PointlyLogoBlack.png" alt="Company Logo" className="mt-20 mb-6 w-[300px] h-auto" />
         <h1 className="text-5xl font-bold text-purple">Welcome to Pointly</h1>
@@ -22,7 +22,7 @@ function Home() {
           </p>
         </div>
 
-        <hr className="my-8 w-3/4 border-t-4 border-gray-300 mx-auto mb-10 mt-10" />
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Features Section */}
         <h2 className="text-3xl font-bold text-purple-dark">Why Should I Use Pointly?</h2>
@@ -55,13 +55,13 @@ function Home() {
           </div>
         </div>
 
-        <hr className="my-8 w-3/4 border-t-4 border-gray-300 mx-auto mb-10 mt-10" />
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Review Section */}
         <h2 className="text-3xl mt-5 font-bold text-purple-dark">Hear What Our Users Have To Say!</h2>
         <ReviewsCarousel /> {/* Insert the ReviewsCarousel component here */}
 
-        <hr className="my-8 w-3/4 border-t-4 border-gray-300 mx-auto mb-10 mt-10" />
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Call to Action */}
         <div className="mt-5 text-center">

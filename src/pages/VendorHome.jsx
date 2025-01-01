@@ -20,7 +20,7 @@ function VendorHome() {
           </p>
         </div>
 
-        <hr className="my-8 w-3/4 border-t-4 border-gray-300 mx-auto mb-10 mt-10" />
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Features Section */}
         <h2 className="text-3xl font-bold text-purple-dark">Why Partner with Pointly?</h2>
@@ -53,7 +53,7 @@ function VendorHome() {
           </div>
         </div>
 
-        <hr className="my-8 w-3/4 border-t-4 border-gray-300 mx-auto mb-10 mt-10" />
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Call to Action */}
         <div className="mt-5 text-center">

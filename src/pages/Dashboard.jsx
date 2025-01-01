@@ -12,6 +12,8 @@ function Dashboard() {
         Track your activities, points, and progress towards your next treasure tier.
       </p>
 
+      <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
+
       {/* User Profile Section */}
       <div className="mt-6 flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-6">
         <img
@@ -26,7 +28,7 @@ function Dashboard() {
       </div>
 
       {/* Points Overview Section */}
-      <div className="mt-8 bg-purple-100 p-4 rounded-lg shadow-sm w-full mx-auto">
+      <div className="mt-8 bg-gold-100 p-4 rounded-lg shadow-sm w-full mx-auto">
         <h3 className="text-lg font-semibold text-gray-800 text-center">Points Overview</h3>
         <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-64"> {/* Flex with stacking on small screens */}
           <div className="text-center">
@@ -60,7 +62,7 @@ function Dashboard() {
       </div>
 
       {/* Tier System Section */}
-      <div className="mt-8 bg-purple-100 p-6 rounded-lg shadow-sm w-full mx-auto">
+      <div className="mt-8 bg-gold-100 p-6 rounded-lg shadow-sm w-full mx-auto">
         <h3 className="text-lg font-semibold text-gray-800 text-center">Your Treasure Tier</h3>
         <p className="mt-2 text-gray-600 text-center">
           Unlock exclusive rewards and privileges as you level up your treasure tier!

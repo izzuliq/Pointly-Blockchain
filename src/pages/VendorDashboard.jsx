@@ -44,50 +44,51 @@ function VendorDashboard() {
     <div className="flex flex-col min-h-screen">
       <VendorNavbar />
       <div className="flex-grow p-6 font-cabin">
-        <h1 className="text-3xl font-cabin text-gray-800 text-center mb-10">Vendor Dashboard</h1>
+        <h1 className="text-3xl font-cabin text-gray-800 text-center">Vendor Dashboard</h1>
+        <p className="mt-2 text-gray-600 text-center">Manage your promotions and track customer engagement.</p>
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
         
         {/* Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
           {/* Total Redemptions */}
-          <div className="bg-purple-200 p-4 rounded-lg shadow-md font-cabin">
-            <h3 className="text-lg font-cabin">Total Redemptions</h3>
-            <p className="text-2xl">1,200</p>
+          <div className="bg-gold-dark p-4 rounded-lg shadow-md font-cabin">
+            <h3 className="text-lg text-white font-cabin">Total Redemptions</h3>
+            <p className="text-2xl text-white">1,200</p>
           </div>
           
           {/* Active Promotions */}
-          <div className="bg-purple-200 p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-cabin">Active Promotions</h3>
-            <p className="text-2xl">10</p>
+          <div className="bg-gold-dark p-4 rounded-lg shadow-md">
+            <h3 className="text-lg text-white font-cabin">Active Promotions</h3>
+            <p className="text-2xl text-white">10</p>
           </div>
           
           {/* Revenue Generated */}
-          <div className="bg-purple-200 p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-cabin">Revenue Generated</h3>
-            <p className="text-2xl">RM15,450</p>
+          <div className="bg-gold-dark p-4 rounded-lg shadow-md">
+            <h3 className="text-lg text-white font-cabin">Revenue Generated</h3>
+            <p className="text-2xl text-white">RM15,450</p>
           </div>
           
           {/* Upcoming Promotions */}
-          <div className="bg-purple-200 p-4 rounded-lg shadow-md">
-            <h3 className="text-lg font-cabin">Upcoming Promotions</h3>
-            <p className="text-2xl">3</p>
+          <div className="bg-gold-dark p-4 rounded-lg shadow-md">
+            <h3 className="text-lg text-white font-cabin">Upcoming Promotions</h3>
+            <p className="text-2xl text-white">3</p>
           </div>
         </div>
 
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
+
         {/* Analytics */}
-      <div className="mt-6">
-        <h2 className="text-2xl font-cabin mb-4 mt-10 text-center">Redemption Trends</h2>
-        <div className="bg-white shadow-lg p-6 rounded-lg">
-          {/* Line Chart for Redemption Trends */}
-          <div className="flex justify-center items-center h-[500px] w-full">
-            {/* Center the chart horizontally and vertically */}
-            <div className="w-3/4">
+        <div className="mt-6">
+          <h2 className="text-2xl font-cabin mb-10 mt-10 text-center">Redemption Trends</h2>
+          <div className="bg-white shadow-lg p-6 rounded-lg flex justify-center items-center">
+            {/* Line Chart for Redemption Trends */}
+            <div className="w-full md:w-3/4 lg:w-1/2">
               <Line data={chartData} />
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   );
 }
 

@@ -30,6 +30,8 @@ function VendorEditAdminPage() {
         <h2 className="text-3xl font-cabin text-gray-800">Edit Admin Profile</h2>
         <p className="mt-2 text-gray-600">Update your admin details below.</p>
 
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
+
         <div className="mt-8 flex flex-col items-center">
           {/* Profile Picture */}
           <div className="w-24 h-24 mb-4 rounded-full overflow-hidden">

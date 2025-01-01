@@ -47,7 +47,7 @@ function ReviewsCarousel() {
 
   return (
     <div className="mt-12 w-full max-w-[800px] mx-auto text-center">
-      <div className="bg-white shadow-lg rounded-lg p-8">
+      <div className="bg-white shadow-xl rounded-lg p-8">
         <div className="flex items-center justify-center">
         {/* Review Image */}
         <img

@@ -29,6 +29,8 @@ function VendorProfile() {
           View and manage your vendor details.
         </p>
 
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
+
         {/* Admin Profile Section */}
         <div className="mt-8">
           <h3 className="text-2xl font-semibold text-purple-dark text-center mb-4">
@@ -77,6 +79,8 @@ function VendorProfile() {
             </Link>
           </div>
         </div>
+
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Company Profile Section */}
         <div className="mt-8">

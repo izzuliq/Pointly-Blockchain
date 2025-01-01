@@ -18,15 +18,17 @@ function VendorRewards() {
   return (
     <>
       <VendorNavbar />
-      <div className="p-6 bg-white shadow-md rounded-lg">
+      <div className="p-6 bg-white shadow-md rounded-lg font-cabin">
         {/* Page Header */}
         <h2 className="text-3xl font-cabin text-gray-800 text-center">Manage Rewards</h2>
         <p className="mt-2 text-gray-600 text-center">Create, update, and monitor rewards for your customers.</p>
 
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
+
         {/* Rewards Overview Section */}
-        <div className="mt-6 bg-purple-100 p-4 rounded-lg shadow-sm">
+        <div className="mt-6 bg-gold-100 p-4 rounded-lg shadow-sm w-3/4 items-center mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Your Company Rewards Overview</h3>
-          <div className="mt-4 flex justify-between">
+          <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-64">
             <div>
               <h4 className="text-xl font-semibold text-gray-700 text-center">5</h4>
               <p className="text-gray-500 text-center">Total Rewards</p>
@@ -41,13 +43,14 @@ function VendorRewards() {
             </div>
           </div>
         </div>
+        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Rewards Section */}
         <div className="mt-8">
-          <h3 className="text-lg font-semibold text-gray-800">Available Rewards</h3>
+          <h3 className="text-lg font-semibold text-gray-800 text-center">Available Rewards</h3>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Reward 1 */}
-            <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
+            <div className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
               <img
                 src="./Coffee.png"
                 alt="Free Coffee"
@@ -77,7 +80,7 @@ function VendorRewards() {
             </div>
 
             {/* Reward 2 */}
-            <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
+            <div className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
               <img
                 src="./Voucher.png"
                 alt="Gift Voucher"
@@ -107,7 +110,7 @@ function VendorRewards() {
             </div>
 
             {/* Reward 3 */}
-            <div className="bg-white p-4 rounded-lg shadow-md flex flex-col items-center">
+            <div className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
               <img
                 src="./Discount.png"
                 alt="Exclusive Discount"

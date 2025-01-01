@@ -16,6 +16,7 @@ export default {
           light: '#f5cc00',  // Light gold
           DEFAULT: '#FFD700',  // Default gold
           dark: '#B8860B',  // Dark gold
+          100: '#ecd598',  // Light gold
         },
       },
       fontFamily: {
