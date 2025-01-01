@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate for navigation
-import Navbar from "../components/Navbar";
+import Navbar from "../components/UserNavbar";
 
 function Rewards() {
   const navigate = useNavigate(); // Initialize the useNavigate hook
@@ -13,22 +13,22 @@ function Rewards() {
   return (
     <>
       <Navbar />
-      <div className="p-6 bg-white shadow-md rounded-lg">
+      <div className="p-6 bg-white shadow-md rounded-lg text-center">
         {/* Page Header */}
-        <h2 className="text-2xl font-semibold text-gray-800">Rewards</h2>
+        <h2 className="text-3xl font-cabin text-gray-800 text-center">Rewards</h2>
         <p className="mt-2 text-gray-600">Redeem your points for amazing rewards.</p>
 
         {/* Points Overview Section */}
-        <div className="mt-6 bg-purple-100 p-4 rounded-lg shadow-sm">
-          <h3 className="text-lg font-semibold text-gray-800">Your Points</h3>
-          <div className="mt-4 flex justify-between">
-            <div>
-              <h4 className="text-xl font-semibold text-gray-700">1200</h4>
-              <p className="text-gray-500">Available Points</p>
+        <div className="mt-8 bg-purple-100 p-4 rounded-lg shadow-sm w-full md:w-3/4 mx-auto">
+          <h3 className="text-lg font-semibold text-gray-800 text-center">Points Overview</h3>
+          <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-64"> {/* Flex with stacking on small screens */}
+            <div className="text-center">
+              <h4 className="text-xl font-semibold text-gray-700">1000</h4>
+              <p className="text-gray-500">Total Points</p>
             </div>
-            <div>
+            <div className="text-center mt-4 sm:mt-0">
               <h4 className="text-xl font-semibold text-gray-700">500</h4>
-              <p className="text-gray-500">Points Needed to Redeem</p>
+              <p className="text-gray-500">Available Points</p>
             </div>
           </div>
         </div>

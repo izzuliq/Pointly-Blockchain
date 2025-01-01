@@ -13,7 +13,7 @@ export default {
           dark: '#4B0082',  // Dark purple
         },
         gold: {
-          light: '#F5D300',  // Light gold
+          light: '#f5cc00',  // Light gold
           DEFAULT: '#FFD700',  // Default gold
           dark: '#B8860B',  // Dark gold
         },

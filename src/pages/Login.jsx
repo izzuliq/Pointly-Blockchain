@@ -71,7 +71,6 @@ function LoginPage() {
               required
             >
               <option value="user">User</option>
-              <option value="admin">Admin</option>
               <option value="vendor">Vendor</option>
             </select>
           </div>
@@ -87,7 +86,7 @@ function LoginPage() {
           {/* Link to Sign-Up Page */}
           <p className="mt-4 text-center font-cabin font-cabin">
             Don't have an account?{" "}
-            <a href="/signup" className="text-purple">Sign up here</a>
+            <a href="/" className="text-purple">Sign up here</a>
           </p>
         </form>
       </div>

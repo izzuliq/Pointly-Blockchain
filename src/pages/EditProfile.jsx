@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Navbar from "../components/Navbar";
+import Navbar from "../components/UserNavbar";
 
 function EditProfilePage() {
   const [name, setName] = useState("John Doe");
@@ -29,9 +29,9 @@ function EditProfilePage() {
   return (
     <>
     <Navbar />
-    <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto">
-      <h2 className="text-3xl font-semibold text-gray-800">Edit Profile</h2>
-      <p className="mt-2 text-gray-600">Update your account details below.</p>
+    <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto text-center font-cabin">
+      <h2 className="text-3xl font-cabin text-gray-800 text-center">Edit Profile</h2>
+      <p className="mt-2 text-gray-600 text-center">Update your account details below.</p>
       
       <div className="mt-8 flex flex-col items-center">
         {/* Profile Picture */}
@@ -50,7 +50,7 @@ function EditProfilePage() {
             type="file"
             id="profile-picture"
             onChange={handleImageChange}
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
           />
         </div>
 
@@ -62,7 +62,7 @@ function EditProfilePage() {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
             placeholder="Enter your name"
           />
         </div>
@@ -75,7 +75,7 @@ function EditProfilePage() {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
             placeholder="Enter your email"
           />
         </div>
@@ -88,7 +88,7 @@ function EditProfilePage() {
             id="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
             placeholder="Enter your phone number"
           />
         </div>
@@ -101,7 +101,7 @@ function EditProfilePage() {
             id="address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
             placeholder="Enter your address"
           />
         </div>
@@ -114,7 +114,7 @@ function EditProfilePage() {
             id="dob"
             value={dob}
             onChange={(e) => setDob(e.target.value)}
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+            className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
           />
         </div>
 

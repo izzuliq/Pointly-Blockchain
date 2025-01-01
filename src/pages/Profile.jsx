@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom"; // React Router for navigation
-import Navbar from "../components/Navbar";
+import Navbar from "../components/UserNavbar";
 
 function ProfilePage() {
   const [name, setName] = useState("Sarimah Jalil");
-  const [email, setEmail] = useState("SJalil@gamil.com");
-  const [phone, setPhone] = useState("(60) 123456789");
+  const [email, setEmail] = useState("SJalil@gmail.com");
+  const [phone, setPhone] = useState("(60)123456789");
   const [address, setAddress] = useState(
     "123 Jalan Abu Karam, Kota Bharu, Kelantan, Malaysia"
   );
@@ -14,9 +14,9 @@ function ProfilePage() {
   return (
     <>
       <Navbar />
-      <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto">
-        <h2 className="text-3xl font-semibold text-gray-800 text-center">
-          Profile
+      <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto font-cabin">
+        <h2 className="text-3xl font-cabin text-gray-800 text-center">
+          Vendor Profile
         </h2>
         <p className="mt-2 text-gray-600 text-center">
           View and manage your account details.
@@ -24,7 +24,7 @@ function ProfilePage() {
 
         <div className="mt-8 flex flex-col items-center">
           {/* Profile Picture */}
-          <div className="w-24 h-24 mb-6 rounded-full overflow-hidden">
+          <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
             <img
               src="Sarimah.png"
               alt="Profile"
