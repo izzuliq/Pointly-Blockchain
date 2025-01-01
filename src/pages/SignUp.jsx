@@ -11,40 +11,32 @@ function SignUpPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Simple validation to check if passwords match
+  
     if (password !== confirmPassword) {
       alert('Passwords do not match!');
       return;
     }
-
+  
     try {
-      // Make a POST request to the backend API
-      const response = await axios.post('http://localhost:5000/signup', {
-        email,
-        password,
-        role,
+      const response = await fetch('http://localhost:5000/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
       });
-
-      // Handle success response
-      alert(response.data.message); // e.g., "User registered successfully"
-      navigate('/login'); // Redirect to login after successful sign-up
-    } catch (err) {
-      // Handle error response
-      if (err.response) {
-        // Server responded with a status other than 200 range
-        alert(err.response.data.message || 'Sign-up failed');
-      } else if (err.request) {
-        // Request was made, but no response was received
-        console.error('No response from server:', err.request);
-        alert('No response from server. Please try again later.');
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert('Sign-up successful! Please log in.');
+        navigate('/login');
       } else {
-        // Something else caused the error
-        console.error('Error during sign-up:', err.message);
-        alert('An error occurred during sign-up. Please try again later.');
+        alert(data.message || 'Sign-up failed');
       }
+    } catch (error) {
+      console.error(error);
+      alert('Something went wrong. Please try again later.');
     }
-  };
+  };  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple">

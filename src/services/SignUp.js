@@ -1,30 +1,27 @@
 const express = require('express');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcryptjs');
 const sql = require('mssql');
-const dotenv = require('dotenv');
 const cors = require('cors');
 
-dotenv.config();
-const app = express();
-
-app.use(cors());
-app.use(express.json());
-
-// Database connection configuration
+// MSSQL Configuration
 const dbConfig = {
   user: 'your_username',
   password: 'your_password',
-  server: 'your_server_address',
-  database: 'MultiShopSystem',
+  server: 'your_server',
+  database: 'your_database',
   options: {
     encrypt: true,
-    trustServerCertificate: true,
+    trustServerCertificate: true, // For self-signed certificates
   },
 };
 
-// Route: User Registration
-app.post('/signup', async (req, res) => {
+const app = express();
+app.use(bodyParser.json());
+app.use(cors());
+
+// API Endpoint for User Registration
+app.post('/api/signup', async (req, res) => {
   const { email, password, role } = req.body;
 
   if (!email || !password || !role) {
@@ -32,39 +29,36 @@ app.post('/signup', async (req, res) => {
   }
 
   try {
+    // Hash the password
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    // Connect to the database
     const pool = await sql.connect(dbConfig);
 
-    // Check if the user already exists
-    const userExists = await pool
-      .request()
-      .input('email', sql.NVarChar, email)
-      .query('SELECT Id FROM Users WHERE Email = @email');
+    // Insert the user into the database
+    const result = await pool.request()
+      .input('Email', sql.NVarChar, email)
+      .input('PasswordHash', sql.NVarChar, passwordHash)
+      .input('Role', sql.NVarChar, role)
+      .query(`
+        INSERT INTO Users (Email, PasswordHash, Role) 
+        VALUES (@Email, @PasswordHash, @Role)
+      `);
 
-    if (userExists.recordset.length > 0) {
-      return res.status(400).json({ message: 'Email is already registered' });
-    }
-
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // Insert the new user
-    await pool
-      .request()
-      .input('email', sql.NVarChar, email)
-      .input('password', sql.NVarChar, hashedPassword)
-      .input('role', sql.NVarChar, role)
-      .query('INSERT INTO Users (Email, Password, Role) VALUES (@email, @password, @role)');
-
-    // Generate JWT Token
-    const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-    res.status(201).json({ message: 'User registered successfully', token });
+    res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
-    console.error('Error connecting to the database:', err);
-    res.status(500).json({ message: 'Server error', error: err.message });
+    if (err.originalError && err.originalError.info && err.originalError.info.number === 2627) {
+      // Unique constraint error
+      res.status(400).json({ message: 'Email already exists' });
+    } else {
+      console.error(err);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   }
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
