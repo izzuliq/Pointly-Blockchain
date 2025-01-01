@@ -15,7 +15,9 @@ function App() {
       <div className="min-h-screen flex flex-col">
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* Set SignUpPage as the main page */}
+            <Route path="/" element={<SignUpPage />} />
+            <Route path="/home" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/rewards" element={<Rewards />} />
             <Route path="/editprofile" element={<EditProfile />} />
