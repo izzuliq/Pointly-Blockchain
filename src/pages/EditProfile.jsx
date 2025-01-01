@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Navbar from "../components/Navbar";
 
 function EditProfilePage() {
   const [name, setName] = useState("John Doe");
@@ -26,6 +27,8 @@ function EditProfilePage() {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto">
       <h2 className="text-3xl font-semibold text-gray-800">Edit Profile</h2>
       <p className="mt-2 text-gray-600">Update your account details below.</p>
@@ -124,6 +127,7 @@ function EditProfilePage() {
         </button>
       </div>
     </div>
+    </>
   );
 }
 
