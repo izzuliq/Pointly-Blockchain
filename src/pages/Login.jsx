@@ -13,7 +13,7 @@ function LoginPage() {
     // Simulate login logic (replace with actual authentication logic)
     if (email === "test@example.com" && password === "password") {
       alert(`Logged in as ${role}`);
-      navigate('/'); // Redirect to home after successful login
+      navigate('/home'); // Redirect to home after successful login
     } else {
       alert("Invalid credentials");
     }
@@ -34,7 +34,7 @@ function LoginPage() {
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col">
           {/* Email Input */}
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center" htmlFor="email">Email</label>
+            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
@@ -48,7 +48,7 @@ function LoginPage() {
 
           {/* Password Input */}
           <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700 text-center" htmlFor="password">Password</label>
+            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="password">Password</label>
             <input
               type="password"
               id="password"
@@ -62,12 +62,12 @@ function LoginPage() {
 
           {/* Role Selection - Dropdown (optional) */}
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center" htmlFor="role">Select Role</label>
+            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">Select Role</label>
             <select
               id="role"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
+              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center font-cabin"
               required
             >
               <option value="user">User</option>
@@ -85,7 +85,7 @@ function LoginPage() {
           </button>
 
           {/* Link to Sign-Up Page */}
-          <p className="mt-4 text-center">
+          <p className="mt-4 text-center font-cabin font-cabin">
             Don't have an account?{" "}
             <a href="/signup" className="text-purple">Sign up here</a>
           </p>
