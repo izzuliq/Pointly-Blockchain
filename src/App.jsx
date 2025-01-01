@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import EditProfile from "./pages/EditProfile";
 import LoginPage from "./pages/Login";
 import SignUpPage from "./pages/SignUp";
+import RewardDetails from "./pages/RewardsDetails"; // Import the new RewardDetails page
 
 function App() {
   return (
@@ -15,15 +16,14 @@ function App() {
       <div className="min-h-screen flex flex-col">
         <main className="flex-grow">
           <Routes>
-            {/* Set SignUpPage as the main page */}
             <Route path="/" element={<SignUpPage />} />
-            <Route path="/home" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/rewards" element={<Rewards />} />
-            <Route path="/editprofile" element={<EditProfile />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/editprofile" element={<EditProfile />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/reward-details" element={<RewardDetails />} /> {/* Add RewardDetails route */}
           </Routes>
         </main>
         <Footer />
