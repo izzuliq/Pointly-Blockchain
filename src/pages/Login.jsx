@@ -1,25 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user'); // Default role is 'user'
+  const [loading, setLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    setLoading(true); // Start loading
+  
     try {
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role }),
+      // Use Axios to send a POST request to the login API
+      const response = await axios.post('http://localhost:5000/api/login', {
+        email,
+        password,
+        role,
       });
   
-      const data = await response.json();
-  
-      if (response.ok) {
+      if (response.status === 200) {
         alert('Login successful');
   
         // Redirect based on the role
@@ -29,11 +32,13 @@ function LoginPage() {
           navigate('/vendor-home'); // Redirect to vendor home
         }
       } else {
-        alert(data.message || 'Login failed');
+        alert(response.data.message || 'Login failed');
       }
     } catch (error) {
       console.error(error);
       alert('Something went wrong. Please try again later.');
+    } finally {
+      setLoading(false); // End loading
     }
   };  
 
@@ -97,9 +102,17 @@ function LoginPage() {
           <button
             type="submit"
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
+            disabled={loading} // Disable button when loading
           >
-            Log In
+            {loading ? 'Logging in...' : 'Log In'} {/* Display loading text */}
           </button>
+
+          {/* Loading Spinner (Optional) */}
+          {loading && (
+            <div className="flex justify-center mt-4">
+              <div className="w-8 h-8 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
+            </div>
+          )}
 
           {/* Link to Sign-Up Page */}
           <p className="mt-4 text-center font-cabin font-cabin">

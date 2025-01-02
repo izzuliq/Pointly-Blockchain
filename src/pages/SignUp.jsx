@@ -7,6 +7,7 @@ function SignUpPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('user'); // Default role is 'user'
+  const [loading, setLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -17,29 +18,28 @@ function SignUpPage() {
       alert('Passwords do not match!');
       return;
     }
+
+    setLoading(true); // Start loading
   
     try {
-      // Call the backend API for sign-up
-      const response = await fetch('http://localhost:5000/api/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email,
-          password,
-          role,
-        }),
+      // Use Axios to call the backend API for sign-up
+      const response = await axios.post('http://localhost:5000/api/signup', {
+        email,
+        password,
+        role,
       });
-  
-      const data = await response.json();
-      if (response.ok) {
+
+      if (response.status === 200) {
         alert(`Signed up as ${role}`);
         navigate('/login');
       } else {
-        alert(data.message || 'Error during sign-up');
+        alert(response.data.message || 'Error during sign-up');
       }
     } catch (err) {
       console.error('Error:', err);
       alert('Something went wrong');
+    } finally {
+      setLoading(false); // End loading
     }
   }; 
 
@@ -117,9 +117,17 @@ function SignUpPage() {
           <button
             type="submit"
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
+            disabled={loading} // Disable button when loading
           >
-            Sign Up
+            {loading ? 'Signing Up...' : 'Sign Up'} {/* Display loading text */}
           </button>
+
+          {/* Loading Spinner (Optional) */}
+          {loading && (
+            <div className="flex justify-center mt-4">
+              <div className="w-8 h-8 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
+            </div>
+          )}
 
           {/* Link to Login Page */}
           <p className="mt-4 text-center font-cabin">
