@@ -34,7 +34,7 @@ function App() {
             <Route path="/editprofile" element={<EditProfile />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/reward-details" element={<RewardDetails />} />
+            <Route path="/reward-details/:rewardId" element={<RewardDetails />} />
 
             {/* Vendor Routes */}
             <Route path="/vendor-home" element={<VendorHome />} />

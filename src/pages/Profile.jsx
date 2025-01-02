@@ -1,15 +1,50 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // React Router for navigation
 import Navbar from "../components/UserNavbar";
+import axios from "axios";
 
 function ProfilePage() {
-  const [name, setName] = useState("Sarimah Jalil");
-  const [email, setEmail] = useState("SJalil@gmail.com");
-  const [phone, setPhone] = useState("(60)123456789");
-  const [address, setAddress] = useState(
-    "123 Jalan Abu Karam, Kota Bharu, Kelantan, Malaysia"
-  );
-  const [dob, setDob] = useState("01/01/1990");
+  const [userData, setUserData] = useState({
+    name: "Sarimah Jalil",
+    email: "SJalil@gmail.com",
+    phone: "(60)123456789",
+    address: "123 Jalan Abu Karam, Kota Bharu, Kelantan, Malaysia",
+    dob: "01/01/1990",
+    profileImage: "Sarimah.png", // Default profile image
+  });
+  const [loading, setLoading] = useState(true); // Track loading state
+  const [error, setError] = useState(null); // Track error state
+
+  useEffect(() => {
+    // Fetch user profile data from API
+    axios
+      .get("/api/user/profile") // Replace with your API endpoint
+      .then((response) => {
+        // Set user data from API response
+        setUserData({
+          name: response.data.name || userData.name,
+          email: response.data.email || userData.email,
+          phone: response.data.phone || userData.phone,
+          address: response.data.address || userData.address,
+          dob: response.data.dob || userData.dob,
+          profileImage: response.data.profileImage || userData.profileImage,
+        });
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching profile data:", err);
+        setError("Failed to fetch profile data.");
+        setLoading(false);
+      });
+  }, []); // Run once on mount
+
+  if (loading) {
+    return <div>Loading...</div>; // Display loading state
+  }
+
+  if (error) {
+    return <div>{error}</div>; // Display error message
+  }
 
   return (
     <>
@@ -28,7 +63,7 @@ function ProfilePage() {
           {/* Profile Picture */}
           <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
             <img
-              src="Sarimah.png"
+              src={userData.profileImage}
               alt="Profile"
               className="w-full h-full object-cover"
             />
@@ -39,7 +74,7 @@ function ProfilePage() {
             <label className="block text-2xl font-cabin text-purple-dark">
               Name
             </label>
-            <p className="mt-2 text-gray-800 text-xl">{name}</p>
+            <p className="mt-2 text-gray-800 text-xl">{userData.name}</p>
           </div>
 
           {/* Email */}
@@ -47,7 +82,7 @@ function ProfilePage() {
             <label className="block text-2xl font-cabin text-purple-dark">
               Email
             </label>
-            <p className="mt-2 text-gray-800 text-xl">{email}</p>
+            <p className="mt-2 text-gray-800 text-xl">{userData.email}</p>
           </div>
 
           {/* Phone */}
@@ -55,7 +90,7 @@ function ProfilePage() {
             <label className="block text-2xl font-cabin text-purple-dark">
               Phone
             </label>
-            <p className="mt-2 text-gray-800 text-xl">{phone}</p>
+            <p className="mt-2 text-gray-800 text-xl">{userData.phone}</p>
           </div>
 
           {/* Address */}
@@ -63,7 +98,7 @@ function ProfilePage() {
             <label className="block text-2xl font-cabin text-purple-dark">
               Address
             </label>
-            <p className="mt-2 text-gray-800 text-xl">{address}</p>
+            <p className="mt-2 text-gray-800 text-xl">{userData.address}</p>
           </div>
 
           {/* Date of Birth */}
@@ -71,7 +106,7 @@ function ProfilePage() {
             <label className="block text-2xl font-cabin text-purple-dark">
               Date of Birth
             </label>
-            <p className="mt-2 text-gray-800 text-xl">{dob}</p>
+            <p className="mt-2 text-gray-800 text-xl">{userData.dob}</p>
           </div>
 
           {/* Edit Button */}

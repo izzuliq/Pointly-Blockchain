@@ -1,18 +1,21 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom'; // To access the passed state
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; // Use useParams to get rewardId from the URL
 
 function RewardDetails() {
-  const location = useLocation();
-  const rewardId = location.state?.reward; // Retrieve the reward ID passed via state
+  const { rewardId } = useParams(); // Get the rewardId from the URL using useParams
+  const [rewardInfo, setRewardInfo] = useState(null);
+  const [isRedeemed, setIsRedeemed] = useState(false); // Track redemption status
+  const [loading, setLoading] = useState(true); // Loading state
 
-  // Sample data with multiple terms and conditions
+  // Sample data for rewards with id and expiration date as Date object
   const rewardDetails = {
     1: {
+      id: 1,
       name: "Free Coffee",
       description: "Enjoy a freshly brewed cup of coffee.",
       cost: 300,
       img: "./Coffee.png",
-      expiration: "Expires on: 31st January 2025",
+      expiration: new Date("2025-01-31"), // Date object for expiration
       terms: [
         "This offer is available at participating coffee shops only.",
         "The coffee must be claimed in-store and cannot be redeemed online.",
@@ -20,11 +23,12 @@ function RewardDetails() {
       ]
     },
     2: {
+      id: 2,
       name: "Gift Voucher",
       description: "Redeem your points for a gift voucher.",
       cost: 500,
       img: "./Voucher.png",
-      expiration: "Expires on: 15th February 2025",
+      expiration: new Date("2025-02-15"), // Date object for expiration
       terms: [
         "Voucher can be used in participating stores only.",
         "This voucher cannot be exchanged for cash.",
@@ -32,11 +36,12 @@ function RewardDetails() {
       ]
     },
     3: {
+      id: 3,
       name: "Exclusive Discount",
       description: "Unlock exclusive discounts on your next purchase.",
       cost: 1000,
       img: "./Discount.png",
-      expiration: "Expires on: 28th February 2025",
+      expiration: new Date("2025-02-28"), // Date object for expiration
       terms: [
         "Discount can only be applied to selected items.",
         "Cannot be used in conjunction with any other offer.",
@@ -45,20 +50,34 @@ function RewardDetails() {
     },
   };
 
-  // Retrieve reward details based on passed reward ID
-  const rewardInfo = rewardDetails[rewardId];
+  useEffect(() => {
+    // Check if rewardId exists and fetch corresponding reward info
+    if (rewardId && rewardDetails[rewardId]) {
+      setRewardInfo(rewardDetails[rewardId]); // Set the reward info based on the ID
+      setLoading(false); // Stop loading after fetching
+    } else {
+      setRewardInfo(null); // If no reward info is found
+      setLoading(false); // Stop loading
+    }
+  }, [rewardId]); // Re-run the effect when the rewardId changes
 
-  const [isRedeemed, setIsRedeemed] = useState(false); // Track redemption status
+  // If loading or rewardInfo is null, show loading or error message
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!rewardInfo) {
+    return <div>No reward details found.</div>;
+  }
+
+  // Format the expiration date properly
+  const formattedExpirationDate = rewardInfo.expiration.toLocaleDateString("en-US");
 
   // Handle reward redemption
   const handleRedemption = () => {
     // Simulate the redemption process (e.g., API call)
     setIsRedeemed(true); // Update the state to reflect successful redemption
   };
-
-  if (!rewardInfo) {
-    return <div>No reward details found.</div>; // In case the reward info is invalid
-  }
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg flex flex-col items-center">
@@ -75,10 +94,10 @@ function RewardDetails() {
       <p className="mt-2 text-lg font-semibold text-gray-700">Cost: {rewardInfo.cost} points</p>
 
       {/* Expiration Date Section */}
-      <p className="mt-4 text-gray-500">{rewardInfo.expiration}</p>
+      <p className="mt-4 text-gray-500">Expires on: {formattedExpirationDate}</p>
 
       {/* Terms & Conditions Section */}
-      <div className="mt-4 p-4 w-1/2 bg-purple-100 rounded-lg shadow-sm ">
+      <div className="mt-4 p-4 w-1/2 bg-purple-100 rounded-lg shadow-sm">
         <h3 className="text-lg font-semibold text-gray-700 text-center">Terms & Conditions</h3>
         <ul className="mt-2 text-gray-600 list-disc pl-6">
           {rewardInfo.terms.map((term, index) => (
