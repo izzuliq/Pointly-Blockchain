@@ -14,7 +14,7 @@ function RewardDetails() {
       name: "Free Coffee",
       description: "Enjoy a freshly brewed cup of coffee.",
       cost: 300,
-      img: "./Coffee.png",
+      img: "/Coffee.png",
       expiration: new Date("2025-01-31"), // Date object for expiration
       terms: [
         "This offer is available at participating coffee shops only.",
@@ -27,7 +27,7 @@ function RewardDetails() {
       name: "Gift Voucher",
       description: "Redeem your points for a gift voucher.",
       cost: 500,
-      img: "./Voucher.png",
+      img: "/Voucher.png",
       expiration: new Date("2025-02-15"), // Date object for expiration
       terms: [
         "Voucher can be used in participating stores only.",
@@ -40,7 +40,7 @@ function RewardDetails() {
       name: "Exclusive Discount",
       description: "Unlock exclusive discounts on your next purchase.",
       cost: 1000,
-      img: "./Discount.png",
+      img: "/Discount.png",
       expiration: new Date("2025-02-28"), // Date object for expiration
       terms: [
         "Discount can only be applied to selected items.",
