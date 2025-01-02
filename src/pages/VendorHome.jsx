@@ -24,7 +24,7 @@ function VendorHome() {
 
         {/* Features Section */}
         <h2 className="text-3xl font-bold text-purple-dark">Why Partner with Pointly?</h2>
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-3/4">
           {/* Feature 1 */}
           <div className="bg-gold-light shadow-lg rounded-lg p-6 flex flex-col items-center">
             <img src="./Manage.png" alt="Manage Rewards" className="max-w-[300px] max-h-[300px] mb-4" />

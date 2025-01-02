@@ -26,7 +26,7 @@ function Home() {
 
         {/* Features Section */}
         <h2 className="text-3xl font-bold text-purple-dark">Why Should I Use Pointly?</h2>
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-3/4">
           {/* Feature 1 */}
           <div className="bg-gold-light shadow-lg rounded-lg p-6 flex flex-col items-center">
             <img src="./Reward.png" alt="Feature 1" className="max-w-[300px] max-h-[300px] mb-4" />
@@ -58,8 +58,8 @@ function Home() {
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Review Section */}
-        <h2 className="text-3xl mt-5 font-bold text-purple-dark">Hear What Our Users Have To Say!</h2>
-        <ReviewsCarousel /> {/* Insert the ReviewsCarousel component here */}
+        <h2 className="text-3xl mt-5 font-bold text-purple-dark text-center">Hear What Our Users Have To Say!</h2>
+        <ReviewsCarousel /> 
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 

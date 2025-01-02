@@ -42,8 +42,8 @@ function Rewards() {
       .then((response) => {
         // Assuming response contains total and available points
         setPoints({
-          total: response.data.total || 69, // Use 69 as default example value
-          available: response.data.available || 69, // Use 69 as default example value
+          total: response.data.total || 1000, // Use 69 as default example value
+          available: response.data.available || 800, // Use 69 as default example value
         });
         setLoading(false); // Set loading to false after data is fetched
       })

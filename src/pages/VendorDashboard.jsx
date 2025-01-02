@@ -81,7 +81,7 @@ function VendorDashboard() {
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
         
         {/* Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-center w-3/4 items-center mx-auto">
           {/* Total Redemptions */}
           <div className="bg-gold-dark p-4 rounded-lg shadow-md font-cabin">
             <h3 className="text-lg text-white font-cabin">Total Redemptions</h3>
