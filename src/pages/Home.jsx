@@ -9,7 +9,7 @@ function Home() {
       <Navbar />
       <div className="flex flex-col items-center justify-center h-full p-6 font-cabin">
         {/* Header */}
-        <img src="./PointlyLogoBlack.png" alt="Company Logo" className="mt-20 mb-6 w-[300px] h-auto" />
+        <img src="./PointlyLogoBlack.png" alt="Company Logo" className="mt-10 mb-6 w-[300px] h-auto" />
         <h1 className="text-5xl font-bold text-purple">Welcome to Pointly</h1>
         <p className="mt-4 text-3xl font-bold text-gray-800 italic">"Points Simplified"</p>
 
