@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import VendorNavbar from "../components/VendorNavbar";
+import axios from 'axios'; // Import axios for making HTTP requests
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function VendorEditAdminPage() {
   const [name, setName] = useState("Alex Chin Wei Mei");
   const [email, setEmail] = useState("alexcwm@kfcmalaysia.com");
   const [phone, setPhone] = useState("(60)1239873456");
   const [profilePicture, setProfilePicture] = useState("https://via.placeholder.com/150");
+  const [loading, setLoading] = useState(false); // Loading state for handling the save process
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -18,9 +22,41 @@ function VendorEditAdminPage() {
     }
   };
 
-  const handleSave = () => {
-    // Handle saving of updated details (image and text fields)
-    alert("Admin profile updated!");
+  const handleSave = async () => {
+    try {
+      setLoading(true); // Set loading state to true when saving
+
+      // Prepare the data to be sent to the server
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("email", email);
+      formData.append("phone", phone);
+      formData.append("profilePicture", profilePicture); // You can send base64 or a file here
+
+      // Send the data using axios (replace with your API endpoint)
+      const response = await axios.put('/api/vendor/admin/profile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+
+      // Handle success response
+      if (response.status === 200) {
+        toast.success("Admin profile updated successfully!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+      }
+
+      setLoading(false); // Set loading state to false after response
+    } catch (error) {
+      console.error("Error updating admin profile:", error);
+      toast.error("Failed to update admin profile. Please try again.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+      });
+      setLoading(false); // Set loading state to false in case of an error
+    }
   };
 
   return (
@@ -49,7 +85,7 @@ function VendorEditAdminPage() {
               type="file"
               id="profile-picture"
               onChange={handleImageChange}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center items-center"
+              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
             />
           </div>
 
@@ -96,11 +132,15 @@ function VendorEditAdminPage() {
           <button
             onClick={handleSave}
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
+            disabled={loading} // Disable the button while loading
           >
-            Save Changes
+            {loading ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
+
+      {/* Toast container */}
+      <ToastContainer />
     </>
   );
 }

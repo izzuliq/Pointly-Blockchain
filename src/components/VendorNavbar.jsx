@@ -54,12 +54,13 @@ function VendorNavbar() {
         </li>
       </ul>
 
-      {/* Logout Confirmation Modal */}
+      {/* Popup Modal */}
       {showLogoutModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 text-center">
-            <h2 className="text-xl text-black font-semibold mb-4">Are you sure you want to log out?</h2>
-            <div className="flex justify-around w-[200px] mx-auto">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 font-cabin">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <h3 className="text-xl font-semibold text-gray-800 text-center">Log Out Confirmation</h3>
+            <p className="mt-4 text-gray-600 text-center">Are you sure you want to log out of Pointly?</p>
+            <div className="mt-6 flex justify-around">
               <button 
                 onClick={handleLogout} 
                 className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-all duration-300"
@@ -80,7 +81,7 @@ function VendorNavbar() {
       {/* Thank You Popup */}
       {showThankYouModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3 text-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <h2 className="text-xl text-black font-semibold mb-4">Thank you for using our service!</h2>
             <p className="text-gray-600">You will be redirected shortly.</p>
           </div>

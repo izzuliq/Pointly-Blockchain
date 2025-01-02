@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 function EditRewardDetails() {
-  const location = useLocation();
-  const rewardId = location.state?.reward; // Retrieve the reward ID passed via state
+  const { rewardId } = useParams(); // Use useParams to get rewardId from URL
   const [rewardInfo, setRewardInfo] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Sample data for rewards, similar to the reward details in the Rewards page
+  // Sample reward details data
   const rewardDetails = {
     1: {
+      id: 1,
       name: "Free Coffee",
       description: "Enjoy a freshly brewed cup of coffee.",
       cost: 300,
       img: "./Coffee.png", // Default image
-      expiration: "2025-01-31", // Update to valid date format
+      expiration: "2025-01-31",
       terms: [
         "This offer is available at participating coffee shops only.",
         "The coffee must be claimed in-store and cannot be redeemed online.",
@@ -21,28 +22,33 @@ function EditRewardDetails() {
       ],
     },
     2: {
+      id: 2,
       name: "Gift Voucher",
       description: "Redeem your points for a gift voucher.",
       cost: 500,
       img: "./Voucher.png", // Default image
-      expiration: "2025-02-15", // Update to valid date format
+      expiration: "2025-02-15",
       terms: [
         "Voucher can be used in participating stores only.",
         "This voucher cannot be exchanged for cash.",
         "Voucher expires after 6 months from the date of issuance.",
       ],
     },
-    // Add more reward details if needed
   };
 
   useEffect(() => {
-    // Retrieve the reward information based on the rewardId
-    setRewardInfo(rewardDetails[rewardId]);
+    // Simulate fetching the reward data using the sample rewardDetails
+    const reward = rewardDetails[rewardId];
+    if (reward) {
+      setRewardInfo(reward);
+    }
+    setLoading(false); // Set loading to false after data is loaded
   }, [rewardId]);
 
   const handleSave = () => {
-    // Handle saving of updated reward information (image and text fields)
-    alert("Reward details updated!");
+    // For testing, we'll just log the updated data to the console
+    console.log("Updated Reward Info:", rewardInfo);
+    alert("Reward details updated successfully!");
   };
 
   const handleDateChange = (e) => {
@@ -52,27 +58,43 @@ function EditRewardDetails() {
     });
   };
 
-  // Handle image upload
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setRewardInfo({ ...rewardInfo, img: reader.result }); // Update image to the selected file
+        setRewardInfo({ ...rewardInfo, img: reader.result });
       };
       reader.readAsDataURL(file); // Read the file as a data URL (base64)
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="flex flex-col items-center">
+          <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
+          <p className="mt-4 text-xl text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   if (!rewardInfo) {
-    return <div>Loading...</div>; // In case the reward info is not yet loaded
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <p className="text-xl text-red-600">Reward not found.</p>
+      </div>
+    );
   }
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto">
-      <h2 className="text-3xl font-semibold text-gray-800 text-center mb-4">
+      <h2 className="text-3xl font-semibold text-gray-800 text-center">
         Edit Reward Details
       </h2>
+
+      <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
       {/* Promo Image */}
       <div className="mt-4 mb-6 flex flex-col items-center">

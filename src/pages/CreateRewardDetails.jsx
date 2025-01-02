@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios"; // Import axios for HTTP requests
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function CreateRewardDetails() {
   const [rewardInfo, setRewardInfo] = useState({
@@ -10,10 +13,45 @@ function CreateRewardDetails() {
     terms: [""] // Default empty terms
   });
 
-  const handleSave = () => {
-    // Handle saving of new reward information (image and text fields)
-    alert("New reward created!");
-    // You can implement the logic to save the reward info, e.g., sending it to an API or state.
+  const [loading, setLoading] = useState(false); // Loading state for handling the save process
+
+  const handleSave = async () => {
+    try {
+      setLoading(true); // Set loading state to true when saving
+
+      // Prepare the data to be sent to the server
+      const formData = new FormData();
+      formData.append("name", rewardInfo.name);
+      formData.append("description", rewardInfo.description);
+      formData.append("cost", rewardInfo.cost);
+      formData.append("img", rewardInfo.img); // You can send base64 or a file here
+      formData.append("expiration", rewardInfo.expiration);
+      formData.append("terms", rewardInfo.terms.join("\n"));
+
+      // Send the data using axios (replace with your API endpoint)
+      const response = await axios.post('/api/rewards', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+
+      // Handle success response
+      if (response.status === 200) {
+        toast.success("New reward created successfully!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+      }
+
+      setLoading(false); // Set loading state to false after response
+    } catch (error) {
+      console.error("Error creating reward:", error);
+      toast.error("Failed to create new reward. Please try again.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
+      });
+      setLoading(false); // Set loading state to false in case of an error
+    }
   };
 
   const handleDateChange = (e) => {
@@ -36,9 +74,11 @@ function CreateRewardDetails() {
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto">
-      <h2 className="text-3xl font-semibold text-gray-800 text-center mb-4">
+      <h2 className="text-3xl font-semibold text-gray-800 text-center ">
         Create New Reward
       </h2>
+
+      <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
       {/* Promo Image */}
       <div className="mt-4 mb-6 flex flex-col items-center">
@@ -130,9 +170,13 @@ function CreateRewardDetails() {
       <button
         onClick={handleSave}
         className="w-full bg-gold-dark text-white py-3 rounded-lg hover:bg-purple transition-colors"
+        disabled={loading} // Disable the button while loading
       >
-        Create Reward
+        {loading ? "Saving..." : "Create Reward"}
       </button>
+
+      {/* Toast container for notifications */}
+      <ToastContainer />
     </div>
   );
 }

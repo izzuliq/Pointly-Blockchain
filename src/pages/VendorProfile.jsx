@@ -1,22 +1,74 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import VendorNavbar from "../components/VendorNavbar";
 import { Link } from "react-router-dom"; // Import Link for navigation
+import axios from "axios"; // Import Axios for API requests
 
 function VendorProfile() {
-  // Example data for admin and company (this can be replaced with dynamic data from API or state)
-  const adminData = {
+  // Fallback static data for admin and company (template)
+  const defaultAdminData = {
     name: "Alex Chin Wei Mei",
     email: "alexcwm@kfcmalaysia.com",
     phone: "(60)1239873456",
     profilePicture: "Alex.png", // Replace with actual URL or data
   };
 
-  const companyData = {
+  const defaultCompanyData = {
     companyName: "KFC Malaysia Sdn Bhd",
     companyAddress: "Level Ground Floor, Tower 1, V Square @ PJ City Centre, Jln Utara, Section 52, 46100 Petaling Jaya, Selangor",
     companyIndustry: "Foods & Beverages",
     companyLogo: "KFC.png", // Replace with actual URL or data
   };
+
+  // State variables to store fetched data or fallback data
+  const [adminData, setAdminData] = useState(defaultAdminData);
+  const [companyData, setCompanyData] = useState(defaultCompanyData);
+  const [loading, setLoading] = useState(true); // To handle loading state
+  const [error, setError] = useState(null); // To handle error state
+
+  useEffect(() => {
+    // Fetch data from API (using Axios)
+    axios
+      .get("/api/vendor/admin") // Replace with actual API endpoint for admin
+      .then((response) => {
+        // If the API response is successful, update the state with fetched data
+        setAdminData({
+          name: response.data.name || defaultAdminData.name,
+          email: response.data.email || defaultAdminData.email,
+          phone: response.data.phone || defaultAdminData.phone,
+          profilePicture: response.data.profilePicture || defaultAdminData.profilePicture,
+        });
+
+        setCompanyData({
+          companyName: response.data.companyName || defaultCompanyData.companyName,
+          companyAddress: response.data.companyAddress || defaultCompanyData.companyAddress,
+          companyIndustry: response.data.companyIndustry || defaultCompanyData.companyIndustry,
+          companyLogo: response.data.companyLogo || defaultCompanyData.companyLogo,
+        });
+
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching vendor data:", err);
+        setError("Failed to fetch vendor data.");
+        setLoading(false); // Stop loading on error
+      });
+  }, []); // Only run once when the component mounts
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        {/* Spinner for loading */}
+        <div className="flex flex-col items-center">
+          <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
+          <p className="mt-4 text-xl text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <div>{error}</div>; // Display error message if API fails
+  }
 
   return (
     <div>

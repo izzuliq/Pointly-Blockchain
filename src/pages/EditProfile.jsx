@@ -1,69 +1,65 @@
-import React, { useState } from 'react';
-import Navbar from "../components/UserNavbar";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import VendorNavbar from "../components/VendorNavbar";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
-function EditProfilePage() {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [phone, setPhone] = useState("(123) 456-7890");
-  const [address, setAddress] = useState("123 Main Street, Springfield, IL");
-  const [dob, setDob] = useState("01/01/1990");
-  const [profilePicture, setProfilePicture] = useState("https://via.placeholder.com/150");
+function VendorEditCompanyPage() {
+  const [companyName, setCompanyName] = useState("KFC Malaysia Sdn Bhd");
+  const [companyAddress, setCompanyAddress] = useState(
+    "Level Ground Floor, Tower 1, V Square @ PJ City Centre, Jln Utara, Section 52, 46100 Petaling Jaya, Selangor"
+  );
+  const [companyIndustry, setCompanyIndustry] = useState("Foods & Beverages");
+  const [companyLogo, setCompanyLogo] = useState("https://via.placeholder.com/150");
 
-  // Use the useNavigate hook to handle redirection
   const navigate = useNavigate();
 
-  // Handle image upload
-  const handleImageChange = (e) => {
+  // Handle logo upload
+  const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfilePicture(reader.result); // Update profile picture to the selected image
+        setCompanyLogo(reader.result); // Set the logo image to the selected file
       };
-      reader.readAsDataURL(file); // Read the file as a data URL (base64)
+      reader.readAsDataURL(file); // Convert image to base64
     }
   };
 
+  // Handle save button click
   const handleSave = async () => {
     try {
-      // Prepare the data to be sent to the server
+      // Prepare the form data to be sent to the server
       const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("phone", phone);
-      formData.append("address", address);
-      formData.append("dob", dob);
-      formData.append("profilePicture", profilePicture); // You can also send a file instead of base64 if needed
+      formData.append("companyName", companyName);
+      formData.append("companyAddress", companyAddress);
+      formData.append("companyIndustry", companyIndustry);
+      formData.append("companyLogo", companyLogo); // Include the base64 encoded logo image
 
-      // Send the data using axios (replace with your API endpoint)
-      const response = await axios.put('/api/user/profile', formData, {
+      // Send the data using Axios (replace with your API endpoint)
+      const response = await axios.put("/api/vendor/company", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
-      // Handle success response
+      // Check the response status
       if (response.status === 200) {
-        // Show success toast notification
-        toast.success("Profile updated successfully!", {
+        toast.success("Company profile updated successfully!", {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 3000,
         });
-        
-        // Redirect after toast notification closes (after 3 seconds)
+
+        // Redirect after 3 seconds
         setTimeout(() => {
-          navigate('/profile');
+          navigate("/vendor/profile"); // Redirect to the vendor profile page
         }, 3000);
       }
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error updating company profile:", error);
 
-      // Show error toast notification
-      toast.error("Failed to update profile. Please try again.", {
+      toast.error("Failed to update company profile. Please try again.", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
@@ -72,95 +68,78 @@ function EditProfilePage() {
 
   return (
     <>
-      <Navbar />
+      <VendorNavbar />
       <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto text-center font-cabin">
-        <h2 className="text-3xl font-cabin text-gray-800 text-center">Edit Profile</h2>
-        <p className="mt-2 text-gray-600 text-center">Update your account details below.</p>
+        <h2 className="text-3xl font-cabin text-gray-800">Edit Company Profile</h2>
+        <p className="mt-2 text-gray-600">Update your company details below.</p>
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
-        
+
         <div className="mt-8 flex flex-col items-center">
-          {/* Profile Picture */}
+          {/* Company Logo */}
           <div className="w-24 h-24 mb-4 rounded-full overflow-hidden">
             <img
-              src={profilePicture}
-              alt="Profile"
+              src={companyLogo}
+              alt="Company Logo"
               className="w-full h-full object-cover"
             />
           </div>
 
-          {/* Image Upload Input */}
+          {/* Logo Upload Input */}
           <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700" htmlFor="profile-picture">Profile Picture</label>
+            <label className="block text-lg text-gray-700" htmlFor="company-logo">
+              Company Logo
+            </label>
             <input
               type="file"
-              id="profile-picture"
-              onChange={handleImageChange}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
+              id="company-logo"
+              onChange={handleLogoChange}
+              className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
             />
           </div>
 
-          {/* Name Input */}
+          {/* Company Name Input */}
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="name">Name</label>
+            <label className="block text-lg text-gray-700" htmlFor="company-name">
+              Company Name
+            </label>
             <input
               type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              id="company-name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
               className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your name"
+              placeholder="Enter company name"
             />
           </div>
 
-          {/* Email Input */}
+          {/* Company Address Input */}
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your email"
-            />
-          </div>
-
-          {/* Phone Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="phone">Phone</label>
+            <label className="block text-lg text-gray-700" htmlFor="company-address">
+              Address
+            </label>
             <input
               type="text"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              id="company-address"
+              value={companyAddress}
+              onChange={(e) => setCompanyAddress(e.target.value)}
               className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your phone number"
+              placeholder="Enter company address"
             />
           </div>
 
-          {/* Address Input */}
+          {/* Company Industry Input */}
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="address">Address</label>
+            <label className="block text-lg text-gray-700" htmlFor="company-industry">
+              Industry
+            </label>
             <input
               type="text"
-              id="address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              id="company-industry"
+              value={companyIndustry}
+              onChange={(e) => setCompanyIndustry(e.target.value)}
               className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your address"
-            />
-          </div>
-
-          {/* Date of Birth Input */}
-          <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700" htmlFor="dob">Date of Birth</label>
-            <input
-              type="date"
-              id="dob"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
+              placeholder="Enter company industry"
             />
           </div>
 
@@ -174,10 +153,10 @@ function EditProfilePage() {
         </div>
       </div>
 
-      {/* Toast container */}
+      {/* Toast container for success/error messages */}
       <ToastContainer />
     </>
   );
 }
 
-export default EditProfilePage;
+export default VendorEditCompanyPage;

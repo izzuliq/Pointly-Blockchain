@@ -39,8 +39,16 @@ function ProfilePage() {
   }, []); // Run once on mount
 
   if (loading) {
-    return <div>Loading...</div>; // Display loading state
-  }
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        {/* Spinner for loading */}
+        <div className="flex flex-col items-center">
+          <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
+          <p className="mt-4 text-xl text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  } 
 
   if (error) {
     return <div>{error}</div>; // Display error message

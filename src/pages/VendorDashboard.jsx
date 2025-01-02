@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';  // Add this import
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import axios for making HTTP requests
 import VendorNavbar from '../components/VendorNavbar';
 import { Line } from 'react-chartjs-2';
 import {
@@ -25,8 +25,11 @@ ChartJS.register(
 );
 
 function VendorDashboard() {
+  const [chartData, setChartData] = useState(null); // State to hold chart data
+  const [loading, setLoading] = useState(true); // Loading state for fetching data
+
   // Sample data for the chart
-  const chartData = {
+  const fallbackData = {
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
@@ -39,6 +42,35 @@ function VendorDashboard() {
       },
     ],
   };
+
+  // Fetch data from API using Axios
+  useEffect(() => {
+    axios
+      .get('https://your-api-endpoint.com/dashboard') // Replace with your actual API endpoint
+      .then((response) => {
+        // On success, use the fetched data
+        setChartData(response.data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        // On error, use fallback data and log the error
+        console.error('Error fetching chart data:', error);
+        setChartData(fallbackData);
+        setLoading(false);
+      });
+  }, []); // Empty dependency array to run once on component mount
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        {/* Spinner for loading */}
+        <div className="flex flex-col items-center">
+          <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
+          <p className="mt-4 text-xl text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }  
 
   return (
     <div className="flex flex-col min-h-screen">
