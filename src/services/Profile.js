@@ -1,79 +1,68 @@
-const express = require("express");
-const sql = require("mssql");
-const dotenv = require("dotenv");
-const cors = require("cors");
+import express from 'express';
+import { sql } from './db.js'; // Assuming `db.js` handles the database connection and exports the `sql` object
+import authenticateToken from './middleware/authMiddleware.js'; // Middleware to validate JWT token
 
-dotenv.config();
-const app = express();
-app.use(cors());
-app.use(express.json());
+const router = express.Router();
 
-const dbConfig = {
-  user: "your_username",
-  password: "your_password",
-  server: "your_server_address",
-  database: "MultiShopSystem",
-  options: {
-    encrypt: true,
-    trustServerCertificate: true,
-  },
-};
-
-// 1. Get User Profile
-app.get("/profile", async (req, res) => {
-  const userId = req.query.userId;
-
-  if (!userId) {
-    return res.status(400).json({ message: "User ID is required." });
-  }
-
+// Fetch user profile
+router.get('/user/profile', authenticateToken, async (req, res) => {
+  const userEmail = req.user.email; // Assuming email is stored in the JWT token
+  
   try {
-    const pool = await sql.connect(dbConfig);
-    const result = await pool.request()
-      .input("userId", sql.Int, userId)
-      .query(
-        `SELECT Name, Email, Phone, Address, DateOfBirth FROM Users WHERE Id = @userId`
-      );
-
+    const result = await sql.query`SELECT * FROM ShopAdmins WHERE Email = ${userEmail}`;
     if (result.recordset.length === 0) {
-      return res.status(404).json({ message: "User not found." });
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json(result.recordset[0]);
-  } catch (error) {
-    console.error("Error fetching profile:", error);
-    res.status(500).json({ message: "Server error.", error: error.message });
+    const user = result.recordset[0];
+    const userData = {
+      name: user.Name,
+      email: user.Email,
+      phone: user.Phone || '',
+      address: user.Address || '',
+      dob: user.DateOfBirth || '',
+      profileImage: user.ProfileImage || 'default.png', // Default image if not set
+    };
+
+    res.json(userData);
+  } catch (err) {
+    console.error('Error fetching user profile:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// 2. Update User Profile
-app.put("/profile", async (req, res) => {
-  const { userId, name, email, phone, address, dob } = req.body;
-
-  if (!userId || !name || !email || !phone || !address || !dob) {
-    return res.status(400).json({ message: "All fields are required." });
-  }
+// Update user profile
+router.put('/user/profile', authenticateToken, async (req, res) => {
+  const userEmail = req.user.email; // Extract email from JWT token
+  const { name, phone, address, dob, profileImage } = req.body;
 
   try {
-    const pool = await sql.connect(dbConfig);
-    await pool.request()
-      .input("userId", sql.Int, userId)
-      .input("name", sql.NVarChar, name)
-      .input("email", sql.NVarChar, email)
-      .input("phone", sql.NVarChar, phone)
-      .input("address", sql.NVarChar, address)
-      .input("dob", sql.Date, dob)
-      .query(
-        `UPDATE Users SET Name = @name, Email = @email, Phone = @phone, Address = @address, DateOfBirth = @dob WHERE Id = @userId`
-      );
+    const result = await sql.query`SELECT * FROM ShopAdmins WHERE Email = ${userEmail}`;
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
 
-    res.status(200).json({ message: "Profile updated successfully." });
-  } catch (error) {
-    console.error("Error updating profile:", error);
-    res.status(500).json({ message: "Server error.", error: error.message });
+    const updateQuery = `
+      UPDATE ShopAdmins
+      SET Name = @Name, Phone = @Phone, Address = @Address, 
+          DateOfBirth = @DateOfBirth, ProfileImage = @ProfileImage
+      WHERE Email = @Email
+    `;
+
+    await sql.query(updateQuery, {
+      Email: userEmail,
+      Name: name || result.recordset[0].Name,
+      Phone: phone || result.recordset[0].Phone,
+      Address: address || result.recordset[0].Address,
+      DateOfBirth: dob || result.recordset[0].DateOfBirth,
+      ProfileImage: profileImage || result.recordset[0].ProfileImage,
+    });
+
+    res.json({ message: 'Profile updated successfully' });
+  } catch (err) {
+    console.error('Error updating user profile:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+export default router;

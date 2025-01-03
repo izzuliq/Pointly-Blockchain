@@ -1,87 +1,104 @@
-const express = require('express');
-const sql = require('mssql');
-const cors = require('cors');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import sql from 'mssql'; // Assuming you're using SQL Server for your database
+import dotenv from 'dotenv';
 
-const app = express();
-app.use(express.json());
-app.use(cors());
+dotenv.config();
 
-// MSSQL Configuration
-const dbConfig = {
-  user: 'your_username',
-  password: 'your_password',
-  server: 'your_server',
-  database: 'your_database',
+const router = express.Router();
+
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'Access token required' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' });
+    req.user = user;
+    next();
+  });
 };
 
-// Fetch User Profile and Points
-app.get('/api/dashboard/user/:userID', async (req, res) => {
-  const { userID } = req.params;
-
+// Fetch user profile data
+router.get('/api/user/profile', authenticateToken, async (req, res) => {
   try {
-    const pool = await sql.connect(dbConfig);
+    const userEmail = req.user.email; // Extract email from JWT
 
-    const result = await pool.request()
-      .input('UserID', sql.Int, userID)
-      .query(`
-        SELECT Name, Tier, PointsTotal, PointsAvailable
-        FROM Users
-        WHERE UserID = @UserID
-      `);
-
+    const result = await sql.query`
+      SELECT Name, Tier, ProfileImage AS avatarUrl 
+      FROM ShopAdmins 
+      WHERE Email = ${userEmail}
+    `;
+    
     if (result.recordset.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     res.json(result.recordset[0]);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error fetching user profile:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Fetch Recent Activities
-app.get('/api/dashboard/activities/:userID', async (req, res) => {
-  const { userID } = req.params;
-
+// Fetch points data
+router.get('/api/user/points', authenticateToken, async (req, res) => {
   try {
-    const pool = await sql.connect(dbConfig);
+    const userEmail = req.user.email;
+    const result = await sql.query`
+      SELECT TotalPoints AS total, AvailablePoints AS available 
+      FROM Points 
+      WHERE Email = ${userEmail}
+    `;
+    
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'Points data not found' });
+    }
 
-    const result = await pool.request()
-      .input('UserID', sql.Int, userID)
-      .query(`
-        SELECT ActivityDescription, PointsEarned, Timestamp
-        FROM Activities
-        WHERE UserID = @UserID
-        ORDER BY Timestamp DESC
-        OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
-      `);
+    res.json(result.recordset[0]);
+  } catch (error) {
+    console.error('Error fetching points:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
+// Fetch recent activities
+router.get('/api/user/activities', authenticateToken, async (req, res) => {
+  try {
+    const userEmail = req.user.email;
+    const result = await sql.query`
+      SELECT Description AS description, TimeAgo AS timeAgo
+      FROM Activities
+      WHERE Email = ${userEmail}
+      ORDER BY CreatedAt DESC
+      FETCH NEXT 10 ROWS ONLY
+    `;
+    
     res.json(result.recordset);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error fetching activities:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Fetch Treasure Tiers
-app.get('/api/dashboard/tiers', async (req, res) => {
+// Fetch progress data
+router.get('/api/user/progress', authenticateToken, async (req, res) => {
   try {
-    const pool = await sql.connect(dbConfig);
+    const userEmail = req.user.email;
+    const result = await sql.query`
+      SELECT ProgressPercentage AS percentage 
+      FROM Progress 
+      WHERE Email = ${userEmail}
+    `;
+    
+    if (result.recordset.length === 0) {
+      return res.status(404).json({ message: 'Progress data not found' });
+    }
 
-    const result = await pool.request()
-      .query(`
-        SELECT TierName, Description, Rewards
-        FROM Tiers
-      `);
-
-    res.json(result.recordset);
+    res.json(result.recordset[0]);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
+    console.error('Error fetching progress:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Start Server
-const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
