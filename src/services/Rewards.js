@@ -1,140 +1,54 @@
-const express = require('express');
-const sql = require('mssql');
-const dotenv = require('dotenv');
-const cors = require('cors');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors'; 
+import { connectDB, sql } from './db.js'; // Ensure your DB connection is properly configured
 
-dotenv.config();
 const app = express();
+const port = 5000;
 
+// Use middleware
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-const dbConfig = {
-  user: 'your_username',
-  password: 'your_password',
-  server: 'your_server_address',
-  database: 'MultiShopSystem',
-  options: {
-    encrypt: true,
-    trustServerCertificate: true,
-  },
-};
+// Database connection
+connectDB()
+  .then(() => console.log('Connected to the database'))
+  .catch((err) => console.error('Database connection failed:', err));
 
-// 1. Get User's Available Points
-app.get('/points', async (req, res) => {
-  const userId = req.query.userId;
-
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID is required.' });
-  }
-
+// Fetch points endpoint
+app.get('/api/points', async (req, res) => {
   try {
-    const pool = await sql.connect(dbConfig);
-    const result = await pool.request()
-      .input('userId', sql.Int, userId)
-      .query('SELECT AvailablePoints FROM Users WHERE Id = @userId');
+    const userId = req.query.userId; // Assuming userId is passed as a query parameter
+    if (!userId) return res.status(400).json({ message: 'User ID is required' });
 
-    if (result.recordset.length === 0) {
-      return res.status(404).json({ message: 'User not found.' });
+    const pointsResult = await sql.query`SELECT TotalPoints, AvailablePoints FROM Users WHERE UserID = ${userId}`;
+    if (pointsResult.recordset.length === 0) {
+      return res.status(404).json({ message: 'User not found' });
     }
 
-    res.status(200).json({ availablePoints: result.recordset[0].AvailablePoints });
+    const points = pointsResult.recordset[0];
+    res.json({
+      total: points.TotalPoints,
+      available: points.AvailablePoints,
+    });
   } catch (error) {
     console.error('Error fetching points:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-// 2. Get Available Rewards
-app.get('/rewards', async (req, res) => {
-  const userId = req.query.userId;
-
-  if (!userId) {
-    return res.status(400).json({ message: 'User ID is required.' });
-  }
-
+// Fetch rewards endpoint
+app.get('/api/rewards', async (req, res) => {
   try {
-    const pool = await sql.connect(dbConfig);
-
-    // Fetch user points
-    const userPoints = await pool.request()
-      .input('userId', sql.Int, userId)
-      .query('SELECT AvailablePoints FROM Users WHERE Id = @userId');
-
-    if (userPoints.recordset.length === 0) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    const availablePoints = userPoints.recordset[0].AvailablePoints;
-
-    // Fetch rewards within user's point range
-    const rewards = await pool.request()
-      .input('availablePoints', sql.Int, availablePoints)
-      .query('SELECT * FROM Rewards WHERE Cost <= @availablePoints');
-
-    res.status(200).json({ rewards: rewards.recordset });
+    const rewardsResult = await sql.query`SELECT RewardID AS id, Name, Description, PointsRequired AS points, ImgSrc AS imgSrc FROM Rewards`;
+    res.json(rewardsResult.recordset);
   } catch (error) {
     console.error('Error fetching rewards:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
-  }
-});
-
-// 3. Claim Reward and Deduct Points
-app.post('/claim-reward', async (req, res) => {
-  const { userId, rewardId } = req.body;
-
-  if (!userId || !rewardId) {
-    return res.status(400).json({ message: 'User ID and Reward ID are required.' });
-  }
-
-  try {
-    const pool = await sql.connect(dbConfig);
-
-    // Check if user has enough points
-    const userPoints = await pool.request()
-      .input('userId', sql.Int, userId)
-      .query('SELECT AvailablePoints FROM Users WHERE Id = @userId');
-
-    if (userPoints.recordset.length === 0) {
-      return res.status(404).json({ message: 'User not found.' });
-    }
-
-    const availablePoints = userPoints.recordset[0].AvailablePoints;
-
-    // Fetch reward cost
-    const reward = await pool.request()
-      .input('rewardId', sql.Int, rewardId)
-      .query('SELECT Cost FROM Rewards WHERE Id = @rewardId');
-
-    if (reward.recordset.length === 0) {
-      return res.status(404).json({ message: 'Reward not found.' });
-    }
-
-    const rewardCost = reward.recordset[0].Cost;
-
-    if (availablePoints < rewardCost) {
-      return res.status(400).json({ message: 'Not enough points to claim this reward.' });
-    }
-
-    // Deduct points and log the claim
-    await pool.request()
-      .input('userId', sql.Int, userId)
-      .input('rewardId', sql.Int, rewardId)
-      .input('cost', sql.Int, rewardCost)
-      .query(`
-        BEGIN TRANSACTION;
-        UPDATE Users SET AvailablePoints = AvailablePoints - @cost WHERE Id = @userId;
-        INSERT INTO ClaimedRewards (UserId, RewardId, ClaimedAt) VALUES (@userId, @rewardId, GETDATE());
-        COMMIT TRANSACTION;
-      `);
-
-    res.status(200).json({ message: 'Reward claimed successfully.' });
-  } catch (error) {
-    console.error('Error claiming reward:', error);
-    res.status(500).json({ message: 'Server error.', error: error.message });
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(port, () => {
+  console.log(`Server running at http://localhost:${port}`);
+});
