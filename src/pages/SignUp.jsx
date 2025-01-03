@@ -23,13 +23,13 @@ function SignUpPage() {
   
     try {
       // Use Axios to call the backend API for sign-up
-      const response = await axios.post('http://localhost:5000/api/signup', {
+      const response = await axios.post('/api/signup', {  // Use the relative path here
         email,
         password,
         role,
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         alert(`Signed up as ${role}`);
         navigate('/login');
       } else {
@@ -37,7 +37,7 @@ function SignUpPage() {
       }
     } catch (err) {
       console.error('Error:', err);
-      alert('Something went wrong');
+      alert('Something went wrong. Please try again.');
     } finally {
       setLoading(false); // End loading
     }
