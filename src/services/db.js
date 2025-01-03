@@ -1,24 +1,42 @@
 import sql from 'mssql';
 
-const dbConfig = {
-  user: 'your-username',
-  password: 'your-password',
-  server: 'localhost', // replace with your SQL Server address
-  database: 'RewardLoyaltySystem',
+let dbConfig = {
+  user: 'Dani',
+  password: 'K0ntol..',
+  server: '192.168.0.22', // ensure this IP is used
+  database: 'Pointly',
   options: {
-    encrypt: true, // Use this option if you're connecting to Azure
-    trustServerCertificate: true, // Change to true for local dev servers
+    encrypt: true,
+    trustServerCertificate: true, // trust server for local dev
   },
 };
 
 const connectDB = async () => {
   try {
+    console.log('Initial DB config:', dbConfig);
+    
+    // Log the server IP address before connecting
+    console.log('Attempting to connect to IP:', dbConfig.server);
+
     await sql.connect(dbConfig);
     console.log('Connected to the database');
   } catch (err) {
     console.error('Database connection error:', err);
+    if (err.code) {
+      console.log('Error code:', err.code);
+    }
     throw err;
   }
 };
 
-export { sql, connectDB };
+// Function to dynamically change the server IP (example of modification)
+const changeDbServer = (newIp) => {
+  console.log('Changing DB server to:', newIp);
+  dbConfig = {
+    ...dbConfig,
+    server: newIp,
+  };
+  console.log('Updated DB config:', dbConfig);
+};
+
+export { sql, connectDB, changeDbServer };
