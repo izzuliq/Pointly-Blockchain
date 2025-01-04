@@ -7,22 +7,30 @@ dotenv.config();
 
 const router = express.Router();
 
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1];
+  if (!token) return res.status(401).json({ message: 'Access token required' });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: 'Invalid token' });
+    req.user = user;
+    next();
+  });
+};
+
 // Fetch user profile data
 router.get('/api/user/profile', authenticateToken, async (req, res) => {
   try {
-    const userEmail = req.user.email;
-    console.log('Fetching profile for email:', userEmail);
+    const userEmail = req.user.email; // Extract email from JWT
 
     const result = await sql.query`
-      SELECT name, tier, profile_image AS avatarUrl 
-      FROM Users 
-      WHERE email = ${userEmail}
+      SELECT Name, Tier, ProfileImage AS avatarUrl 
+      FROM ShopAdmins 
+      WHERE Email = ${userEmail}
     `;
-
-    console.log('Profile query result:', result.recordset);
-
+    
     if (result.recordset.length === 0) {
-      console.log('No profile data found for email:', userEmail);
       return res.status(404).json({ message: 'User not found' });
     }
 
@@ -37,18 +45,13 @@ router.get('/api/user/profile', authenticateToken, async (req, res) => {
 router.get('/api/user/points', authenticateToken, async (req, res) => {
   try {
     const userEmail = req.user.email;
-    console.log('Fetching points for email:', userEmail);
-
     const result = await sql.query`
-      SELECT total_points AS total, available_points AS available 
-      FROM Users 
-      WHERE email = ${userEmail}
+      SELECT TotalPoints AS total, AvailablePoints AS available 
+      FROM Points 
+      WHERE Email = ${userEmail}
     `;
-
-    console.log('Points query result:', result.recordset);
-
+    
     if (result.recordset.length === 0) {
-      console.log('No points data found for email:', userEmail);
       return res.status(404).json({ message: 'Points data not found' });
     }
 
@@ -63,30 +66,15 @@ router.get('/api/user/points', authenticateToken, async (req, res) => {
 router.get('/api/user/activities', authenticateToken, async (req, res) => {
   try {
     const userEmail = req.user.email;
-    console.log('Fetching activities for email:', userEmail);
-
-    const userResult = await sql.query`
-      SELECT id FROM Users WHERE email = ${userEmail}
-    `;
-    console.log('User ID query result:', userResult.recordset);
-
-    if (userResult.recordset.length === 0) {
-      console.log('No user found for email:', userEmail);
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const userId = userResult.recordset[0].id;
-
-    const activitiesResult = await sql.query`
-      SELECT description, created_at AS timeAgo
+    const result = await sql.query`
+      SELECT Description AS description, TimeAgo AS timeAgo
       FROM Activities
-      WHERE user_id = ${userId}
-      ORDER BY created_at DESC
+      WHERE Email = ${userEmail}
+      ORDER BY CreatedAt DESC
       FETCH NEXT 10 ROWS ONLY
     `;
-    console.log('Activities query result:', activitiesResult.recordset);
-
-    res.json(activitiesResult.recordset);
+    
+    res.json(result.recordset);
   } catch (error) {
     console.error('Error fetching activities:', error);
     res.status(500).json({ message: 'Server error' });
@@ -97,37 +85,20 @@ router.get('/api/user/activities', authenticateToken, async (req, res) => {
 router.get('/api/user/progress', authenticateToken, async (req, res) => {
   try {
     const userEmail = req.user.email;
-    console.log('Fetching progress for email:', userEmail);
-
-    const userResult = await sql.query`
-      SELECT id FROM Users WHERE email = ${userEmail}
+    const result = await sql.query`
+      SELECT ProgressPercentage AS percentage 
+      FROM Progress 
+      WHERE Email = ${userEmail}
     `;
-    console.log('User ID query result:', userResult.recordset);
-
-    if (userResult.recordset.length === 0) {
-      console.log('No user found for email:', userEmail);
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    const userId = userResult.recordset[0].id;
-
-    const progressResult = await sql.query`
-      SELECT ProgressPercentage AS percentage
-      FROM Progress
-      WHERE user_id = ${userId}
-    `;
-    console.log('Progress query result:', progressResult.recordset);
-
-    if (progressResult.recordset.length === 0) {
-      console.log('No progress data found for user ID:', userId);
+    
+    if (result.recordset.length === 0) {
       return res.status(404).json({ message: 'Progress data not found' });
     }
 
-    res.json(progressResult.recordset[0]);
+    res.json(result.recordset[0]);
   } catch (error) {
     console.error('Error fetching progress:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-export default router;

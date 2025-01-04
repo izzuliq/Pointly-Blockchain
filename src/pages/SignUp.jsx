@@ -31,7 +31,11 @@ function SignUpPage() {
 
       if (response.status === 201) {
         alert(`Signed up as ${role}`);
-        navigate('/login');
+
+        // Save the JWT token in localStorage
+        localStorage.setItem('token', response.data.token);
+
+        navigate('/login'); // Redirect to login page
       } else {
         alert(response.data.message || 'Error during sign-up');
       }
@@ -41,7 +45,7 @@ function SignUpPage() {
     } finally {
       setLoading(false); // End loading
     }
-  }; 
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple">

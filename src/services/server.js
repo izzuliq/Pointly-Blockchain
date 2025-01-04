@@ -1,10 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import cors from 'cors';  // Import CORS
-import { connectDB } from './db.js';  // Ensure this is correctly imported
-import signUpRoute from './SignUp.js';  // Import the signup route
-import logInRoute from './Login.js';  // Import the signup route
+import cors from 'cors';
+import { connectDB } from './db.js'; // Ensure this is correctly imported
+import signUpRoute from './SignUp.js'; // Import the signup route
+import logInRoute from './Login.js'; // Import the login route
 
+// Create your express app
 const app = express();
 const port = 5000;
 
@@ -45,8 +46,50 @@ app.get('/', (req, res) => {
 // Use the signUp route from signup.js
 app.use('/api/signup', signUpRoute);
 
-// Define other routes as necessary (e.g., for login)
-app.post('/api/login', logInRoute);
+// Use the logIn route from login.js
+app.use('/api/login', logInRoute);
+
+// New routes for the dashboard
+// Route to get user profile
+app.get('/api/user/profile', (req, res) => {
+  // Fetch user profile from DB (replace with actual DB query)
+  const userProfile = {
+    name: 'John Doe',
+    avatarUrl: 'https://example.com/avatar.jpg',
+    tier: 'Gold', // Example, retrieve from DB
+  };
+  res.json(userProfile);
+});
+
+// Route to get user points
+app.get('/api/user/points', (req, res) => {
+  // Fetch user points (replace with actual DB query)
+  const points = {
+    total: 1500, // Example, retrieve from DB
+    available: 1200,
+  };
+  res.json(points);
+});
+
+// Route to get user activities
+app.get('/api/user/activities', (req, res) => {
+  // Fetch recent user activities (replace with actual DB query)
+  const activities = [
+    { description: 'Completed a quiz', timeAgo: '2 hours ago' },
+    { description: 'Redeemed a reward', timeAgo: '1 day ago' },
+    { description: 'Joined a new challenge', timeAgo: '3 days ago' },
+  ];
+  res.json(activities);
+});
+
+// Route to get user progress
+app.get('/api/user/progress', (req, res) => {
+  // Fetch user progress (replace with actual DB query)
+  const progress = {
+    percentage: 75, // Example, retrieve from DB
+  };
+  res.json(progress);
+});
 
 // Error-handling middleware
 app.use((err, req, res, next) => {

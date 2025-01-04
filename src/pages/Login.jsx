@@ -11,12 +11,10 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
     setLoading(true); // Start loading
-  
+    
     try {
-      // Use Axios to send a POST request to the login API
-      const response = await axios.post('http://localhost:5000/api/login', {
+      const response = await axios.post('/api/login', {
         email,
         password,
         role,
@@ -26,14 +24,12 @@ function LoginPage() {
         console.log('Login successful');
         alert('Login successful');
   
-        // Redirect based on the role
-        if (role === 'user') {
-          console.log('Redirecting to user home');
-          navigate('/home'); // Redirect to user home
-        } else if (role === 'vendor') {
-          console.log('Redirecting to vendor home');
-          navigate('/vendor-home'); // Redirect to vendor home
-        }
+        // Extract user data
+        const { token, userRole, userId } = response.data;
+        localStorage.setItem('authToken', token);  // Store JWT in localStorage
+  
+        // Redirect with state containing user data
+        navigate('/home', { state: { userId, userRole } });  // Pass state
       } else {
         alert(response.data.message || 'Login failed');
       }
@@ -43,7 +39,7 @@ function LoginPage() {
     } finally {
       setLoading(false); // End loading
     }
-  };
+  };   
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">

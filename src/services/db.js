@@ -1,9 +1,9 @@
 import sql from 'mssql';
 
 let dbConfig = {
-  user: 'Azriy',
+  user: 'Dani',
   password: '12345678',
-  server: '192.168.0.18', // Default IP address
+  server: '192.168.0.22', // Default IP address
   database: 'Pointly',
   options: {
     encrypt: true, // Enable for Azure or encrypted connections

@@ -1,9 +1,12 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';  // Import JWT library
 import { sql, connectDB } from './db.js'; // Ensure correct path for db.js
 import dotenv from 'dotenv';
 
-dotenv.config();
+// Explicitly load the .env file
+dotenv.config();  // No need to specify the path unless the .env file is not at the root
+console.log('JWT_SECRET_KEY:', process.env.JWT_SECRET_KEY);
 
 const router = express.Router();
 
@@ -54,9 +57,16 @@ router.post('/', async (req, res) => {
 
     await request.query(query);
 
-    // Send success response
+    // Generate JWT token after successful sign-up
+    const payload = { email, role }; // Include the email and role in the token payload
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' }); // 1 hour expiration time
+
+    // Send success response with JWT token
     console.log('Sign-up successful');
-    res.status(201).json({ message: 'Sign-up successful'});
+    res.status(201).json({
+      message: 'Sign-up successful',
+      token, // Return the JWT token to the frontend
+    });
   } catch (error) {
     console.error('Error during sign-up:', error);
     res.status(500).json({ message: 'Error during sign-up', error: error.message });
