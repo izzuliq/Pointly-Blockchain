@@ -23,12 +23,15 @@ function LoginPage() {
       });
   
       if (response.status === 200) {
+        console.log('Login successful');
         alert('Login successful');
   
         // Redirect based on the role
         if (role === 'user') {
+          console.log('Redirecting to user home');
           navigate('/home'); // Redirect to user home
         } else if (role === 'vendor') {
+          console.log('Redirecting to vendor home');
           navigate('/vendor-home'); // Redirect to vendor home
         }
       } else {
@@ -40,7 +43,7 @@ function LoginPage() {
     } finally {
       setLoading(false); // End loading
     }
-  };  
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">

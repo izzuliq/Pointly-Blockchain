@@ -21,7 +21,7 @@ app.get('/api/points', async (req, res) => {
     const userId = req.query.userId; // Assuming userId is passed as a query parameter
     if (!userId) return res.status(400).json({ message: 'User ID is required' });
 
-    const pointsResult = await sql.query`SELECT TotalPoints, AvailablePoints FROM Users WHERE UserID = ${userId}`;
+    const pointsResult = await sql.query`SELECT TotalPoints, AvailablePoints FROM User WHERE UserID = ${userId}`;
     if (pointsResult.recordset.length === 0) {
       return res.status(404).json({ message: 'User not found' });
     }

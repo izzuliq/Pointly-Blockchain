@@ -2,7 +2,7 @@ import sql from 'mssql';
 
 let dbConfig = {
   user: 'Dani',
-  password: 'K0ntol..',
+  password: '12345678',
   server: '192.168.0.22', // ensure this IP is used
   database: 'Pointly',
   options: {
