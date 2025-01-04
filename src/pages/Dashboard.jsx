@@ -3,18 +3,18 @@ import Navbar from "../components/UserNavbar";
 import axios from "axios";
 
 function Dashboard() {
-  const [user, setUser] = useState({
-    name: "Sarimah Jalil",
-    tier: "Quartz",
-    avatarUrl: "Sarimah.png", // Placeholder avatar
-  });
-  const [points, setPoints] = useState({ total: 1000, available: 800 });
-  const [activities, setActivities] = useState([
-    { description: "Redeemed 50 points at KFC Cyberjaya", timeAgo: "2 hours ago" },
-    { description: "Earned 100 points at KFC Serdang Jaya", timeAgo: "1 day ago" },
-    { description: "Signed up and received 500 bonus points", timeAgo: "1 week ago" },
-  ]);
-  const [progress, setProgress] = useState(45);
+  // const [user, setUser] = useState({
+  //   name: "Sarimah Jalil",
+  //   tier: "Quartz",
+  //   avatarUrl: "Sarimah.png", // Placeholder avatar
+  // });
+  // const [points, setPoints] = useState({ total: 1000, available: 800 });
+  // const [activities, setActivities] = useState([
+  //   { description: "Redeemed 50 points at KFC Cyberjaya", timeAgo: "2 hours ago" },
+  //   { description: "Earned 100 points at KFC Serdang Jaya", timeAgo: "1 day ago" },
+  //   { description: "Signed up and received 500 bonus points", timeAgo: "1 week ago" },
+  // ]);
+  // const [progress, setProgress] = useState(45);
 
   useEffect(() => {
     // Fetch user profile data

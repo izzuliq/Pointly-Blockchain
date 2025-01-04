@@ -1,7 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { sql } from './db.js'; // Adjust the import path as needed
+import { sql, connectDB } from './db.js'; // Ensure correct path for db.js
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const router = express.Router();
 
@@ -15,54 +18,49 @@ router.post('/', async (req, res) => {
   const address = req.body.address || 'Default Address';
   const dob = req.body.dob || '2000-01-01';
 
-  console.log('Request received:', { email, password, role, name, phone, address, dob });
+  console.log('Request received:', { email, role, name, phone, address, dob });
 
-  // Check if required fields are provided
+  // Validate required fields
   if (!email || !password || !role) {
     console.error('Missing required fields');
     return res.status(400).json({ message: 'Please provide email, password, and role' });
   }
 
   try {
-    // Check if the email already exists
-    const tableName = role === 'admin' ? 'Admins' : 'Users';
-    console.log(`Checking if email exists in ${tableName}...`);
-    const existingUser = await sql.query`SELECT * FROM ${sql.escapeIdentifier(tableName)} WHERE email = ${email}`;
-    if (existingUser.recordset.length > 0) {
-      console.warn('Email already exists:', email);
-      return res.status(400).json({ message: 'Email already exists' });
-    }
-
     // Hash the password
-    console.log('Hashing password...');
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    console.log('Inserting user into database...');
-    // Insert new user into the appropriate table
+    // Connect to the database
+    const pool = await connectDB();
+    const request = pool.request();
+
+    // Insert user into the database
+    const query = `
+      INSERT INTO Users (Email, Password, Name, Phone, Address, Dob, Role)
+      VALUES (@Email, @Password, @Name, @Phone, @Address, @Dob, @Role)
+    `;
+
+    request.input('Email', sql.VarChar, email)
+      .input('Password', sql.VarChar, hashedPassword)
+      .input('Name', sql.VarChar, name)
+      .input('Phone', sql.VarChar, phone)
+      .input('Address', sql.VarChar, address)
+      .input('Dob', sql.Date, dob)
+      .input('Role', sql.VarChar, role);
+
     if (role === 'admin') {
       const company_id = req.body.company_id || 1; // Default company_id
-      await sql.query(`
-        INSERT INTO Admins (email, password, name, phone, address, dob, role, company_id)
-        VALUES (@Email, @PasswordHash, @Name, @Phone, @Address, @Dob, @Role, @CompanyId)
-      `, { Email: email, PasswordHash: hashedPassword, Name: name, Phone: phone, Address: address, Dob: dob, Role: role, CompanyId: company_id });
-    } else {
-      await sql.query(`
-        INSERT INTO Users (email, password, name, phone, address, dob, role)
-        VALUES (@Email, @PasswordHash, @Name, @Phone, @Address, @Dob, @Role)
-      `, { Email: email, PasswordHash: hashedPassword, Name: name, Phone: phone, Address: address, Dob: dob, Role: role });
+      request.input('CompanyId', sql.Int, company_id);
     }
 
-    // Create JWT token
-    console.log('Creating JWT token...');
-    const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    await request.query(query);
 
     // Send success response
     console.log('Sign-up successful');
-    res.status(201).json({ message: 'Sign-up successful', token });
+    res.status(201).json({ message: 'Sign-up successful'});
   } catch (error) {
     console.error('Error during sign-up:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'Error during sign-up', error: error.message });
   }
 });
 

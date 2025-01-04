@@ -7,31 +7,22 @@ dotenv.config();
 
 const router = express.Router();
 
-// Authentication middleware
-const authenticateToken = (req, res, next) => {
-  const token = req.headers['authorization']?.split(' ')[1];
-  if (!token) return res.status(401).json({ message: 'Access token required' });
-
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: 'Invalid token' });
-    req.user = user;
-    next();
-  });
-};
-
 // Fetch user profile data
 router.get('/api/user/profile', authenticateToken, async (req, res) => {
   try {
-    const userEmail = req.user.email; // Extract email from JWT
+    const userEmail = req.user.email;
+    console.log('Fetching profile for email:', userEmail);
 
-    // Query to fetch user profile details
     const result = await sql.query`
       SELECT name, tier, profile_image AS avatarUrl 
       FROM Users 
       WHERE email = ${userEmail}
     `;
-    
+
+    console.log('Profile query result:', result.recordset);
+
     if (result.recordset.length === 0) {
+      console.log('No profile data found for email:', userEmail);
       return res.status(404).json({ message: 'User not found' });
     }
 
@@ -42,18 +33,22 @@ router.get('/api/user/profile', authenticateToken, async (req, res) => {
   }
 });
 
-// Fetch points data (from Users table)
+// Fetch points data
 router.get('/api/user/points', authenticateToken, async (req, res) => {
   try {
     const userEmail = req.user.email;
-    // Query to fetch points directly from the Users table
+    console.log('Fetching points for email:', userEmail);
+
     const result = await sql.query`
       SELECT total_points AS total, available_points AS available 
       FROM Users 
       WHERE email = ${userEmail}
     `;
-    
+
+    console.log('Points query result:', result.recordset);
+
     if (result.recordset.length === 0) {
+      console.log('No points data found for email:', userEmail);
       return res.status(404).json({ message: 'Points data not found' });
     }
 
@@ -68,17 +63,20 @@ router.get('/api/user/points', authenticateToken, async (req, res) => {
 router.get('/api/user/activities', authenticateToken, async (req, res) => {
   try {
     const userEmail = req.user.email;
+    console.log('Fetching activities for email:', userEmail);
 
-    // Get user ID from email
     const userResult = await sql.query`
       SELECT id FROM Users WHERE email = ${userEmail}
     `;
+    console.log('User ID query result:', userResult.recordset);
+
     if (userResult.recordset.length === 0) {
+      console.log('No user found for email:', userEmail);
       return res.status(404).json({ message: 'User not found' });
     }
+
     const userId = userResult.recordset[0].id;
 
-    // Query to fetch activities for the user
     const activitiesResult = await sql.query`
       SELECT description, created_at AS timeAgo
       FROM Activities
@@ -86,6 +84,7 @@ router.get('/api/user/activities', authenticateToken, async (req, res) => {
       ORDER BY created_at DESC
       FETCH NEXT 10 ROWS ONLY
     `;
+    console.log('Activities query result:', activitiesResult.recordset);
 
     res.json(activitiesResult.recordset);
   } catch (error) {
@@ -94,28 +93,33 @@ router.get('/api/user/activities', authenticateToken, async (req, res) => {
   }
 });
 
-// Fetch progress data (assuming a Progress table exists in your database)
+// Fetch progress data
 router.get('/api/user/progress', authenticateToken, async (req, res) => {
   try {
     const userEmail = req.user.email;
-    
-    // Get user ID from email
+    console.log('Fetching progress for email:', userEmail);
+
     const userResult = await sql.query`
       SELECT id FROM Users WHERE email = ${userEmail}
     `;
+    console.log('User ID query result:', userResult.recordset);
+
     if (userResult.recordset.length === 0) {
+      console.log('No user found for email:', userEmail);
       return res.status(404).json({ message: 'User not found' });
     }
+
     const userId = userResult.recordset[0].id;
 
-    // Query to fetch progress for the user (assuming a Progress table)
     const progressResult = await sql.query`
       SELECT ProgressPercentage AS percentage
       FROM Progress
       WHERE user_id = ${userId}
     `;
-    
+    console.log('Progress query result:', progressResult.recordset);
+
     if (progressResult.recordset.length === 0) {
+      console.log('No progress data found for user ID:', userId);
       return res.status(404).json({ message: 'Progress data not found' });
     }
 
