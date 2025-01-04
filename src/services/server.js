@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';  // Import CORS
 import { connectDB } from './db.js';  // Ensure this is correctly imported
 import signUpRoute from './SignUp.js';  // Import the signup route
+import logInRoute from './Login.js';  // Import the signup route
 
 const app = express();
 const port = 5000;
@@ -45,9 +46,7 @@ app.get('/', (req, res) => {
 app.use('/api/signup', signUpRoute);
 
 // Define other routes as necessary (e.g., for login)
-app.post('/api/login', (req, res) => {
-  // login logic here
-});
+app.post('/api/login', logInRoute);
 
 // Error-handling middleware
 app.use((err, req, res, next) => {
