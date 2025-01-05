@@ -11,46 +11,28 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true); // Start loading
 
     try {
-      const response = await axios.post('/api/login', {
-        email,
-        password,
-        role,
-      });
+      const response = await axios.post('/api/login', { email, password, role });
 
       if (response.status === 200) {
         console.log('Login successful');
         alert('Login successful');
 
-        // Save session details to sessionStorage
-        const { token, userRole, userId } = response.data;
-        sessionStorage.setItem('authToken', token);  // Store JWT in sessionStorage
-        sessionStorage.setItem('userId', userId);    // Store userId in sessionStorage
-        sessionStorage.setItem('userRole', userRole); // Store userRole in sessionStorage
+        // Save JWT to sessionStorage
+        const { token, redirectPath } = response.data;
+        sessionStorage.setItem('authToken', token); // Store JWT in sessionStorage
 
-        // Log session details for debugging
-        console.log('Session initialized:');
-        console.log('Token:', sessionStorage.getItem('authToken'));
-        console.log('User ID:', sessionStorage.getItem('userId'));
-        console.log('User Role:', sessionStorage.getItem('userRole'));
-
-        // Redirect based on the role
-        if (userRole === 'user') {
-          console.log('Redirecting to user home');
-          navigate('/home'); // Redirect to user home
-        } else if (userRole === 'vendor') {
-          console.log('Redirecting to vendor home');
-          navigate('/vendor-home'); // Redirect to vendor home
-        }
+        // Redirect to the backend-specified path
+        console.log('Redirecting to:', redirectPath);
+        navigate(redirectPath);
       } else {
         alert(response.data.message || 'Login failed');
       }
     } catch (error) {
       console.error(error);
-      alert('Something went wrong. Please try again later.');
+      alert(error.response?.data?.message || 'Something went wrong. Please try again later.');
     } finally {
       setLoading(false); // End loading
     }
@@ -58,18 +40,15 @@ function LoginPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">
-      {/* Header Section */}
       <header className="flex flex-col items-center text-center mt-10 mb-8">
         <img src="./PointlyLogoWhite.png" alt="Company Logo" className="w-[200px] h-auto mb-4" />
         <h1 className="text-4xl font-bold text-white">Welcome to Pointly</h1>
         <p className="mt-2 text-xl font-bold text-white italic">"Points Simplified"</p>
       </header>
 
-      {/* Login Form */}
       <div className="p-6 bg-white shadow-md rounded-lg max-w-xl w-full mb-10">
         <h2 className="text-3xl font-semibold text-gray-800 text-center">Login</h2>
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col">
-          {/* Email Input */}
           <div className="w-full mb-4">
             <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="email">Email</label>
             <input
@@ -83,7 +62,6 @@ function LoginPage() {
             />
           </div>
 
-          {/* Password Input */}
           <div className="w-full mb-6">
             <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="password">Password</label>
             <input
@@ -97,7 +75,6 @@ function LoginPage() {
             />
           </div>
 
-          {/* Role Selection - Dropdown */}
           <div className="w-full mb-4">
             <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">Select Role</label>
             <select
@@ -112,23 +89,20 @@ function LoginPage() {
             </select>
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
             disabled={loading} // Disable button when loading
           >
-            {loading ? 'Logging in...' : 'Log In'} {/* Display loading text */}
+            {loading ? 'Logging in...' : 'Log In'}
           </button>
 
-          {/* Loading Spinner (Optional) */}
           {loading && (
             <div className="flex justify-center mt-4">
               <div className="w-8 h-8 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
             </div>
           )}
 
-          {/* Link to Sign-Up Page */}
           <p className="mt-4 text-center font-cabin">
             Don't have an account?{" "}
             <a href="/" className="text-purple">Sign up here</a>

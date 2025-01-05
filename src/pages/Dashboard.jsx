@@ -17,53 +17,62 @@ function Dashboard() {
   const [progress, setProgress] = useState(45);
 
   useEffect(() => {
+    const userId = sessionStorage.getItem("userId");
+    const authToken = sessionStorage.getItem("authToken");
+    console.log('Current userId from sessionStorage:', userId); // Log userId
+    console.log('Current authToken from sessionStorage:', authToken); // Log authToken
+
     // Fetch user profile data
     axios
-      .get("/api/user/profile")
-      .then((response) => {
-        if (response.data && response.data.name) {
-          setUser(response.data);
-        } else {
-          console.warn("Invalid profile data, using default template.");
-        }
+      .get("/api/user/profile", {
+        headers: { Authorization: `Bearer ${authToken}` }
       })
-      .catch((error) => console.error("Error fetching user profile:", error));
-  
+      .then((response) => {
+        console.log('Fetched user profile data:', response.data); // Log response data
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching user profile:', error);
+      });
+
     // Fetch points data
     axios
-      .get("/api/user/points")
-      .then((response) => {
-        if (response.data && response.data.total !== undefined) {
-          setPoints(response.data);
-        } else {
-          console.warn("Invalid points data, using default template.");
-        }
+      .get("/api/user/points", {
+        headers: { Authorization: `Bearer ${authToken}` }
       })
-      .catch((error) => console.error("Error fetching points data:", error));
-  
+      .then((response) => {
+        console.log('Fetched points data:', response.data); // Log response data
+        setPoints(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching points data:', error);
+      });
+
     // Fetch recent activities
     axios
-      .get("/api/user/activities")
-      .then((response) => {
-        if (Array.isArray(response.data) && response.data.length > 0) {
-          setActivities(response.data);
-        } else {
-          console.warn("Invalid activities data, using default template.");
-        }
+      .get("/api/user/activities", {
+        headers: { Authorization: `Bearer ${authToken}` }
       })
-      .catch((error) => console.error("Error fetching activities:", error));
-  
+      .then((response) => {
+        console.log('Fetched activities data:', response.data); // Log response data
+        setActivities(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching activities data:', error);
+      });
+
     // Fetch progress data
     axios
-      .get("/api/user/progress")
-      .then((response) => {
-        if (response.data && typeof response.data.percentage === "number") {
-          setProgress(response.data.percentage);
-        } else {
-          console.warn("Invalid progress data, using default template.");
-        }
+      .get("/api/user/progress", {
+        headers: { Authorization: `Bearer ${authToken}` }
       })
-      .catch((error) => console.error("Error fetching progress data:", error));
+      .then((response) => {
+        console.log('Fetched progress data:', response.data); // Log response data
+        setProgress(response.data.percentage);
+      })
+      .catch((error) => {
+        console.error('Error fetching progress data:', error);
+      });
   }, []);
   
   return (
