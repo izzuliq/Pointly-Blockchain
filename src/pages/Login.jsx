@@ -11,25 +11,40 @@ function LoginPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true); // Start loading
-    
+
     try {
       const response = await axios.post('/api/login', {
         email,
         password,
         role,
       });
-  
+
       if (response.status === 200) {
         console.log('Login successful');
         alert('Login successful');
-  
-        // Extract user data
+
+        // Save session details to sessionStorage
         const { token, userRole, userId } = response.data;
-        localStorage.setItem('authToken', token);  // Store JWT in localStorage
-  
-        // Redirect with state containing user data
-        navigate('/home', { state: { userId, userRole } });  // Pass state
+        sessionStorage.setItem('authToken', token);  // Store JWT in sessionStorage
+        sessionStorage.setItem('userId', userId);    // Store userId in sessionStorage
+        sessionStorage.setItem('userRole', userRole); // Store userRole in sessionStorage
+
+        // Log session details for debugging
+        console.log('Session initialized:');
+        console.log('Token:', sessionStorage.getItem('authToken'));
+        console.log('User ID:', sessionStorage.getItem('userId'));
+        console.log('User Role:', sessionStorage.getItem('userRole'));
+
+        // Redirect based on the role
+        if (userRole === 'user') {
+          console.log('Redirecting to user home');
+          navigate('/home'); // Redirect to user home
+        } else if (userRole === 'vendor') {
+          console.log('Redirecting to vendor home');
+          navigate('/vendor-home'); // Redirect to vendor home
+        }
       } else {
         alert(response.data.message || 'Login failed');
       }
@@ -39,7 +54,7 @@ function LoginPage() {
     } finally {
       setLoading(false); // End loading
     }
-  };   
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">
@@ -114,7 +129,7 @@ function LoginPage() {
           )}
 
           {/* Link to Sign-Up Page */}
-          <p className="mt-4 text-center font-cabin font-cabin">
+          <p className="mt-4 text-center font-cabin">
             Don't have an account?{" "}
             <a href="/" className="text-purple">Sign up here</a>
           </p>
