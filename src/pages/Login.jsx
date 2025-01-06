@@ -20,9 +20,11 @@ function LoginPage() {
         console.log('Login successful');
         alert('Login successful');
 
-        // Save JWT to sessionStorage
-        const { token, redirectPath } = response.data;
+        // Save JWT and user info to sessionStorage
+        const { token, redirectPath, userId } = response.data;
         sessionStorage.setItem('authToken', token); // Store JWT in sessionStorage
+        sessionStorage.setItem('userRole', role); // Store role in sessionStorage
+        sessionStorage.setItem('userId', userId); // Store userId in sessionStorage
 
         // Redirect to the backend-specified path
         console.log('Redirecting to:', redirectPath);

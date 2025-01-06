@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // React Router for navigation
+import { Link, useNavigate } from "react-router-dom"; // React Router for navigation
 import Navbar from "../components/UserNavbar";
 import axios from "axios";
 
@@ -14,11 +14,29 @@ function ProfilePage() {
   });
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Track error state
+  const navigate = useNavigate();
 
   useEffect(() => {
+    // Extract session data from sessionStorage
+    const token = sessionStorage.getItem('authToken');
+    const role = sessionStorage.getItem('userRole');
+    const id = sessionStorage.getItem('userId');
+
+    if (token && role && id) {
+      console.log('Session extracted:');
+      console.log('Token:', token);
+      console.log('User ID:', id);
+      console.log('User Role:', role);
+    } else {
+      console.warn('No valid session found. Redirecting to login.');
+      navigate('/'); // Redirect to login page if not authenticated
+    }
+
     // Fetch user profile data from API
     axios
-      .get("/api/user/profile") // Replace with your API endpoint
+      .get("/api/user/profile", {
+        headers: { Authorization: `Bearer ${token}` }, // Include token in API call
+      })
       .then((response) => {
         // Set user data from API response
         setUserData({
@@ -36,7 +54,7 @@ function ProfilePage() {
         setError("Failed to fetch profile data.");
         setLoading(false);
       });
-  }, []); // Run once on mount
+  }, [navigate, userData.name, userData.email, userData.phone, userData.address, userData.dob, userData.profileImage]);
 
   if (loading) {
     return (
@@ -48,7 +66,7 @@ function ProfilePage() {
         </div>
       </div>
     );
-  } 
+  }
 
   if (error) {
     return <div>{error}</div>; // Display error message
