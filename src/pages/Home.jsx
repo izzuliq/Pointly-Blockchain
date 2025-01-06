@@ -20,10 +20,6 @@ function Home() {
       setIsAuthenticated(true);
       setUserRole(role);
       setUserId(id);
-      console.log('Session extracted:');
-      console.log('Token:', token);
-      console.log('User ID:', id);
-      console.log('User Role:', role);
     } else {
       console.warn('No valid session found. Redirecting to login.');
       navigate('/'); // Redirect to login page if not authenticated
