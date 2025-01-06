@@ -27,14 +27,17 @@ CREATE TABLE Activities (
 
 -- Rewards Table (Available Rewards for Redemption)
 CREATE TABLE Rewards (
-    id INT IDENTITY(1,1) PRIMARY KEY,  -- Changed AUTO_INCREMENT to IDENTITY
+    id INT IDENTITY(1,1) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     points_required INT NOT NULL,
     img_src VARCHAR(255),
     expiration_date DATE NOT NULL,
-    terms TEXT
+    terms TEXT,
+    companies_id INT NOT NULL,  -- New column for vendor association
+    FOREIGN KEY (companies_id) REFERENCES Companies(id)  -- Foreign key reference to Companies
 );
+
 
 -- Transactions Table (Tracking Points Earned and Redeemed)
 CREATE TABLE Transactions (
@@ -55,16 +58,6 @@ CREATE TABLE Reward_Redemptions (
     redemption_date DATETIME DEFAULT CURRENT_TIMESTAMP, -- Changed TIMESTAMP to DATETIME
     FOREIGN KEY (user_id) REFERENCES Users(id),
     FOREIGN KEY (reward_id) REFERENCES Rewards(id)
-);
-
--- Vendor Metrics Table (Tracking Vendor Performance Metrics)
-CREATE TABLE Vendor_Metrics (
-    id INT IDENTITY(1,1) PRIMARY KEY,  -- Changed AUTO_INCREMENT to IDENTITY
-    vendor_id INT NOT NULL,
-    total_redemptions INT DEFAULT 0,
-    active_promotions INT DEFAULT 0,
-    revenue_generated DECIMAL(10, 2) DEFAULT 0.00,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP -- Changed TIMESTAMP to DATETIME
 );
 
 -- Companies Table (Company Information)

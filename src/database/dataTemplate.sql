@@ -47,27 +47,27 @@ VALUES
     (20, 'Updated profile');
 
 -- Insert dummy data for Rewards table
-INSERT INTO Rewards (name, description, points_required, img_src, expiration_date, terms)
+INSERT INTO Rewards (name, description, points_required, img_src, expiration_date, terms, companies_id)
 VALUES
-    ('Gift Card', 'Redeemable gift card for online store', 100, 'gift_card.jpg', '2025-12-31', 'Valid for one-time use'),
-    ('Coffee Mug', 'Custom branded coffee mug', 50, 'coffee_mug.jpg', '2025-06-30', 'Non-refundable'),
-    ('Headphones', 'Noise-cancelling headphones', 200, 'headphones.jpg', '2025-11-30', 'No exchanges'),
-    ('T-shirt', 'Custom branded T-shirt', 75, 'tshirt.jpg', '2025-09-30', 'Limited stock'),
-    ('Backpack', 'Stylish backpack', 150, 'backpack.jpg', '2025-08-15', 'One per user'),
-    ('Laptop Stand', 'Ergonomic laptop stand', 300, 'laptop_stand.jpg', '2025-07-10', 'Free shipping'),
-    ('Water Bottle', 'Reusable water bottle', 50, 'water_bottle.jpg', '2025-06-25', 'Not redeemable for cash'),
-    ('Bluetooth Speaker', 'Portable Bluetooth speaker', 120, 'bluetooth_speaker.jpg', '2025-12-15', 'Limited availability'),
-    ('Smartwatch', 'Fitness tracking smartwatch', 250, 'smartwatch.jpg', '2025-11-01', 'No returns'),
-    ('Tablet', '7-inch tablet', 400, 'tablet.jpg', '2025-09-30', 'Batteries not included'),
-    ('Gift Voucher', 'Store-wide gift voucher', 200, 'gift_voucher.jpg', '2025-10-01', 'Valid in-store and online'),
-    ('Game Console', 'Gaming console bundle', 500, 'game_console.jpg', '2025-12-20', 'One per user'),
-    ('Movie Tickets', 'Two tickets for a movie', 80, 'movie_tickets.jpg', '2025-07-20', 'Valid for one-time use'),
-    ('E-book Reader', 'Portable e-book reader', 180, 'ebook_reader.jpg', '2025-11-10', 'Non-transferable'),
-    ('Travel Voucher', 'Voucher for travel booking', 600, 'travel_voucher.jpg', '2025-06-01', 'Expires in 1 year'),
-    ('Amazon Echo', 'Voice assistant smart speaker', 220, 'amazon_echo.jpg', '2025-10-05', 'One per user'),
-    ('Camera', 'Digital camera', 350, 'camera.jpg', '2025-09-01', 'Limited stock'),
-    ('Fitness Tracker', 'Track your health with this fitness tracker', 140, 'fitness_tracker.jpg', '2025-08-10', 'Non-refundable'),
-    ('Portable Charger', 'Portable power bank', 60, 'portable_charger.jpg', '2025-07-15', 'Limited edition');
+    ('Gift Card', 'Redeemable gift card for online store', 100, 'gift_card.jpg', '2025-12-31', 'Valid for one-time use', 1),
+    ('Coffee Mug', 'Custom branded coffee mug', 50, 'coffee_mug.jpg', '2025-06-30', 'Non-refundable', 2),
+    ('Headphones', 'Noise-cancelling headphones', 200, 'headphones.jpg', '2025-11-30', 'No exchanges', 3),
+    ('T-shirt', 'Custom branded T-shirt', 75, 'tshirt.jpg', '2025-09-30', 'Limited stock', 4),
+    ('Backpack', 'Stylish backpack', 150, 'backpack.jpg', '2025-08-15', 'One per user', 5),
+    ('Laptop Stand', 'Ergonomic laptop stand', 300, 'laptop_stand.jpg', '2025-07-10', 'Free shipping', 6),
+    ('Water Bottle', 'Reusable water bottle', 50, 'water_bottle.jpg', '2025-06-25', 'Not redeemable for cash', 7),
+    ('Bluetooth Speaker', 'Portable Bluetooth speaker', 120, 'bluetooth_speaker.jpg', '2025-12-15', 'Limited availability', 8),
+    ('Smartwatch', 'Fitness tracking smartwatch', 250, 'smartwatch.jpg', '2025-11-01', 'No returns', 9),
+    ('Tablet', '7-inch tablet', 400, 'tablet.jpg', '2025-09-30', 'Batteries not included', 10),
+    ('Gift Voucher', 'Store-wide gift voucher', 200, 'gift_voucher.jpg', '2025-10-01', 'Valid in-store and online', 11),
+    ('Game Console', 'Gaming console bundle', 500, 'game_console.jpg', '2025-12-20', 'One per user', 12),
+    ('Movie Tickets', 'Two tickets for a movie', 80, 'movie_tickets.jpg', '2025-07-20', 'Valid for one-time use', 13),
+    ('E-book Reader', 'Portable e-book reader', 180, 'ebook_reader.jpg', '2025-11-10', 'Non-transferable', 14),
+    ('Travel Voucher', 'Voucher for travel booking', 600, 'travel_voucher.jpg', '2025-06-01', 'Expires in 1 year', 15),
+    ('Amazon Echo', 'Voice assistant smart speaker', 220, 'amazon_echo.jpg', '2025-10-05', 'One per user', 16),
+    ('Camera', 'Digital camera', 350, 'camera.jpg', '2025-09-01', 'Limited stock', 17),
+    ('Fitness Tracker', 'Track your health with this fitness tracker', 140, 'fitness_tracker.jpg', '2025-08-10', 'Non-refundable',18),
+    ('Portable Charger', 'Portable power bank', 60, 'portable_charger.jpg', '2025-07-15', 'Limited edition', 19);
 
 -- Insert dummy data for Transactions table
 INSERT INTO Transactions (user_id, points_change, transaction_type, description)
@@ -116,30 +116,6 @@ VALUES
     (18, 18),
     (19, 19),
     (20, 20);
-
--- Insert dummy data for Vendor_Metrics table
-INSERT INTO Vendor_Metrics (vendor_id, total_redemptions, active_promotions, revenue_generated)
-VALUES
-    (1, 20, 5, 1000.00),
-    (2, 15, 3, 500.00),
-    (3, 25, 8, 1500.00),
-    (4, 10, 2, 200.00),
-    (5, 18, 4, 800.00),
-    (6, 30, 6, 1200.00),
-    (7, 40, 7, 1700.00),
-    (8, 22, 5, 600.00),
-    (9, 14, 3, 400.00),
-    (10, 35, 9, 2000.00),
-    (11, 28, 5, 1300.00),
-    (12, 38, 8, 1600.00),
-    (13, 24, 4, 1100.00),
-    (14, 19, 2, 500.00),
-    (15, 33, 7, 1400.00),
-    (16, 27, 6, 1300.00),
-    (17, 15, 3, 350.00),
-    (18, 21, 4, 800.00),
-    (19, 17, 2, 600.00),
-    (20, 23, 5, 900.00);
 
 -- Insert dummy data for Companies table
 INSERT INTO Companies (name, address, industry, logo)
