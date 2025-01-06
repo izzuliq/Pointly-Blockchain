@@ -157,7 +157,3 @@ Pointly is a loyalty reward application designed to simplify the management of r
 5. Open a pull request.
 
 ---
-
-## License
-
-This project is licensed under the MIT License.
