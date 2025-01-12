@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // React Router for navigation
 import Navbar from "../components/UserNavbar";
-import axios from "axios";
+import Web3 from "web3"; // Import Web3.js
+import PointlyUserABI from "../abis/PointlyUser.json"; // Import ABI of PointlyUser.sol
 
 function ProfilePage() {
   const [userData, setUserData] = useState({
@@ -15,46 +16,57 @@ function ProfilePage() {
   const [loading, setLoading] = useState(true); // Track loading state
   const [error, setError] = useState(null); // Track error state
   const navigate = useNavigate();
+  const [account, setAccount] = useState(null); // User's account address
+  const [contract, setContract] = useState(null); // Contract instance
 
   useEffect(() => {
-    // Extract session data from sessionStorage
-    const token = sessionStorage.getItem('authToken');
-    const role = sessionStorage.getItem('userRole');
-    const id = sessionStorage.getItem('userId');
+    // Initialize Web3.js and set up the contract
+    const initWeb3 = async () => {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        await window.ethereum.enable(); // Request wallet access
+        const accounts = await web3.eth.getAccounts();
+        setAccount(accounts[0]);
 
-    if (token && role && id) {
-      console.log('Session extracted:');
-      console.log('Token:', token);
-      console.log('User ID:', id);
-      console.log('User Role:', role);
-    } else {
-      console.warn('No valid session found. Redirecting to login.');
-      navigate('/'); // Redirect to login page if not authenticated
-    }
+        const contractAddress = "0x56fe86dF9846967b4B50DCB94b323bf529b41D83"; // Replace with your contract address
+        const pointlyUserContract = new web3.eth.Contract(PointlyUserABI, contractAddress);
+        setContract(pointlyUserContract);
 
-    // Fetch user profile data from API
-    axios
-      .get("/api/user/profile", {
-        headers: { Authorization: `Bearer ${token}` }, // Include token in API call
-      })
-      .then((response) => {
-        // Set user data from API response
-        setUserData({
-          name: response.data.name || userData.name,
-          email: response.data.email || userData.email,
-          phone: response.data.phone || userData.phone,
-          address: response.data.address || userData.address,
-          dob: response.data.dob || userData.dob,
-          profileImage: response.data.profileImage || userData.profileImage,
-        });
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Error fetching profile data:", err);
-        setError("Failed to fetch profile data.");
-        setLoading(false);
+        // Extract session data from sessionStorage
+        const token = sessionStorage.getItem('authToken');
+        const role = sessionStorage.getItem('userRole');
+        const id = sessionStorage.getItem('userId');
+
+        // Fetch user profile data from the contract
+        if (account && contract) {
+          fetchUserProfile(account, pointlyUserContract);
+        }
+      } else {
+        console.error("Ethereum wallet not detected. Please install MetaMask.");
+      }
+    };
+
+    initWeb3();
+  }, [navigate, account, contract]);
+
+  const fetchUserProfile = async (userAddress, contract) => {
+    try {
+      const userProfile = await contract.methods.getUser(userAddress).call();
+      setUserData({
+        name: userProfile.name || userData.name,
+        email: userProfile.email || userData.email,
+        phone: userProfile.phone || userData.phone,
+        address: userProfile.addressDetails || userData.address,
+        dob: userProfile.dob || userData.dob,
+        profileImage: userProfile.profileImage || userData.profileImage,
       });
-  }, [navigate, userData.name, userData.email, userData.phone, userData.address, userData.dob, userData.profileImage]);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setError("Failed to fetch profile data.");
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
