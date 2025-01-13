@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
-import PointlyUser from '../abis/PointlyUser.json';  // Import the ABI of your contract
+import PointlyUser from '../abis/PointlyUser.json';  // Import ABI of your contract
 
 function LoginPage() {
   const [account, setAccount] = useState(null);  // Store MetaMask account
@@ -35,33 +35,25 @@ function LoginPage() {
 
       console.log("Contract initialized:", contract); // Debugging contract
 
-      // Check if the user is already registered in the smart contract (example function)
-      const isRegistered = await contract.methods.isUser(userAccount).call();
-      console.log("User registered:", isRegistered); // Debugging registration check
+      const user = await contract.methods.getUser(userAccount).call();
+      console.log("User details:", user);
 
-      if (isRegistered) {
-        // Optionally: you can also fetch additional details such as user role if necessary
-        const role = await contract.methods.getUserRole(userAccount).call();
-        console.log("User role:", role); // Debugging user role
-
-        alert(`Welcome back! You are logged in as a ${role}.`);
-
-        // Store the account and role in sessionStorage
+      if (user.exists === true || user.exists === 'true' || user.exists === 1) {
+        alert(`Welcome back! You are logged in as a ${user.tier} member.`);
         sessionStorage.setItem('userAccount', userAccount);
-        sessionStorage.setItem('userRole', role);
-
-        // Redirect to dashboard or user-specific page
-        navigate('/dashboard'); // You can change this to any path you want
+        sessionStorage.setItem('userRole', user.tier);
+        navigate('/dashboard');
       } else {
         alert('You are not registered. Please sign up first!');
       }
-    } catch (error) {
-      console.error("Error during login:", error); // Debugging error
-      alert('Something went wrong during login. Please try again.');
-    } finally {
-      setLoading(false);  // End loading
-    }
-  };
+
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        alert('You are not registered. Please sign up first!');
+      } finally {
+        setLoading(false);  // End loading
+      }
+    };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">
