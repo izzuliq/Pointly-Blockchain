@@ -23,7 +23,7 @@ function Dashboard() {
         const accounts = await web3.eth.getAccounts();
         setAccount(accounts[0]);
 
-        const contractAddress = "0x9e900DeE4602cBEFcaF8d78e9DAfE0859037aAB5"; // Replace with your deployed contract address
+        const contractAddress = "0xDc12603e7A1BF26c70B87332C2c32b8d66DB709d"; // Replace with your deployed contract address
         const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress); // Ensure ABI is correct
         setContract(pointlyUserContract);
 
@@ -38,33 +38,43 @@ function Dashboard() {
     initWeb3();
   }, []);
 
-  const fetchUserData = async (userAddress, contract) => {
+  const fetchUserData = async () => {
     try {
-      const userDetails = await contract.methods.getUser(userAddress).call();
-      setUser({
-        name: userDetails[1], // Name at index 1
-        tier: userDetails[5], // Tier at index 5
-        avatarUrl: userDetails[4] || "Default.png", // Profile image at index 4
+      const user = await contract.methods.getUser(userAddress).call();
+  
+      // Convert BigInt values to numbers or strings
+      const totalPoints = BigInt(user[6]).toString(); // Convert to string for display
+      const availablePoints = BigInt(user[7]).toString(); // Convert to string for display
+  
+      setUserData({
+        email: user[0],
+        name: user[1],
+        phone: user[2],
+        addressDetails: user[3],
+        profileImage: user[4],
+        tier: user[5],
+        totalPoints, // Use string
+        availablePoints, // Use string
       });
-      setPoints({
-        total: userDetails[6], // Total points at index 6
-        available: userDetails[7], // Available points at index 7
-      });
-
-      // Calculate progress
-      const progressPercentage = calculateProgress(userDetails[6]);
-      setProgress(progressPercentage);
+  
+      calculateProgress(Number(totalPoints), Number(availablePoints)); // Pass as numbers for calculations
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
-
-  const calculateProgress = (totalPoints) => {
-    if (totalPoints >= 10000) return 100; // Diamond
-    if (totalPoints >= 5000) return ((totalPoints - 5000) / 5000) * 100; // Sapphire
-    if (totalPoints >= 1000) return ((totalPoints - 1000) / 4000) * 100; // Emerald
-    return (totalPoints / 1000) * 100; // Quartz
+  
+  const calculateProgress = (totalPoints, availablePoints) => {
+    try {
+      if (totalPoints === 0) return 0;
+  
+      // Calculate progress as a percentage
+      const progress = (availablePoints / totalPoints) * 100;
+      setProgress(progress.toFixed(2)); // Set progress with 2 decimal places
+    } catch (error) {
+      console.error("Error calculating progress:", error);
+    }
   };
+  
 
   if (loading) {
     return (

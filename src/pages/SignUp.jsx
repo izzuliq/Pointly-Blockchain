@@ -1,49 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
+import PointlyUser from '../abis/PointlyUser.json';  // Import ABI of your contract
 
 function SignUpPage() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('user'); // Default role is 'user'
-  const [loading, setLoading] = useState(false); // Track loading state
+  const [loading, setLoading] = useState(false);
+  const [account, setAccount] = useState(null); // State to store MetaMask account
+  const [web3, setWeb3] = useState(null); // Store Web3 instance
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if MetaMask is available and listen for account changes
+    if (window.ethereum) {
+      window.ethereum.on('accountsChanged', handleAccountsChanged); // Listen for account change
+      window.ethereum.on('chainChanged', handleChainChanged); // Listen for network change
+    }
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+        window.ethereum.removeListener('chainChanged', handleChainChanged);
+      }
+    };
+  }, []);
+
+  const handleAccountsChanged = (accounts) => {
+    if (accounts.length > 0) {
+      setAccount(accounts[0]);  // Update the account
+    } else {
+      alert('Please connect your MetaMask wallet!');
+    }
+  };
+
+  const handleChainChanged = () => {
+    alert('Network changed! Please reconnect your wallet.');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Simple validation to check if passwords match
-    if (password !== confirmPassword) {
-      alert('Passwords do not match!');
+
+    if (!account) {
+      alert('Please connect your MetaMask wallet!');
       return;
     }
 
-    setLoading(true); // Start loading
-  
+    setLoading(true);
+
     try {
-      // Use Axios to call the backend API for sign-up
-      const response = await axios.post('/api/signup', {  // Use the relative path here
-        email,
-        password,
-        role,
-      });
+      // Use Web3 to interact with the contract
+      const contract = new web3.eth.Contract(PointlyUser.abi, '0xDc12603e7A1BF26c70B87332C2c32b8d66DB709d'); // Contract address
 
-      if (response.status === 201) {
-        alert(`Signed up as ${role}`);
+      // Call the contract to register the user
+      await contract.methods.createUser(account, email, role, '', '', 'default_avatar.jpg')
+        .send({ from: account });
 
-        // Save the JWT token in localStorage
-        localStorage.setItem('token', response.data.token);
-
-        navigate('/login'); // Redirect to login page
-      } else {
-        alert(response.data.message || 'Error during sign-up');
-      }
+      alert('User registered on the blockchain!');
+      navigate('/login'); // Redirect to login page
     } catch (err) {
-      console.error('Error:', err);
-      alert('Something went wrong. Please try again.');
+      console.error('Error during signup:', err);
+      alert('Something went wrong during registration.');
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
+    }
+  };
+
+  const handleMetaMaskConnect = async () => {
+    try {
+      // Initialize Web3 using the utility
+      const web3Instance = await getWeb3();
+      setWeb3(web3Instance);  // Set the Web3 instance
+
+      const accounts = await web3Instance.eth.getAccounts();
+      if (accounts.length > 0) {
+        setAccount(accounts[0]);  // Store MetaMask account in state
+      } else {
+        alert('Please connect your MetaMask wallet!');
+      }
+    } catch (error) {
+      console.error('MetaMask connection failed:', error);
+      alert('MetaMask connection failed.');
     }
   };
 
@@ -74,34 +110,6 @@ function SignUpPage() {
             />
           </div>
 
-          {/* Password Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          {/* Confirm Password Input */}
-          <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Confirm your password"
-              required
-            />
-          </div>
-
           {/* Role Selection - Dropdown */}
           <div className="w-full mb-4">
             <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">Select Role</label>
@@ -117,13 +125,22 @@ function SignUpPage() {
             </select>
           </div>
 
+          {/* MetaMask Connect Button */}
+          <button
+            type="button"
+            onClick={handleMetaMaskConnect}
+            className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
+          >
+            {account ? `Connected: ${account}` : 'Connect MetaMask'}
+          </button>
+
           {/* Submit Button */}
           <button
             type="submit"
-            className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
-            disabled={loading} // Disable button when loading
+            className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors mt-4"
+            disabled={loading || !account} // Disable button if loading or MetaMask is not connected
           >
-            {loading ? 'Signing Up...' : 'Sign Up'} {/* Display loading text */}
+            {loading ? 'Signing Up...' : 'Sign Up'}
           </button>
 
           {/* Loading Spinner (Optional) */}

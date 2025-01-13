@@ -1,42 +1,65 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
+import PointlyUser from '../abis/PointlyUser.json';  // Import the ABI of your contract
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user'); // Default role is 'user'
+  const [account, setAccount] = useState(null);  // Store MetaMask account
   const [loading, setLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true); // Start loading
+  const handleMetaMaskLogin = async () => {
+    setLoading(true);  // Start loading
 
     try {
-      const response = await axios.post('/api/login', { email, password, role });
+      console.log("Attempting to connect to MetaMask...");
 
-      if (response.status === 200) {
-        console.log('Login successful');
-        alert('Login successful');
+      // Connect to Web3 and MetaMask
+      const web3 = await getWeb3();
+      console.log("Web3 initialized:", web3); // Debugging Web3
 
-        // Save JWT and user info to sessionStorage
-        const { token, redirectPath, userId } = response.data;
-        sessionStorage.setItem('authToken', token); // Store JWT in sessionStorage
-        sessionStorage.setItem('userRole', role); // Store role in sessionStorage
-        sessionStorage.setItem('userId', userId); // Store userId in sessionStorage
+      const accounts = await web3.eth.getAccounts();
+      console.log("MetaMask Accounts:", accounts); // Debugging accounts
 
-        // Redirect to the backend-specified path
-        console.log('Redirecting to:', redirectPath);
-        navigate(redirectPath);
+      if (accounts.length === 0) {
+        alert('Please connect MetaMask!');
+        return;
+      }
+
+      const userAccount = accounts[0];  // MetaMask account
+      setAccount(userAccount);  // Store account in state
+
+      // Initialize the contract
+      const contractAddress = '0xDc12603e7A1BF26c70B87332C2c32b8d66DB709d'; // Replace with your contract address
+      const contract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
+
+      console.log("Contract initialized:", contract); // Debugging contract
+
+      // Check if the user is already registered in the smart contract (example function)
+      const isRegistered = await contract.methods.isUser(userAccount).call();
+      console.log("User registered:", isRegistered); // Debugging registration check
+
+      if (isRegistered) {
+        // Optionally: you can also fetch additional details such as user role if necessary
+        const role = await contract.methods.getUserRole(userAccount).call();
+        console.log("User role:", role); // Debugging user role
+
+        alert(`Welcome back! You are logged in as a ${role}.`);
+
+        // Store the account and role in sessionStorage
+        sessionStorage.setItem('userAccount', userAccount);
+        sessionStorage.setItem('userRole', role);
+
+        // Redirect to dashboard or user-specific page
+        navigate('/dashboard'); // You can change this to any path you want
       } else {
-        alert(response.data.message || 'Login failed');
+        alert('You are not registered. Please sign up first!');
       }
     } catch (error) {
-      console.error(error);
-      alert(error.response?.data?.message || 'Something went wrong. Please try again later.');
+      console.error("Error during login:", error); // Debugging error
+      alert('Something went wrong during login. Please try again.');
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);  // End loading
     }
   };
 
@@ -50,53 +73,15 @@ function LoginPage() {
 
       <div className="p-6 bg-white shadow-md rounded-lg max-w-xl w-full mb-10">
         <h2 className="text-3xl font-semibold text-gray-800 text-center">Login</h2>
-        <form onSubmit={handleSubmit} className="mt-8 flex flex-col">
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
-
-          <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your password"
-              required
-            />
-          </div>
-
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">Select Role</label>
-            <select
-              id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center font-cabin"
-              required
-            >
-              <option value="user">User</option>
-              <option value="vendor">Vendor</option>
-            </select>
-          </div>
-
+        <form onSubmit={(e) => e.preventDefault()} className="mt-8 flex flex-col">
+          {/* MetaMask Connect Button */}
           <button
-            type="submit"
+            type="button"
+            onClick={handleMetaMaskLogin}
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
             disabled={loading} // Disable button when loading
           >
-            {loading ? 'Logging in...' : 'Log In'}
+            {loading ? 'Logging in...' : 'Login with MetaMask'}
           </button>
 
           {loading && (
@@ -104,6 +89,9 @@ function LoginPage() {
               <div className="w-8 h-8 border-4 border-t-4 border-white border-solid rounded-full animate-spin"></div>
             </div>
           )}
+
+          {/* Optionally: Display connected account */}
+          {account && <p className="mt-4 text-center text-gray-700">Connected as: {account}</p>}
 
           <p className="mt-4 text-center font-cabin">
             Don't have an account?{" "}
