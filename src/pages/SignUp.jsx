@@ -55,7 +55,7 @@ function SignUpPage() {
       console.log("Web3 instance:", web3);
       console.log("Account:", account);
   
-      const contract = new web3.eth.Contract(PointlyUser.abi, '0x07d76A30B23D1D74339dddE2Ac592Bf7c52c100b'); // Contract address
+      const contract = new web3.eth.Contract(PointlyUser.abi, '0xD4Cd5D753Fc879369bec170DC9ABF8cD7D97Ff90'); // Contract address
       console.log("Calling createUser method...");
   
       // Debug: Check the contract ABI and method
