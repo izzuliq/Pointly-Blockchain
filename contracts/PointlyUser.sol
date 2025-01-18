@@ -2,7 +2,6 @@
 pragma solidity ^0.8.0;
 
 contract PointlyUser {
-
     // Owner of the contract (platform admin)
     address public owner;
 
@@ -11,7 +10,7 @@ contract PointlyUser {
         string email;
         string name;
         string phone;
-        string addressDetails;  // Renamed to avoid keyword conflict
+        string addressDetails; // Renamed to avoid keyword conflict
         string profileImage;
         string tier;
         uint256 totalPoints;
@@ -28,28 +27,22 @@ contract PointlyUser {
     event TierUpdated(address indexed userAddress, string newTier);
     event UserDeleted(address indexed userAddress);
 
-    // Modifier for restricting access to owner
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not authorized");
-        _;
-    }
-
+    // Constructor to initialize the contract owner
     constructor() {
         owner = msg.sender; // Assign contract deployer as owner
     }
 
     // Function to create a new user
     function createUser(
-        address userAddress,
         string memory email,
         string memory name,
         string memory phone,
         string memory addressDetails,
         string memory profileImage
-    ) public onlyOwner {
-        require(!users[userAddress].exists, "User already exists");
-        
-        users[userAddress] = User({
+    ) public {
+        require(!users[msg.sender].exists, "User already exists");
+
+        users[msg.sender] = User({
             email: email,
             name: name,
             phone: phone,
@@ -61,23 +54,24 @@ contract PointlyUser {
             exists: true
         });
 
-        emit UserCreated(userAddress, name);
+        emit UserCreated(msg.sender, name);
     }
 
     // Function to get user details
     function getUser(address userAddress) 
-        public 
-        view 
-        returns (
-            string memory email,
-            string memory name,
-            string memory phone,
-            string memory addressDetails,
-            string memory profileImage,
-            string memory tier,
-            uint256 totalPoints,
-            uint256 availablePoints
-        ) 
+    public 
+    view 
+    returns (
+        string memory email,
+        string memory name,
+        string memory phone,
+        string memory addressDetails,
+        string memory profileImage,
+        string memory tier,
+        uint256 totalPoints,
+        uint256 availablePoints,
+        bool exists
+    ) 
     {
         require(users[userAddress].exists, "User does not exist");
         User memory user = users[userAddress];
@@ -90,12 +84,14 @@ contract PointlyUser {
             user.profileImage,
             user.tier,
             user.totalPoints,
-            user.availablePoints
+            user.availablePoints,
+            user.exists
         );
     }
 
+
     // Function to update points
-    function updatePoints(address userAddress, uint256 points, bool isAddition) public onlyOwner {
+    function updatePoints(address userAddress, uint256 points, bool isAddition) public {
         require(users[userAddress].exists, "User does not exist");
 
         if (isAddition) {
@@ -133,10 +129,10 @@ contract PointlyUser {
     }
 
     // Function to delete a user
-    function deleteUser(address userAddress) public onlyOwner {
-        require(users[userAddress].exists, "User does not exist");
+    function deleteUser() public {
+        require(users[msg.sender].exists, "User does not exist");
 
-        delete users[userAddress];
-        emit UserDeleted(userAddress);
+        delete users[msg.sender];
+        emit UserDeleted(msg.sender);
     }
 }

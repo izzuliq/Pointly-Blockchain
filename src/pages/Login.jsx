@@ -30,7 +30,7 @@ function LoginPage() {
       setAccount(userAccount);  // Store account in state
 
       // Initialize the contract
-      const contractAddress = '0xDc12603e7A1BF26c70B87332C2c32b8d66DB709d'; // Replace with your contract address
+      const contractAddress = '0xD4Cd5D753Fc879369bec170DC9ABF8cD7D97Ff90'; // Replace with your contract address
       const contract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
 
       console.log("Contract initialized:", contract); // Debugging contract
