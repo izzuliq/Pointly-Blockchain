@@ -1,112 +1,106 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";  // Import axios for fetching data
 import VendorNavbar from "../components/VendorNavbar";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Ensure correct CSS import for toastify
+import getWeb3 from "../utils/getWeb3.js";
+import Rewards from "../../build/contracts/Rewards.json";
 
 function VendorRewards() {
   const navigate = useNavigate(); // Initialize the useNavigate hook
-  const [rewards, setRewards] = useState([]); // Ensure rewards is an array initially
+  const [rewards, setRewards] = useState([]); // State to hold vendor's rewards
   const [loading, setLoading] = useState(true); // Loading state
-  const [showModal, setShowModal] = useState(false); // Modal visibility state
-  const [rewardToDelete, setRewardToDelete] = useState(null); // Track the reward to be deleted
+  const [web3, setWeb3] = useState(null);
+  const [account, setAccount] = useState(null);
+  const [rewardsContract, setRewardsContract] = useState(null);
+  const [showModal, setShowModal] = useState(false); // Modal visibility
+  const [rewardToDelete, setRewardToDelete] = useState(null); // Reward to delete
 
-  // Sample fallback data in case the API call fails
-  const fallbackRewards = [
-    {
-      id: 1,
-      name: "Free Coffee",
-      description: "Enjoy a freshly brewed cup of coffee.",
-      cost: 300,
-      img: "./Coffee.png",
-    },
-    {
-      id: 2,
-      name: "Gift Voucher",
-      description: "Redeem your points for a gift voucher.",
-      cost: 500,
-      img: "./Voucher.png",
-    },
-    {
-      id: 3,
-      name: "Exclusive Discount",
-      description: "Unlock exclusive discounts on your next purchase.",
-      cost: 1000,
-      img: "./Discount.png",
-    },
-  ];
+  // Replace with your deployed Rewards contract address
+  const rewardsAddress = "0xa45d988da532AA71Ba0B091355242D2f515Ae458";
 
   useEffect(() => {
-    // Fetch rewards from the database
-    axios.get("/api/rewards") // Replace with your API endpoint
-      .then((response) => {
-        if (Array.isArray(response.data)) { // Ensure the data is an array
-          setRewards(response.data); // Set rewards data from API response
+    const initializeWeb3 = async () => {
+      try {
+        const web3Instance = await getWeb3();
+        setWeb3(web3Instance);
+
+        const accounts = await web3Instance.eth.getAccounts();
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
         } else {
-          setRewards(fallbackRewards); // Fallback to fallbackRewards if data isn't an array
+          alert("No accounts found. Please connect to MetaMask.");
         }
-        setLoading(false); // Set loading to false when data is fetched
-      })
-      .catch((error) => {
-        console.error("Error fetching rewards:", error);
-        setRewards(fallbackRewards); // Use fallback rewards if API fails
-        setLoading(false); // Set loading to false when fallback data is used
-      });
-  }, []); // Empty dependency array ensures it runs once when component mounts
 
-  // Function to navigate to the Reward Details page for editing a reward
-  const handleEditClick = (rewardId) => {
-    navigate(`/vendor-reward-details/${rewardId}`, { state: { reward: rewardId } });
+        const rewardsInstance = new web3Instance.eth.Contract(Rewards.abi, rewardsAddress);
+        setRewardsContract(rewardsInstance);
+
+        await fetchRewardsData(rewardsInstance, accounts[0]);
+      } catch (error) {
+        console.error("Error initializing Web3:", error);
+      }
+    };
+
+    initializeWeb3();
+  }, []);
+
+  const fetchRewardsData = async (contract, userAccount) => {
+    try {
+      // Fetch the total number of rewards
+      const rewardCounter = await contract.methods.rewardCounter().call();
+
+      const vendorRewards = [];
+      for (let i = 1; i <= rewardCounter; i++) {
+        const reward = await contract.methods.getRewardDetails(i).call();
+
+        // Assuming `vendor` field identifies the creator (e.g., msg.sender in addReward)
+        if (reward.vendor.toLowerCase() === userAccount.toLowerCase() && reward.isActive) {
+          vendorRewards.push({
+            id: i,
+            name: reward.name,
+            description: reward.description,
+            cost: reward.cost,
+            img: reward.img,
+            active: reward.isActive,
+          });
+        }
+      }
+      setRewards(vendorRewards);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching rewards:", error);
+    }
   };
 
-  // Function to handle reward creation
-  const handleAddNewReward = () => {
-    navigate("/vendor-create-reward");
+  const deleteReward = async (rewardId) => {
+    try {
+      await rewardsContract.methods.deactivateReward(rewardId).send({ from: account });
+      setRewards((prevRewards) => prevRewards.filter((reward) => reward.id !== rewardId));
+      alert("Reward deactivated successfully!");
+    } catch (error) {
+      console.error("Error deactivating reward:", error);
+      alert("An error occurred while deactivating the reward.");
+    }
+    setShowModal(false);
   };
 
-  // Function to handle deletion of a reward
   const handleDeleteClick = (rewardId) => {
-    setRewardToDelete(rewardId); // Set the reward to be deleted
-    setShowModal(true); // Show the confirmation modal
+    setRewardToDelete(rewardId);
+    setShowModal(true);
   };
 
-  // Function to confirm deletion
-  const confirmDelete = () => {
-    if (!rewardToDelete) return;
-    axios.delete(`/api/rewards/${rewardToDelete}`) // Replace with your API endpoint
-      .then(() => {
-        // If deletion is successful, remove the reward from state
-        setRewards(rewards.filter(reward => reward.id !== rewardToDelete));
-        toast.success("Reward deleted successfully!"); // Success toast
-        setShowModal(false); // Close modal
-        setRewardToDelete(null); // Reset rewardToDelete state
-      })
-      .catch((error) => {
-        console.error("Error deleting reward:", error);
-        toast.error("Failed to delete the reward. Please try again."); // Error toast
-        setShowModal(false); // Close modal
-        setRewardToDelete(null); // Reset rewardToDelete state
-      });
-  };
-
-  // Function to cancel deletion
   const cancelDelete = () => {
-    setShowModal(false); // Close modal without deleting
-    setRewardToDelete(null); // Reset rewardToDelete state
+    setShowModal(false);
+    setRewardToDelete(null);
   };
 
-  // Enhanced loading UI with spinner
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen bg-gray-100">
-        <div className="flex flex-col items-center">
-          <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
-          <p className="mt-4 text-xl text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
+  const confirmDelete = () => {
+    if (rewardToDelete !== null) {
+      deleteReward(rewardToDelete);
+    }
+  };
+
+  const handleAddNewReward = () => {
+    navigate("/vendor-create-reward"); // Redirect to add reward page
+  };
 
   return (
     <>

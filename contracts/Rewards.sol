@@ -18,7 +18,7 @@ contract Rewards {
         bool isActive;
     }
 
-    uint256 private rewardCounter;
+    uint256 public rewardCounter;
     mapping(uint256 => Reward) public rewards;
 
     mapping(address => uint256) public userPoints;

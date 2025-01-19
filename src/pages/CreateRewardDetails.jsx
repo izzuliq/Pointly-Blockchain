@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-import axios from "axios"; // Import axios for HTTP requests
+import React, { useState, useEffect } from "react";
+import Web3 from "web3";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+// ABI of the deployed Rewards contract (make sure to update with your ABI)
+const RewardsABI = [ "../../build/contracts/Rewards.json" ];
+const contractAddress = "0xa45d988da532AA71Ba0B091355242D2f515Ae458"; // Replace with your contract address
 
 function CreateRewardDetails() {
   const [rewardInfo, setRewardInfo] = useState({
@@ -10,47 +14,87 @@ function CreateRewardDetails() {
     cost: 0,
     img: "./default-image.png", // Default image
     expiration: "",
-    terms: [""] // Default empty terms
+    terms: [""], // Default empty terms
   });
+  const [loading, setLoading] = useState(false);
+  const [web3, setWeb3] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [account, setAccount] = useState(null);
 
-  const [loading, setLoading] = useState(false); // Loading state for handling the save process
+  useEffect(() => {
+    const initializeWeb3 = async () => {
+      if (window.ethereum) {
+        try {
+          const web3Instance = new Web3(window.ethereum);
+          setWeb3(web3Instance);
+
+          // Request access to the user's MetaMask account
+          await window.ethereum.request({ method: "eth_requestAccounts" });
+          const accounts = await web3Instance.eth.getAccounts();
+          setAccount(accounts[0]);
+
+          // Initialize contract
+          const contractInstance = new web3Instance.eth.Contract(RewardsABI, contractAddress);
+          setContract(contractInstance);
+        } catch (error) {
+          console.error("Error initializing Web3 or MetaMask:", error);
+          toast.error("Error initializing Web3 or MetaMask. Please try again.", {
+            position: toast.POSITION.TOP_CENTER,
+            autoClose: 3000,
+          });
+        }
+      } else {
+        toast.error("MetaMask is not installed.", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+      }
+    };
+    initializeWeb3();
+  }, []);
 
   const handleSave = async () => {
-    try {
-      setLoading(true); // Set loading state to true when saving
-
-      // Prepare the data to be sent to the server
-      const formData = new FormData();
-      formData.append("name", rewardInfo.name);
-      formData.append("description", rewardInfo.description);
-      formData.append("cost", rewardInfo.cost);
-      formData.append("img", rewardInfo.img); // You can send base64 or a file here
-      formData.append("expiration", rewardInfo.expiration);
-      formData.append("terms", rewardInfo.terms.join("\n"));
-
-      // Send the data using axios (replace with your API endpoint)
-      const response = await axios.post('/api/rewards', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
+    if (!contract || !account) {
+      toast.error("Web3 or contract not initialized.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 3000,
       });
+      return;
+    }
 
-      // Handle success response
-      if (response.status === 200) {
-        toast.success("New reward created successfully!", {
+    try {
+      setLoading(true);
+
+      const { name, description, cost, img, expiration, terms } = rewardInfo;
+
+      // Convert expiration date to timestamp (uint256)
+      const expirationTimestamp = new Date(expiration).getTime() / 1000;
+
+      // Send transaction to create a new reward in the smart contract
+      const transaction = await contract.methods
+        .addReward(name, description, cost, img, expirationTimestamp, terms.join("\n"))
+        .send({ from: account });
+
+      if (transaction.status) {
+        toast.success("New reward created successfully on the blockchain!", {
+          position: toast.POSITION.TOP_CENTER,
+          autoClose: 3000,
+        });
+      } else {
+        toast.error("Failed to create reward on the blockchain.", {
           position: toast.POSITION.TOP_CENTER,
           autoClose: 3000,
         });
       }
 
-      setLoading(false); // Set loading state to false after response
+      setLoading(false);
     } catch (error) {
       console.error("Error creating reward:", error);
       toast.error("Failed to create new reward. Please try again.", {
         position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
-      setLoading(false); // Set loading state to false in case of an error
+      setLoading(false);
     }
   };
 

@@ -16,7 +16,7 @@ function RewardsPage() {
   const navigate = useNavigate();
 
   const rewardsAddress = "0x9B408fE9795D77f0C0d24C026B6E46BFaC7A3F70";
-  const userContractAddress = "0x3726bD0CCCc3031532ad237c28bEC63eEbF69c63";
+  const userContractAddress = "0x07E79cE4F3dFc9C4A35757A4228f44241dfce325";
 
   useEffect(() => {
     const initializeWeb3 = async () => {
