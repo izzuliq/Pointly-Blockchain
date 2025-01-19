@@ -14680,12 +14680,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9",
-      "transactionHash": "0xb026a0a2b34c7681ca92883c47a0fb701d574c5a8d5f600c3da0ff240c36a6fe"
+      "address": "0x2C612313598cB76bFB34D5398446350f5B798018",
+      "transactionHash": "0xccddc7d961a6e2e80238236fdd75f107f8583ca4c4e203f4b00b11c857c00a94"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-01-19T09:19:11.434Z",
+  "updatedAt": "2025-01-19T15:57:29.939Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
