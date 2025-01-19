@@ -28,6 +28,7 @@ contract PointlyUser {
     event TierUpdated(address indexed userAddress, string newTier);
     event UserDeleted(address indexed userAddress);
     event RoleUpdated(address indexed userAddress, string newRole);
+    event UserUpdated(address indexed userAddress);  // Event for user update
 
     // Constructor to initialize the contract owner
     constructor() {
@@ -139,6 +140,29 @@ contract PointlyUser {
 
         users[userAddress].role = newRole;
         emit RoleUpdated(userAddress, newRole);
+    }
+
+    // New function to update user details
+    function updateUser(
+        string memory name,
+        string memory email,
+        string memory phone,
+        string memory addressDetails,
+        string memory profileImage,
+        string memory role
+    ) public {
+        require(users[msg.sender].exists, "User does not exist");
+
+        // Update the user's data
+        users[msg.sender].name = name;
+        users[msg.sender].email = email;
+        users[msg.sender].phone = phone;
+        users[msg.sender].addressDetails = addressDetails;
+        users[msg.sender].profileImage = profileImage;
+        users[msg.sender].role = role;
+
+        // Emit the update event
+        emit UserUpdated(msg.sender);
     }
 
     // Function to delete a user

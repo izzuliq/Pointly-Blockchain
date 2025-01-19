@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import getWeb3 from "../utils/getWeb3"; // Import getWeb3 instead of Web3 directly
+import getWeb3 from "../utils/getWeb3";
 import Navbar from "../components/UserNavbar";
-import PointlyUser from '../../build/contracts/PointlyUser.json'; // Import ABI
+import PointlyUser from '../../build/contracts/PointlyUser.json';
 
 function Dashboard() {
   const [account, setAccount] = useState(null);
@@ -12,74 +12,85 @@ function Dashboard() {
     avatarUrl: "", // Placeholder avatar
   });
   const [points, setPoints] = useState({ total: 0, available: 0 });
-  const [activities, setActivities] = useState([]); // Placeholder for activities
   const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
+
+  const tiers = {
+    Quartz: {
+      level: "Starting Level",
+      range: "0 - 999 points",
+      description: "You're just starting your adventure! Collect points and rise through the ranks.",
+      image: "Quartz.png"
+    },
+    Emerald: {
+      level: "Intermediate Level",
+      range: "1,000 - 4,999 points",
+      description: "You've earned a wealth of points! Enjoy better rewards as you move closer to Sapphire.",
+      image: "Emerald.png"
+    },
+    Sapphire: {
+      level: "Advanced Level",
+      range: "5,000 - 9,999 points",
+      description: "You're a treasure hunter with impressive rewards at your fingertips. Keep it up!",
+      image: "Sapphire.png"
+    },
+    Diamond: {
+      level: "Top Level",
+      range: "10,000+ points",
+      description: "The ultimate treasure hunter! You've reached the pinnacle and unlocked the best rewards.",
+      image: "Diamond.png"
+    }
+  };
 
   useEffect(() => {
     const initWeb3 = async () => {
       try {
-        const web3 = await getWeb3(); // Use the getWeb3 function here
+        const web3 = await getWeb3();
         const accounts = await web3.eth.getAccounts();
-        setAccount(accounts[0]);
+        const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9";
+        const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
 
-        const contractAddress = "0x7B6c379a50076D58F6F87034Df75f05C3e8798ED"; // Replace with your deployed contract address
-        const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress); // Ensure ABI is correct
+        setAccount(accounts[0]);
         setContract(pointlyUserContract);
 
-        // Fetch user data
         await fetchUserData(accounts[0], pointlyUserContract);
         setLoading(false);
       } catch (err) {
-        console.error("Error initializing Web3 or loading contract", err);
+        setLoading(false);
       }
     };
 
     initWeb3();
   }, []);
 
-  const fetchUserData = async () => {
+  const fetchUserData = async (userAddress, pointlyUserContract) => {
     try {
-      const user = await contract.methods.getUser(userAddress).call();
-  
-      // Convert BigInt values to numbers or strings
-      const totalPoints = BigInt(user[6]).toString(); // Convert to string for display
-      const availablePoints = BigInt(user[7]).toString(); // Convert to string for display
-  
-      setUserData({
+      const user = await pointlyUserContract.methods.getUser(userAddress).call();
+      const totalPoints = BigInt(user[6]).toString();
+      const availablePoints = BigInt(user[7]).toString();
+
+      setUser({
         email: user[0],
         name: user[1],
-        phone: user[2],
-        addressDetails: user[3],
-        profileImage: user[4],
         tier: user[5],
-        totalPoints, // Use string
-        availablePoints, // Use string
+        avatarUrl: user[4], // Avatar URL from contract (adjust as needed)
       });
-  
-      calculateProgress(Number(totalPoints), Number(availablePoints)); // Pass as numbers for calculations
+
+      setPoints({ total: totalPoints, available: availablePoints });
+      calculateProgress(Number(totalPoints), Number(availablePoints));
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
   };
-  
+
   const calculateProgress = (totalPoints, availablePoints) => {
-    try {
-      if (totalPoints === 0) return 0;
-  
-      // Calculate progress as a percentage
-      const progress = (availablePoints / totalPoints) * 100;
-      setProgress(progress.toFixed(2)); // Set progress with 2 decimal places
-    } catch (error) {
-      console.error("Error calculating progress:", error);
-    }
+    const progress = (availablePoints / totalPoints) * 100;
+    setProgress(progress.toFixed(2));
   };
-  
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
-        {/* Spinner for loading */}
         <div className="flex flex-col items-center">
           <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
           <p className="mt-4 text-xl text-gray-600">Loading...</p>
@@ -101,7 +112,7 @@ function Dashboard() {
 
         <div className="mt-6 flex flex-col md:flex-row items-center justify-center space-x-0 md:space-x-6">
           <img
-            src={user.avatarUrl || "Default.png"}
+            src={user.avatarUrl || "default_avatar.jpg"}
             alt="User Avatar"
             className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg"
           />
@@ -122,6 +133,32 @@ function Dashboard() {
               <h4 className="text-xl font-semibold text-gray-700">{points.available}</h4>
               <p className="text-gray-500">Available Points</p>
             </div>
+          </div>
+        </div>
+
+        <div className="mt-8 bg-gold-100 p-6 rounded-lg shadow-sm w-full mx-auto">
+          <h3 className="text-lg font-semibold text-gray-800 text-center">Your Treasure Tier</h3>
+          <p className="mt-2 text-gray-600 text-center">
+            Unlock exclusive rewards and privileges as you level up your treasure tier!
+          </p>
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {Object.keys(tiers).map((tier) => (
+              <div
+                key={tier}
+                className={`bg-white p-4 rounded-lg shadow-md text-center transition-all duration-300 ease-in-out 
+                  ${user.tier === tier ? "ring-4 ring-gold-dark ring-opacity-60" : "hover:ring-2 hover:ring-gray-300"}`}
+              >
+                <img
+                  src={tiers[tier].image}
+                  alt={`${tier} Tier`}
+                  className="max-w-[150px] max-h-[150px] object-cover mx-auto mb-4"
+                />
+                <h4 className="text-xl font-semibold text-gray-700">{tier}</h4>
+                <p className="mt-2 text-gray-500">{tiers[tier].level}</p>
+                <p className="mt-2 text-gray-500">{tiers[tier].range}</p>
+                <p className="mt-4 text-gray-600">{tiers[tier].description}</p>
+              </div>
+            ))}
           </div>
         </div>
 
