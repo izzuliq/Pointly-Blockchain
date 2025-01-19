@@ -13,7 +13,7 @@ contract("Rewards", (accounts) => {
     const rewardName = "Free Coffee";
     const description = "Redeem for a free coffee.";
     const cost = 100;
-    const img = "https://example.com/image.png";
+    const img = "ipfs://bafybeibbohcp6l3rzolzjshr5pt5whncblipm55vc3v7pbfrqaql7na2we";
     const expiration = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // 7 days from now
     const terms = ["Valid at all locations", "One per customer"];
 
@@ -32,7 +32,7 @@ contract("Rewards", (accounts) => {
     const newName = "Free Latte";
     const newDescription = "Redeem for a free latte.";
     const newCost = 150;
-    const newImg = "https://example.com/newimage.png";
+    const newImg = "ipfs://bafybeid4t6rb4l6vez7t2psawop5gcn5oszhkazoc6cicerf4o4okleiye";
     const newExpiration = Math.floor(Date.now() / 1000) + 14 * 24 * 60 * 60; // 14 days from now
     const newTerms = ["Valid at selected locations", "Not combinable with other offers"];
 
@@ -67,7 +67,7 @@ contract("Rewards", (accounts) => {
     const rewardName = "Free Coffee";
     const description = "Redeem for a free coffee.";
     const cost = 100;
-    const img = "https://example.com/image.png";
+    const img = "ipfs://bafybeibbohcp6l3rzolzjshr5pt5whncblipm55vc3v7pbfrqaql7na2we";
     const expiration = Math.floor(Date.now() / 1000) + 7 * 24 * 60 * 60; // 7 days from now
     const terms = ["Valid at all locations", "One per customer"];
 
@@ -88,7 +88,7 @@ contract("Rewards", (accounts) => {
     const rewardName = "Expired Reward";
     const description = "This reward is expired.";
     const cost = 50;
-    const img = "https://example.com/expired.png";
+    const img = "ipfs://bafybeibv7vbcxuznqe7jzi3ezhqcchosgjcrp3nk3bbqgnun5vg7623yum";
     const expiration = Math.floor(Date.now() / 1000) - 1; // Expired timestamp
     const terms = ["Expired reward"];
 
