@@ -10,50 +10,60 @@ function LoginPage() {
 
   const handleMetaMaskLogin = async () => {
     setLoading(true);  // Start loading
-
+  
     try {
       console.log("Attempting to connect to MetaMask...");
-
+  
       // Connect to Web3 and MetaMask
       const web3 = await getWeb3();
       console.log("Web3 initialized:", web3); // Debugging Web3
-
+  
       const accounts = await web3.eth.getAccounts();
       console.log("MetaMask Accounts:", accounts); // Debugging accounts
-
+  
       if (accounts.length === 0) {
         alert('Please connect MetaMask!');
         return;
       }
-
+  
       const userAccount = accounts[0];  // MetaMask account
       setAccount(userAccount);  // Store account in state
-
+  
       // Initialize the contract
-      const contractAddress = '0x7B6c379a50076D58F6F87034Df75f05C3e8798ED'; // Replace with your contract address
+      const contractAddress = '0x3726bD0CCCc3031532ad237c28bEC63eEbF69c63'; // Replace with your contract address
       const contract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
-
+  
       console.log("Contract initialized:", contract); // Debugging contract
-
+  
       const user = await contract.methods.getUser(userAccount).call();
       console.log("User details:", user);
-
+      console.log("User role:", user.role); // Log role value for debugging
+  
       if (user.exists === true || user.exists === 'true' || user.exists === 1) {
         alert(`Welcome back! You are logged in as a ${user.tier} member.`);
         sessionStorage.setItem('userAccount', userAccount);
-        sessionStorage.setItem('userRole', user.tier);
-        navigate('/dashboard');
+        sessionStorage.setItem('userRole', user.role);
+  
+        // Redirect based on role
+        if (user.role === 'user') {
+          navigate('/home');
+        } else if (user.role === 'vendor') {
+          navigate('/vendor-home');
+        } else {
+          alert('Unknown user role.');
+          navigate('/'); // Redirect to homepage or error page
+        }
       } else {
         alert('You are not registered. Please sign up first!');
       }
-
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-        alert('You are not registered. Please sign up first!');
-      } finally {
-        setLoading(false);  // End loading
-      }
-    };
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      alert('You are not registered. Please sign up first!');
+    } finally {
+      setLoading(false);  // End loading
+    }
+  };
+  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">

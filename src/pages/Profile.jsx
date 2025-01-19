@@ -28,7 +28,7 @@ function ProfilePage() {
         const accounts = await web3.eth.getAccounts();
         setAccount(accounts[0]);
 
-        const contractAddress = "0x7B6c379a50076D58F6F87034Df75f05C3e8798ED"; // Replace with your contract address
+        const contractAddress = "0x3726bD0CCCc3031532ad237c28bEC63eEbF69c63"; // Replace with your contract address
         const pointlyUserContract = new web3.eth.Contract(PointlyUserABI, contractAddress);
         setContract(pointlyUserContract);
 

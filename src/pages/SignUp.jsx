@@ -55,13 +55,13 @@ function SignUpPage() {
       console.log("Web3 instance:", web3);
       console.log("Account:", account);
   
-      const contract = new web3.eth.Contract(PointlyUser.abi, '0x7B6c379a50076D58F6F87034Df75f05C3e8798ED'); // Contract address
+      const contract = new web3.eth.Contract(PointlyUser.abi, '0x3726bD0CCCc3031532ad237c28bEC63eEbF69c63'); // Contract address
       console.log("Calling createUser method...");
   
       // Debug: Check the contract ABI and method
-      console.log(contract.methods.createUser(account, email, role, '', '', 'default_avatar.jpg'));
+      console.log(contract.methods.createUser(email, '', '', '', 'default_avatar.jpg', role));
   
-      await contract.methods.createUser(account, email, role, '', '', 'default_avatar.jpg')
+      await contract.methods.createUser(email, '', '', '', 'default_avatar.jpg', role)
         .send({ from: account, gas: 500000 });
   
       alert('User registered on the blockchain!');
