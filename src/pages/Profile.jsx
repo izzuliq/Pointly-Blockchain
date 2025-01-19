@@ -53,7 +53,7 @@ function ProfilePage() {
         email: userProfile.email || "N/A",
         phone: userProfile.phone || "N/A",
         address: userProfile.addressDetails || "N/A",
-        profileImage: userProfile.profileImage || "default-profile.png",
+        profileImage: userProfile.profileImage || "default_avatar.jpg",
         tier: userProfile.tier || "Quartz",
         totalPoints: userProfile.totalPoints || 0,
         availablePoints: userProfile.availablePoints || 0,

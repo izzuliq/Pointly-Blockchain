@@ -11,9 +11,9 @@ const getWeb3 = () => {
 
       // Request accounts from MetaMask
       window.ethereum.request({ method: "eth_requestAccounts" })
-        .then(() => {
-          console.log("Accounts successfully connected:", web3.eth.getAccounts());
-          resolve(web3);  // Resolve the promise with the Web3 instance
+        .then((accounts) => {
+          console.log("Accounts successfully connected:", accounts); // Log the resolved accounts array
+          resolve(web3); // Resolve the promise with the Web3 instance
         })
         .catch((error) => {
           console.error("Error during MetaMask request:", error);

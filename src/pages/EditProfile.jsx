@@ -8,7 +8,7 @@ function EditProfilePage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
+  const [profileImage, setProfileImage] = useState("default_avatar.jpg");
   const [dob, setDob] = useState("");
   const [role, setRole] = useState("");
   const [account, setAccount] = useState(null);
