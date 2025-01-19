@@ -2,17 +2,28 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/UserNavbar";
 import Web3 from "web3";
 import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
+import { create } from 'ipfs-http-client';
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+
+// Set up the Pinata IPFS client
+const ipfsClient = create({
+  url: 'https://api.pinata.cloud/pinning/pinFileToIPFS', // Pinata IPFS endpoint
+  headers: {
+    pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
+  }
+});
 
 function EditProfilePage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [profileImage, setProfileImage] = useState("default_avatar.jpg");
-  const [dob, setDob] = useState("");
+  const [profileImage, setProfileImage] = useState(""); // Store the IPFS CID
   const [role, setRole] = useState("");
   const [account, setAccount] = useState(null);
   const [contract, setContract] = useState(null);
+
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const initWeb3 = async () => {
@@ -56,25 +67,47 @@ function EditProfilePage() {
     }
   };
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        // Prepare the file for upload
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Send the file to Pinata using the correct endpoint and headers
+        const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+          method: 'POST',
+          headers: {
+            pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
+            pinata_secret_api_key: '66001fa51b401321cfcda182b365f7e279a18a4f3f0f139ed689b608e0e2cf72', // Replace with your Pinata secret API key
+          },
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to upload image');
+        }
+  
+        const result = await response.json();
+        const imageUrl = `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
+        setProfileImage(imageUrl); // Set the image URL
+      } catch (err) {
+        console.error("Error uploading image to IPFS via Pinata:", err);
+      }
+    }
+  };
+
   const handleSave = async () => {
     try {
       const updatedData = await contract.methods.updateUser(name, email, phone, address, profileImage, role).send({ from: account });
       alert("Profile updated successfully!");
+
+      // Redirect to the profile page after successful update
+      navigate("/profile"); // This will navigate to the /profile route
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Failed to update profile.");
-    }
-  };
-
-  // Handle profile image upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfileImage(reader.result); // Set the image preview URL
-      };
-      reader.readAsDataURL(file);
     }
   };
 
@@ -89,7 +122,7 @@ function EditProfilePage() {
 
         <div className="mt-8 flex flex-col items-center">
           <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
-            <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+            <img src={profileImage || 'default_avatar.jpg'} alt="Profile" className="w-full h-full object-cover" />
           </div>
 
           <div className="w-full mb-6">

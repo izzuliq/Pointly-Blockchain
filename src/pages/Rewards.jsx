@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/UserNavbar";
 import getWeb3 from "../utils/getWeb3.js";
-import Rewards from '../../build/contracts/Rewards.json';;
+import Rewards from '../../build/contracts/Rewards.json';
 import PointlyUser from '../../build/contracts/PointlyUser.json';
 
 function RewardsPage() {
@@ -50,10 +50,14 @@ function RewardsPage() {
   const fetchPointsData = async (contract, userAccount) => {
     try {
       const userData = await contract.methods.getUser(userAccount).call();
+      const totalPoints = BigInt(userData[6]).toString(); // Convert total points to BigInt
+      const availablePoints = BigInt(userData[7]).toString(); // Convert available points to BigInt
+
       setPoints({
-        total: userData.totalPoints,
-        available: userData.availablePoints,
+        total: totalPoints,
+        available: availablePoints,
       });
+
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);

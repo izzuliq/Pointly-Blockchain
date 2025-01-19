@@ -70,15 +70,6 @@ function Home() {
         <h1 className="text-5xl font-bold text-purple">Welcome to Pointly</h1>
         <p className="mt-4 text-3xl font-bold text-gray-800 italic">"Points Simplified"</p>
 
-        {/* User Info */}
-        {isAuthenticated && (
-          <div className="mt-5 text-center">
-            <p className="text-lg text-gray-700">Hello, {userRole}!</p>
-            <p className="text-lg text-gray-700">Your current tier: {userTier}</p>
-            <p className="text-lg text-gray-700">Total Points: {userPoints}</p>
-          </div>
-        )}
-
         {/* Description */}
         <div className="mt-5 max-w-3xl text-center mb-5">
           <p className="text-lg text-gray-700">

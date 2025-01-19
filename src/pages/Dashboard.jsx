@@ -13,8 +13,18 @@ function Dashboard() {
   });
   const [points, setPoints] = useState({ total: 0, available: 0 });
   const [progress, setProgress] = useState(0);
+  const [nextTier, setNextTier] = useState(""); // New state for next tier
   const [loading, setLoading] = useState(true);
 
+  // Define the points thresholds for each tier
+  const tierThresholds = {
+    Quartz: 0,
+    Emerald: 1000,
+    Sapphire: 5000,
+    Diamond: 10000,
+  };
+
+  // Tiers descriptions
   const tiers = {
     Quartz: {
       level: "Starting Level",
@@ -63,29 +73,62 @@ function Dashboard() {
     initWeb3();
   }, []);
 
+  const calculateProgress = (totalPoints, availablePoints, currentTier) => {
+    const tierRanges = {
+      Quartz: [0, 999],
+      Emerald: [1000, 4999],
+      Sapphire: [5000, 9999],
+      Diamond: [10000, Infinity], // Diamond has no upper limit, so we use Infinity
+    };
+  
+    let currentTierRange = tierRanges[currentTier];
+    let nextTierRange = tierRanges[currentTier];
+  
+    const tiers = ["Quartz", "Emerald", "Sapphire", "Diamond"];
+    const currentTierIndex = tiers.indexOf(currentTier);
+  
+    // If the user is not on the last tier, set the next tier
+    if (currentTierIndex < tiers.length - 1) {
+      nextTierRange = tierRanges[tiers[currentTierIndex + 1]];
+    }
+  
+    const nextTierMaxPoints = nextTierRange[0];
+  
+    const progress = (availablePoints / nextTierMaxPoints) * 100;
+  
+    return progress > 100 ? 100 : progress;
+  };  
+
+  // Determine the next tier based on current tier
+  const getNextTier = (currentTier) => {
+    const tierOrder = ["Quartz", "Emerald", "Sapphire", "Diamond"];
+    const currentIndex = tierOrder.indexOf(currentTier);
+    return currentIndex < tierOrder.length - 1 ? tierOrder[currentIndex + 1] : null;
+  };
+
+  // Fetch user data from contract
   const fetchUserData = async (userAddress, pointlyUserContract) => {
     try {
       const user = await pointlyUserContract.methods.getUser(userAddress).call();
       const totalPoints = BigInt(user[6]).toString();
       const availablePoints = BigInt(user[7]).toString();
+      const currentTier = user[5];
+      const nextTier = getNextTier(currentTier); // Get the next tier name
 
       setUser({
         email: user[0],
         name: user[1],
-        tier: user[5],
+        tier: currentTier,
         avatarUrl: user[4], // Avatar URL from contract (adjust as needed)
       });
 
       setPoints({ total: totalPoints, available: availablePoints });
-      calculateProgress(Number(totalPoints), Number(availablePoints));
+      const progress = calculateProgress(Number(totalPoints), Number(availablePoints), currentTier);
+      setProgress(progress.toFixed(2));
+      setNextTier(nextTier); // Set the next tier name
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
-  };
-
-  const calculateProgress = (totalPoints, availablePoints) => {
-    const progress = (availablePoints / totalPoints) * 100;
-    setProgress(progress.toFixed(2));
   };
 
   if (loading) {
@@ -172,7 +215,7 @@ function Dashboard() {
               ></div>
             </div>
             <p className="mt-2 text-gray-500 text-sm text-center">
-              {progress > 0 ? `${progress}% to your next tier` : "Loading progress..."}
+              {nextTier ? `${progress}% to your next tier: ${nextTier}` : "You're at the top! Keep it up!"}
             </p>
           </div>
         </div>

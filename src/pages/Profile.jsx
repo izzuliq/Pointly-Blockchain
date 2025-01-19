@@ -55,8 +55,6 @@ function ProfilePage() {
         address: userProfile.addressDetails || "N/A",
         profileImage: userProfile.profileImage || "default_avatar.jpg",
         tier: userProfile.tier || "Quartz",
-        totalPoints: userProfile.totalPoints || 0,
-        availablePoints: userProfile.availablePoints || 0,
         role: userProfile.role || "User",
       });
       setLoading(false);
@@ -127,16 +125,6 @@ function ProfilePage() {
           <div className="w-full mb-6 text-center">
             <label className="block text-2xl font-cabin text-purple-dark">Tier</label>
             <p className="mt-2 text-gray-800 text-xl">{userData.tier}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Total Points</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.totalPoints}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Available Points</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.availablePoints}</p>
           </div>
 
           <div className="w-full mb-6 text-center">
