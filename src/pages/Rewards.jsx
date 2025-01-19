@@ -1,127 +1,102 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/UserNavbar";
-import Web3 from "web3";
+import getWeb3 from "../utils/getWeb3.js";
+import Rewards from '../../build/contracts/Rewards.json';;
+import PointlyUser from '../../build/contracts/PointlyUser.json';
 
-function Rewards() {
+function RewardsPage() {
   const [rewards, setRewards] = useState([]); // State to hold rewards data
   const [points, setPoints] = useState({ total: 0, available: 0 }); // State for points data
   const [loading, setLoading] = useState(true); // State for loading status
   const [web3, setWeb3] = useState(null);
-  const [pointlyUserContract, setPointlyUserContract] = useState(null);
-  const [rewardsContract, setRewardsContract] = useState(null);
   const [account, setAccount] = useState(null);
+  const [rewardsContract, setRewardsContract] = useState(null);
+  const [userContract, setUserContract] = useState(null);
   const navigate = useNavigate();
 
-  // Define ABI and contract addresses
-  const POINTLY_USER_ABI = [
-    // Replace with your actual PointlyUser.sol ABI
-  ];
-
-  const POINTLY_USER_ADDRESS = "0xYourPointlyUserContractAddress"; // Replace with your PointlyUser.sol contract address
-
-  const REWARDS_ABI = [
-    // Replace with your actual Rewards.sol ABI
-  ];
-
-  const REWARDS_ADDRESS = "0xYourRewardsContractAddress"; // Replace with your Rewards.sol contract address
+  const rewardsAddress = "0x7546c3A474f5CF706dfD0355C95E8759cE5C4e07";
+  const userContractAddress = "0x7B6c379a50076D58F6F87034Df75f05C3e8798ED";
 
   useEffect(() => {
-    // Initialize Web3, Contracts, and Account
-    if (window.ethereum) {
-      const web3Instance = new Web3(window.ethereum);
-      setWeb3(web3Instance);
+    const initializeWeb3 = async () => {
+      try {
+        const web3Instance = await getWeb3();
+        setWeb3(web3Instance);
 
-      // Request MetaMask accounts
-      window.ethereum
-        .request({ method: "eth_requestAccounts" })
-        .then((accounts) => {
+        const accounts = await web3Instance.eth.getAccounts();
+        if (accounts.length > 0) {
           setAccount(accounts[0]);
+        } else {
+          alert("No accounts found. Please connect to MetaMask.");
+        }
 
-          // Initialize contracts
-          const pointlyUserInstance = new web3Instance.eth.Contract(POINTLY_USER_ABI, POINTLY_USER_ADDRESS);
-          setPointlyUserContract(pointlyUserInstance);
+        const rewardsInstance = new web3Instance.eth.Contract(Rewards.abi, rewardsAddress);
+        setRewardsContract(rewardsInstance);
 
-          const rewardsInstance = new web3Instance.eth.Contract(REWARDS_ABI, REWARDS_ADDRESS);
-          setRewardsContract(rewardsInstance);
+        const userInstance = new web3Instance.eth.Contract(PointlyUser.abi, userContractAddress);
+        setUserContract(userInstance);
 
-          // Fetch data
-          fetchPointsData(pointlyUserInstance, accounts[0]);
-          fetchRewardsData(rewardsInstance);
-        })
-        .catch((err) => console.error("Error getting accounts:", err));
-    } else {
-      alert("Please install MetaMask to interact with the contracts.");
-    }
+        await fetchPointsData(userInstance, accounts[0]);
+        await fetchRewardsData(rewardsInstance);
+      } catch (error) {
+        console.error("Error initializing Web3:", error);
+      }
+    };
+
+    initializeWeb3();
   }, []);
 
-  // Function to fetch user points from PointlyUser.sol
-  const fetchPointsData = (contractInstance, userAddress) => {
-    contractInstance.methods
-      .getUser(userAddress)
-      .call()
-      .then((userData) => {
-        setPoints({
-          total: userData.totalPoints,
-          available: userData.availablePoints,
-        });
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching user data:", error);
-        setPoints({ total: 0, available: 0 });
-        setLoading(false);
+  const fetchPointsData = async (contract, userAccount) => {
+    try {
+      const userData = await contract.methods.getUser(userAccount).call();
+      setPoints({
+        total: userData.totalPoints,
+        available: userData.availablePoints,
       });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
   };
 
-  // Function to fetch rewards from Rewards.sol
-  const fetchRewardsData = (contractInstance) => {
-    const fetchedRewards = [];
-    const maxRewards = 50; // Adjust based on expected reward count
-    const rewardPromises = Array.from({ length: maxRewards }, (_, i) =>
-      contractInstance.methods
-        .getReward(i + 1)
-        .call()
-        .then((reward) => {
-          if (reward.isActive) {
-            fetchedRewards.push({
-              id: reward.id,
-              name: reward.name,
-              description: reward.description,
-              points: reward.cost,
-              imgSrc: reward.img,
-            });
-          }
-        })
-        .catch(() => {
-          // Ignore non-existent or inactive rewards
-        })
-    );
-
-    Promise.all(rewardPromises).then(() => setRewards(fetchedRewards));
+  const fetchRewardsData = async (contract) => {
+    try {
+      const rewardCounter = await contract.methods.rewardCounter().call();
+      const allRewards = [];
+      for (let i = 1; i <= rewardCounter; i++) {
+        const reward = await contract.methods.getReward(i).call();
+        allRewards.push({
+          id: reward.id,
+          name: reward.name,
+          description: reward.description,
+          points: reward.cost,
+          imgSrc: reward.img,
+        });
+      }
+      setRewards(allRewards);
+    } catch (error) {
+      console.error("Error fetching rewards:", error);
+    }
   };
 
-  // Function to redeem a reward
-  const redeemPoints = (reward) => {
+  const redeemPoints = async (reward) => {
     if (points.available < reward.points) {
       alert("You don't have enough points to redeem this reward.");
       return;
     }
 
-    rewardsContract.methods
-      .redeemReward(reward.id)
-      .send({ from: account })
-      .then(() => {
-        setPoints((prevState) => ({
-          ...prevState,
-          available: prevState.available - reward.points,
-        }));
-        alert("Reward redeemed successfully!");
-      })
-      .catch((error) => {
-        console.error("Error redeeming reward:", error);
-        alert("An error occurred while redeeming the reward.");
-      });
+    try {
+      await rewardsContract.methods.redeemReward(reward.id).send({ from: account });
+      setPoints((prev) => ({
+        ...prev,
+        available: prev.available - reward.points,
+      }));
+      alert("Reward redeemed successfully!");
+    } catch (error) {
+      console.error("Error redeeming reward:", error);
+      alert("An error occurred while redeeming the reward.");
+    }
   };
 
   return (
@@ -133,7 +108,6 @@ function Rewards() {
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
-        {/* Points Overview Section */}
         <div className="mt-8 bg-gold-100 p-4 rounded-lg shadow-sm w-1/2 mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Points Overview</h3>
           <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-64">
@@ -150,7 +124,6 @@ function Rewards() {
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
-        {/* Rewards Section */}
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Available Rewards For You</h3>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -175,4 +148,4 @@ function Rewards() {
   );
 }
 
-export default Rewards;
+export default RewardsPage;

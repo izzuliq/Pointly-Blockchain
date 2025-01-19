@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
-import PointlyUser from '../abis/PointlyUser.json';  // Import ABI of your contract
+import PointlyUser from '../../build/contracts/PointlyUser.json';  // Import ABI of your contract
 
 function LoginPage() {
   const [account, setAccount] = useState(null);  // Store MetaMask account
@@ -30,7 +30,7 @@ function LoginPage() {
       setAccount(userAccount);  // Store account in state
 
       // Initialize the contract
-      const contractAddress = '0xD4Cd5D753Fc879369bec170DC9ABF8cD7D97Ff90'; // Replace with your contract address
+      const contractAddress = '0x7B6c379a50076D58F6F87034Df75f05C3e8798ED'; // Replace with your contract address
       const contract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
 
       console.log("Contract initialized:", contract); // Debugging contract

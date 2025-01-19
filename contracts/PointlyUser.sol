@@ -15,6 +15,7 @@ contract PointlyUser {
         string tier;
         uint256 totalPoints;
         uint256 availablePoints;
+        string role; // New field for the user's role
         bool exists; // To check if a user exists
     }
 
@@ -22,10 +23,11 @@ contract PointlyUser {
     mapping(address => User) private users;
 
     // Events for logging actions
-    event UserCreated(address indexed userAddress, string name);
+    event UserCreated(address indexed userAddress, string name, string role);
     event PointsUpdated(address indexed userAddress, uint256 newTotalPoints, uint256 newAvailablePoints);
     event TierUpdated(address indexed userAddress, string newTier);
     event UserDeleted(address indexed userAddress);
+    event RoleUpdated(address indexed userAddress, string newRole);
 
     // Constructor to initialize the contract owner
     constructor() {
@@ -38,7 +40,8 @@ contract PointlyUser {
         string memory name,
         string memory phone,
         string memory addressDetails,
-        string memory profileImage
+        string memory profileImage,
+        string memory role // Role added when creating user
     ) public {
         require(!users[msg.sender].exists, "User already exists");
 
@@ -51,10 +54,11 @@ contract PointlyUser {
             tier: "Quartz",
             totalPoints: 0,
             availablePoints: 0,
+            role: role,  // Assign the role to the user
             exists: true
         });
 
-        emit UserCreated(msg.sender, name);
+        emit UserCreated(msg.sender, name, role);
     }
 
     // Function to get user details
@@ -70,6 +74,7 @@ contract PointlyUser {
         string memory tier,
         uint256 totalPoints,
         uint256 availablePoints,
+        string memory role,  // Include role in the return values
         bool exists
     ) 
     {
@@ -85,10 +90,10 @@ contract PointlyUser {
             user.tier,
             user.totalPoints,
             user.availablePoints,
+            user.role,  // Return the role of the user
             user.exists
         );
     }
-
 
     // Function to update points
     function updatePoints(address userAddress, uint256 points, bool isAddition) public {
@@ -126,6 +131,14 @@ contract PointlyUser {
         }
 
         emit TierUpdated(userAddress, users[userAddress].tier);
+    }
+
+    // Function to update user role
+    function updateRole(address userAddress, string memory newRole) public {
+        require(users[userAddress].exists, "User does not exist");
+
+        users[userAddress].role = newRole;
+        emit RoleUpdated(userAddress, newRole);
     }
 
     // Function to delete a user

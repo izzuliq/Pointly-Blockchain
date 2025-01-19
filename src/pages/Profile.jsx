@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; // React Router for navigation
 import Navbar from "../components/UserNavbar";
 import Web3 from "web3"; // Import Web3.js
-import PointlyUserABI from "../abis/PointlyUser.json"; // Import ABI of PointlyUser.sol
+import PointlyUserABI from '../../build/contracts/PointlyUser.json'; // Import ABI of PointlyUser.sol
 
 function ProfilePage() {
   const [userData, setUserData] = useState({
@@ -28,7 +28,7 @@ function ProfilePage() {
         const accounts = await web3.eth.getAccounts();
         setAccount(accounts[0]);
 
-        const contractAddress = "0x56fe86dF9846967b4B50DCB94b323bf529b41D83"; // Replace with your contract address
+        const contractAddress = "0x7B6c379a50076D58F6F87034Df75f05C3e8798ED"; // Replace with your contract address
         const pointlyUserContract = new web3.eth.Contract(PointlyUserABI, contractAddress);
         setContract(pointlyUserContract);
 

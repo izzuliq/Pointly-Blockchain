@@ -1,8 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.0;
+
+import "./PointlyUser.sol";
 
 contract Rewards {
     address public owner;
+    address public pointlyUserContract;  // PointlyUser contract address
 
     struct Reward {
         uint256 id;
@@ -32,11 +35,20 @@ contract Rewards {
         _;
     }
 
-    constructor() {
-        owner = msg.sender;
+    modifier onlyVendor() {
+        require(
+            keccak256(abi.encodePacked(getUserRole(msg.sender))) == keccak256(abi.encodePacked("vendor")),
+            "Only vendors can perform this action"
+        );
+        _;
     }
 
-    // Function to add a new reward
+    constructor(address _pointlyUserContract) {
+        owner = msg.sender;
+        pointlyUserContract = _pointlyUserContract;
+    }
+
+    // Vendor Functions
     function addReward(
         string memory name,
         string memory description,
@@ -44,7 +56,7 @@ contract Rewards {
         string memory img,
         uint256 expiration,
         string[] memory terms
-    ) public onlyOwner {
+    ) public onlyVendor {
         rewardCounter++;
         rewards[rewardCounter] = Reward({
             id: rewardCounter,
@@ -60,7 +72,6 @@ contract Rewards {
         emit RewardAdded(rewardCounter, name, cost);
     }
 
-    // Function to edit an existing reward
     function editReward(
         uint256 rewardId,
         string memory name,
@@ -69,7 +80,7 @@ contract Rewards {
         string memory img,
         uint256 expiration,
         string[] memory terms
-    ) public onlyOwner {
+    ) public onlyVendor {
         require(rewards[rewardId].isActive, "Reward is inactive or does not exist");
 
         rewards[rewardId].name = name;
@@ -82,20 +93,37 @@ contract Rewards {
         emit RewardEdited(rewardId, name, cost);
     }
 
-    // Function to deactivate a reward
-    function deactivateReward(uint256 rewardId) public onlyOwner {
+    function deactivateReward(uint256 rewardId) public onlyVendor {
         require(rewards[rewardId].isActive, "Reward is already inactive");
         rewards[rewardId].isActive = false;
         emit RewardDeactivated(rewardId);
     }
 
-    // Function to add points to a user
-    function addPoints(address user, uint256 points) public onlyOwner {
-        userPoints[user] += points;
-        emit PointsAdded(user, points);
+    // User Functions
+    function getAllRewards() public view returns (Reward[] memory) {
+        uint256 activeCount = 0;
+
+        // Count active rewards
+        for (uint256 i = 1; i <= rewardCounter; i++) {
+            if (rewards[i].isActive) {
+                activeCount++;
+            }
+        }
+
+        // Create an array of active rewards
+        Reward[] memory activeRewards = new Reward[](activeCount);
+        uint256 index = 0;
+
+        for (uint256 i = 1; i <= rewardCounter; i++) {
+            if (rewards[i].isActive) {
+                activeRewards[index] = rewards[i];
+                index++;
+            }
+        }
+
+        return activeRewards;
     }
 
-    // Function to redeem a reward
     function redeemReward(uint256 rewardId) public {
         require(rewards[rewardId].isActive, "Reward is inactive or does not exist");
         require(block.timestamp < rewards[rewardId].expiration, "Reward has expired");
@@ -108,27 +136,39 @@ contract Rewards {
         emit RewardRedeemed(msg.sender, rewardId);
     }
 
-    // Function to get reward details
-    function getReward(uint256 rewardId) public view returns (
-        string memory name,
-        string memory description,
-        uint256 cost,
-        string memory img,
-        uint256 expiration,
-        string[] memory terms,
-        bool isActive
-    ) {
-        Reward memory reward = rewards[rewardId];
-        require(reward.isActive, "Reward is inactive or does not exist");
-
-        return (
-            reward.name,
-            reward.description,
-            reward.cost,
-            reward.img,
-            reward.expiration,
-            reward.terms,
-            reward.isActive
-        );
+    function getRewardDetails(uint256 rewardId) public view returns (Reward memory) {
+        require(rewards[rewardId].isActive, "Reward is inactive or does not exist");
+        return rewards[rewardId];
     }
+
+    function checkRedeemedRewards(address user) public view returns (uint256[] memory) {
+        uint256 redeemedCount = 0;
+
+        // Count redeemed rewards
+        for (uint256 i = 1; i <= rewardCounter; i++) {
+            if (rewardRedeemed[user][i]) {
+                redeemedCount++;
+            }
+        }
+
+        // Create an array of redeemed reward IDs
+        uint256[] memory redeemedRewards = new uint256[](redeemedCount);
+        uint256 index = 0;
+
+        for (uint256 i = 1; i <= rewardCounter; i++) {
+            if (rewardRedeemed[user][i]) {
+                redeemedRewards[index] = i;
+                index++;
+            }
+        }
+
+        return redeemedRewards;
+    }
+
+    // Helper function to get the user's role from PointlyUser contract
+    function getUserRole(address user) public view returns (string memory) {
+        ( , , , , , , , ,string memory role,) = PointlyUser(pointlyUserContract).getUser(user);
+        return role;  // Return the role
+    }
+
 }

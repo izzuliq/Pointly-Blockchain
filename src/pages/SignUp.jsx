@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
-import PointlyUser from '../abis/PointlyUser.json';  // Import ABI of your contract
+import PointlyUser from '../../build/contracts/PointlyUser.json';  // Import ABI of your contract
 
 function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -55,7 +55,7 @@ function SignUpPage() {
       console.log("Web3 instance:", web3);
       console.log("Account:", account);
   
-      const contract = new web3.eth.Contract(PointlyUser.abi, '0xD4Cd5D753Fc879369bec170DC9ABF8cD7D97Ff90'); // Contract address
+      const contract = new web3.eth.Contract(PointlyUser.abi, '0x7B6c379a50076D58F6F87034Df75f05C3e8798ED'); // Contract address
       console.log("Calling createUser method...");
   
       // Debug: Check the contract ABI and method
