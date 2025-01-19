@@ -23,7 +23,7 @@ function Dashboard() {
         const accounts = await web3.eth.getAccounts();
         setAccount(accounts[0]);
 
-        const contractAddress = "0x7B6c379a50076D58F6F87034Df75f05C3e8798ED"; // Replace with your deployed contract address
+        const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9"; // Replace with your deployed contract address
         const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress); // Ensure ABI is correct
         setContract(pointlyUserContract);
 

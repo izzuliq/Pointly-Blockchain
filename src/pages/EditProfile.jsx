@@ -1,52 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/UserNavbar";
-import axios from 'axios';
+import Web3 from "web3";
+import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
 
 function EditProfilePage() {
-  const [name, setName] = useState("John Doe");
-  const [email, setEmail] = useState("john.doe@example.com");
-  const [phone, setPhone] = useState("(123) 456-7890");
-  const [address, setAddress] = useState("123 Main Street, Springfield, IL");
-  const [dob, setDob] = useState("01/01/1990");
-  const [profilePicture, setProfilePicture] = useState("https://via.placeholder.com/150");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [profileImage, setProfileImage] = useState("https://via.placeholder.com/150");
+  const [dob, setDob] = useState("");
+  const [role, setRole] = useState("");
+  const [account, setAccount] = useState(null);
+  const [contract, setContract] = useState(null);
 
-  // Handle image upload
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfilePicture(reader.result); // Update profile picture to the selected image
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL (base64)
+  useEffect(() => {
+    const initWeb3 = async () => {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        
+        // Request access to the user's Ethereum accounts
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          setAccount(accounts[0]);
+  
+          const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9"; // Replace with your contract address
+          const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
+          setContract(pointlyUserContract);
+  
+          if (accounts[0] && pointlyUserContract) {
+            fetchUserProfile(accounts[0], pointlyUserContract);
+          }
+        } catch (err) {
+          console.error("Error requesting accounts:", err);
+        }
+      } else {
+        console.error("Ethereum wallet not detected. Please install MetaMask.");
+      }
+    };
+  
+    initWeb3();
+  }, []);  
+
+  const fetchUserProfile = async (userAddress, contract) => {
+    try {
+      const userProfile = await contract.methods.getUser(userAddress).call();
+      setName(userProfile.name);
+      setEmail(userProfile.email);
+      setPhone(userProfile.phone);
+      setAddress(userProfile.addressDetails);
+      setProfileImage(userProfile.profileImage);
+      setRole(userProfile.role);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
     }
   };
 
   const handleSave = async () => {
     try {
-      // Prepare the data to be sent to the server
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("email", email);
-      formData.append("phone", phone);
-      formData.append("address", address);
-      formData.append("dob", dob);
-      formData.append("profilePicture", profilePicture); // You can also send a file instead of base64 if needed
-
-      // Send the data using axios (replace with your API endpoint)
-      const response = await axios.put('/api/user/profile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }
-      });
-
-      // Handle success response (you can customize this)
-      if (response.status === 200) {
-        alert("Profile updated successfully!");
-      }
+      const updatedData = await contract.methods.updateUser(name, email, phone, address, profileImage, role).send({ from: account });
+      alert("Profile updated successfully!");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile. Please try again.");
+      alert("Failed to update profile.");
+    }
+  };
+
+  // Handle profile image upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result); // Set the image preview URL
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -58,96 +86,75 @@ function EditProfilePage() {
         <p className="mt-2 text-gray-600 text-center">Update your account details below.</p>
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
-        
+
         <div className="mt-8 flex flex-col items-center">
-          {/* Profile Picture */}
-          <div className="w-24 h-24 mb-4 rounded-full overflow-hidden">
-            <img
-              src={profilePicture}
-              alt="Profile"
-              className="w-full h-full object-cover"
-            />
+          <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
+            <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
           </div>
 
-          {/* Image Upload Input */}
           <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700" htmlFor="profile-picture">Profile Picture</label>
-            <input
-              type="file"
-              id="profile-picture"
-              onChange={handleImageChange}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-            />
-          </div>
-
-          {/* Name Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="name">Name</label>
+            <label className="block text-xl text-purple-dark">Name</label>
             <input
               type="text"
-              id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your name"
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
             />
           </div>
 
-          {/* Email Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="email">Email</label>
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Email</label>
             <input
               type="email"
-              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your email"
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
             />
           </div>
 
-          {/* Phone Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="phone">Phone</label>
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Phone</label>
             <input
               type="text"
-              id="phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your phone number"
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
             />
           </div>
 
-          {/* Address Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="address">Address</label>
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Address</label>
             <input
               type="text"
-              id="address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter your address"
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
             />
           </div>
 
-          {/* Date of Birth Input */}
           <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700" htmlFor="dob">Date of Birth</label>
+            <label className="block text-xl text-purple-dark">Profile Image</label>
             <input
-              type="date"
-              id="dob"
-              value={dob}
-              onChange={(e) => setDob(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100"
             />
           </div>
 
-          {/* Save Button */}
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Role</label>
+            <input
+              type="text"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
+            />
+          </div>
+
           <button
-            onClick={handleSave}
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
+            onClick={handleSave}
           >
             Save Changes
           </button>
