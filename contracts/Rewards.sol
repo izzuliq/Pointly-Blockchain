@@ -16,6 +16,7 @@ contract Rewards {
         uint256 expiration; // Unix timestamp
         string[] terms;
         bool isActive;
+        address vendorAddress; // Track the vendor who created the reward
     }
 
     uint256 public rewardCounter;
@@ -66,7 +67,8 @@ contract Rewards {
             img: img,
             expiration: expiration,
             terms: terms,
-            isActive: true
+            isActive: true,
+            vendorAddress: msg.sender
         });
 
         emit RewardAdded(rewardCounter, name, cost);
@@ -81,21 +83,26 @@ contract Rewards {
         uint256 expiration,
         string[] memory terms
     ) public onlyVendor {
-        require(rewards[rewardId].isActive, "Reward is inactive or does not exist");
+        Reward storage reward = rewards[rewardId];
+        require(reward.isActive, "Reward is inactive or does not exist");
+        require(reward.vendorAddress == msg.sender, "Only vendor can edit their rewards");
 
-        rewards[rewardId].name = name;
-        rewards[rewardId].description = description;
-        rewards[rewardId].cost = cost;
-        rewards[rewardId].img = img;
-        rewards[rewardId].expiration = expiration;
-        rewards[rewardId].terms = terms;
+        reward.name = name;
+        reward.description = description;
+        reward.cost = cost;
+        reward.img = img;
+        reward.expiration = expiration;
+        reward.terms = terms;
 
         emit RewardEdited(rewardId, name, cost);
     }
 
     function deactivateReward(uint256 rewardId) public onlyVendor {
-        require(rewards[rewardId].isActive, "Reward is already inactive");
-        rewards[rewardId].isActive = false;
+        Reward storage reward = rewards[rewardId];
+        require(reward.isActive, "Reward is already inactive");
+        require(reward.vendorAddress == msg.sender, "Only vendor can deactivate their rewards");
+
+        reward.isActive = false;
         emit RewardDeactivated(rewardId);
     }
 
@@ -125,12 +132,13 @@ contract Rewards {
     }
 
     function redeemReward(uint256 rewardId) public {
-        require(rewards[rewardId].isActive, "Reward is inactive or does not exist");
-        require(block.timestamp < rewards[rewardId].expiration, "Reward has expired");
+        Reward storage reward = rewards[rewardId];
+        require(reward.isActive, "Reward is inactive or does not exist");
+        require(block.timestamp < reward.expiration, "Reward has expired");
         require(!rewardRedeemed[msg.sender][rewardId], "Reward already redeemed");
-        require(userPoints[msg.sender] >= rewards[rewardId].cost, "Insufficient points");
+        require(userPoints[msg.sender] >= reward.cost, "Insufficient points");
 
-        userPoints[msg.sender] -= rewards[rewardId].cost;
+        userPoints[msg.sender] -= reward.cost;
         rewardRedeemed[msg.sender][rewardId] = true;
 
         emit RewardRedeemed(msg.sender, rewardId);
@@ -170,5 +178,4 @@ contract Rewards {
         ( , , , , , , , ,string memory role,) = PointlyUser(pointlyUserContract).getUser(user);
         return role;  // Return the role
     }
-
 }

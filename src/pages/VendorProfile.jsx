@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import VendorNavbar from "../components/VendorNavbar";
 import { Link, useNavigate } from "react-router-dom";
-import Web3 from "web3";
-import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
+import getContractInstance from "../utils/contract"; // Import the contract instance utility
+import getWeb3 from "../utils/getWeb3"; // Import the getWeb3 utility
 
 function VendorProfile() {
-  const [userData, setUserData] = useState({
+  const [vendorData, setVendorData] = useState({
     name: "",
     email: "",
     phone: "",
@@ -20,41 +20,57 @@ function VendorProfile() {
 
   useEffect(() => {
     const initWeb3 = async () => {
-      if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        await window.ethereum.enable();
+      try {
+        // Initialize Web3 using the getWeb3 utility
+        const web3 = await getWeb3();
+        if (!web3) {
+          setError("Failed to initialize Web3.");
+          setLoading(false);
+          return;
+        }
+
+        // Get the contract instance for the PointlyUser contract
+        const contractInstance = await getContractInstance("PointlyUser");
+        if (!contractInstance) {
+          setError("Failed to load PointlyUser contract.");
+          setLoading(false);
+          return;
+        }
+
+        setContract(contractInstance);
+
+        // Get the connected wallet address
         const accounts = await web3.eth.getAccounts();
         setAccount(accounts[0]);
 
-        const contractAddress = "0x10e72FfCCaF54273011Df2E5dc732E6409404f07"; // Replace with your contract address
-        const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
-        setContract(pointlyUserContract);
-
-        if (accounts[0] && pointlyUserContract) {
-          fetchUserProfile(accounts[0], pointlyUserContract);
+        if (accounts[0] && contractInstance) {
+          fetchVendorProfile(accounts[0], contractInstance);
         }
-      } else {
-        console.error("Ethereum wallet not detected. Please install MetaMask.");
+      } catch (error) {
+        console.error("Error initializing Web3 or contract:", error);
+        setError("Failed to initialize Web3 or contract.");
+        setLoading(false);
       }
     };
 
     initWeb3();
-  }, [navigate, account, contract]);
+  }, [navigate]);
 
-  const fetchUserProfile = async (userAddress, contract) => {
+  const fetchVendorProfile = async (vendorAddress, contract) => {
     try {
-      const userProfile = await contract.methods.getUser(userAddress).call();
-      setUserData({
-        name: userProfile.name || "N/A",
-        email: userProfile.email || "N/A",
-        phone: userProfile.phone || "N/A",
-        address: userProfile.addressDetails || "N/A",
-        profileImage: userProfile.profileImage || "default_avatar.jpg",
+      // Assuming `getVendor` is a method from the PointlyVendor contract to fetch vendor profile
+      const vendorProfile = await contract.methods.getUser(vendorAddress).call();
+      setVendorData({
+        name: vendorProfile.name || "N/A",
+        email: vendorProfile.email || "N/A",
+        phone: vendorProfile.phone || "N/A",
+        address: vendorProfile.addressDetails || "N/A",
+        profileImage: vendorProfile.profileImage || "default_avatar.jpg",
       });
       setLoading(false);
     } catch (err) {
-      console.error("Error fetching user data:", err);
-      setError("Failed to fetch profile data.");
+      console.error("Error fetching vendor data:", err);
+      setError("Failed to fetch vendor profile data.");
       setLoading(false);
     }
   };
@@ -90,7 +106,7 @@ function VendorProfile() {
         <div className="mt-8 flex flex-col items-center">
           <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
             <img
-              src={userData.profileImage}
+              src={vendorData.profileImage}
               alt="Profile"
               className="w-full h-full object-cover"
             />
@@ -98,22 +114,22 @@ function VendorProfile() {
 
           <div className="w-full mb-6 text-center">
             <label className="block text-2xl font-cabin text-purple-dark">Name</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.name}</p>
+            <p className="mt-2 text-gray-800 text-xl">{vendorData.name}</p>
           </div>
 
           <div className="w-full mb-6 text-center">
             <label className="block text-2xl font-cabin text-purple-dark">Email</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.email}</p>
+            <p className="mt-2 text-gray-800 text-xl">{vendorData.email}</p>
           </div>
 
           <div className="w-full mb-6 text-center">
             <label className="block text-2xl font-cabin text-purple-dark">Phone</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.phone}</p>
+            <p className="mt-2 text-gray-800 text-xl">{vendorData.phone}</p>
           </div>
 
           <div className="w-full mb-6 text-center">
             <label className="block text-2xl font-cabin text-purple-dark">Address</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.address}</p>
+            <p className="mt-2 text-gray-800 text-xl">{vendorData.address}</p>
           </div>
 
           <Link to="/vendor-edit-company">

@@ -1,8 +1,8 @@
 
     const CONFIG = {
-  "PointlyUser": "0x12503bF1a84B7293DC5e8C08998E2D11265a3bb3",
-  "Rewards": "0xC22618fa75ca2a5B63ef3a963485354e547460Ad",
-  "PointlyVendor": "0xA060c62581A19FFC877159bAE129D28F74865b88"
+  "PointlyUser": "0x45b435cBc9e3101AeD5100062E54Dd42d3e4765A",
+  "Rewards": "0xBF16dFaEB221EF47DC87ebcF5B7cca156A4e170c",
+  "PointlyVendor": "0x92Cefe75e4eE6da5E887f1949A3e7f634Df36449"
 };
     export default CONFIG;
   

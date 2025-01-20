@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import getWeb3 from "../utils/getWeb3";
-import Navbar from "../components/UserNavbar";
+import Navbar from "../components/VendorNavbar";
 import PointlyVendor from '../../build/contracts/PointlyVendor.json';
 
 function VendorDashboard() {

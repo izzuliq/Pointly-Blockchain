@@ -2,82 +2,83 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import VendorNavbar from "../components/VendorNavbar";
 import getWeb3 from "../utils/getWeb3.js";
-import Rewards from "../../build/contracts/Rewards.json";
+import getContractInstance from "../utils/contract";
 
 function VendorRewards() {
-  const navigate = useNavigate(); // Initialize the useNavigate hook
-  const [rewards, setRewards] = useState([]); // State to hold vendor's rewards
-  const [loading, setLoading] = useState(true); // Loading state
-  const [web3, setWeb3] = useState(null);
+  const navigate = useNavigate();
+  const [rewards, setRewards] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [account, setAccount] = useState(null);
-  const [rewardsContract, setRewardsContract] = useState(null);
-  const [showModal, setShowModal] = useState(false); // Modal visibility
-  const [rewardToDelete, setRewardToDelete] = useState(null); // Reward to delete
-
-  // Replace with your deployed Rewards contract address
-  const rewardsAddress = "0x0b2D248A1F1d03f3a949982876A074fa716A4f52";
+  const [showModal, setShowModal] = useState(false);
+  const [rewardToDelete, setRewardToDelete] = useState(null);
+  const [error, setError] = useState(null);
+  const [contract, setContract] = useState(null);
 
   useEffect(() => {
     const initializeWeb3 = async () => {
       try {
         const web3Instance = await getWeb3();
-        setWeb3(web3Instance);
-
         const accounts = await web3Instance.eth.getAccounts();
-        if (accounts.length > 0) {
-          setAccount(accounts[0]);
-        } else {
-          alert("No accounts found. Please connect to MetaMask.");
+
+        if (accounts.length === 0) {
+          throw new Error("No accounts found. Please connect to MetaMask.");
         }
+        setAccount(accounts[0]);
 
-        const rewardsInstance = new web3Instance.eth.Contract(Rewards.abi, rewardsAddress);
-        setRewardsContract(rewardsInstance);
+        const contractInstance = await getContractInstance("Rewards");
+        setContract(contractInstance);
 
-        await fetchRewardsData(rewardsInstance, accounts[0]);
-      } catch (error) {
-        console.error("Error initializing Web3:", error);
+        if (contractInstance) {
+          await fetchRewardsData(contractInstance, accounts[0]);
+        }
+      } catch (err) {
+        console.error("Error initializing Web3 or fetching data:", err);
+        setError("Failed to load rewards data. Please try again.");
+        setLoading(false);
       }
     };
 
     initializeWeb3();
   }, []);
 
-  const fetchRewardsData = async (contract, userAccount) => {
+  useEffect(() => {
+    if (contract && account) {
+      fetchRewardsData(contract, account);
+    }
+  }, [contract, account]);  // Fetch rewards when either contract or account changes
+
+  const fetchRewardsData = async (contractInstance, account) => {
     try {
-      // Fetch the total number of rewards
-      const rewardCounter = await contract.methods.rewardCounter().call();
-
-      const vendorRewards = [];
-      for (let i = 1; i <= rewardCounter; i++) {
-        const reward = await contract.methods.getRewardDetails(i).call();
-
-        // Assuming `vendor` field identifies the creator (e.g., msg.sender in addReward)
-        if (reward.vendor.toLowerCase() === userAccount.toLowerCase() && reward.isActive) {
-          vendorRewards.push({
-            id: i,
-            name: reward.name,
-            description: reward.description,
-            cost: reward.cost,
-            img: reward.img,
-            active: reward.isActive,
-          });
-        }
+      const rewards = await contractInstance.methods.getAllRewards().call();
+      console.log("Fetched rewards:", rewards);
+  
+      // Ensure account is defined before calling toLowerCase()
+      if (!account) {
+        throw new Error("Vendor account is not available.");
       }
-      setRewards(vendorRewards);
+  
+      // Filter rewards based on vendor's address (vendorAddress isn't available, so we need another way)
+      const filteredRewards = rewards.filter(
+        (reward) => reward.isActive && reward.vendorAddress && reward.vendorAddress.toLowerCase() === account.toLowerCase()
+      );
+  
+      setRewards(filteredRewards);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching rewards:", error);
+      setError("Failed to fetch rewards. Please try again.");
+      setLoading(false);
     }
-  };
+  };  
 
   const deleteReward = async (rewardId) => {
     try {
-      await rewardsContract.methods.deactivateReward(rewardId).send({ from: account });
+      await contract.methods.deactivateReward(rewardId).send({ from: account });
       setRewards((prevRewards) => prevRewards.filter((reward) => reward.id !== rewardId));
       alert("Reward deactivated successfully!");
-    } catch (error) {
-      console.error("Error deactivating reward:", error);
-      alert("An error occurred while deactivating the reward.");
+    } catch (err) {
+      console.error("Error deactivating reward:", err);
+      setError("An error occurred while deactivating the reward. Please try again.");
     }
     setShowModal(false);
   };
@@ -99,8 +100,19 @@ function VendorRewards() {
   };
 
   const handleAddNewReward = () => {
-    navigate("/vendor-create-reward"); // Redirect to add reward page
+    navigate("/vendor-create-reward");
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-gray-100">
+        <div className="flex flex-col items-center">
+          <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
+          <p className="mt-4 text-xl text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -108,57 +120,48 @@ function VendorRewards() {
       <div className="p-6 bg-white shadow-md rounded-lg font-cabin">
         <h2 className="text-3xl font-cabin text-gray-800 text-center">Manage Rewards</h2>
         <p className="mt-2 text-gray-600 text-center">Create, update, and monitor rewards for your customers.</p>
-
-        <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
-
-        <div className="mt-6 bg-gold-100 p-4 rounded-lg shadow-sm w-3/4 items-center mx-auto">
-          <h3 className="text-lg font-semibold text-gray-800 text-center">Your Company Rewards Overview</h3>
-          <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-64">
-            <div>
-              <h4 className="text-xl font-semibold text-gray-700 text-center">{rewards.length}</h4>
-              <p className="text-gray-500 text-center">Total Rewards</p>
-            </div>
-            <div>
-              <h4 className="text-xl font-semibold text-gray-700 text-center">1,200</h4>
-              <p className="text-gray-500 text-center">Total Redemptions</p>
-            </div>
-            <div>
-              <h4 className="text-xl font-semibold text-gray-700 text-center">3</h4>
-              <p className="text-gray-500 text-center">Active Promotions</p>
-            </div>
-          </div>
-        </div>
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Available Rewards</h3>
+          {error && <p className="text-red-500 text-center">{error}</p>}
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.isArray(rewards) && rewards.map((reward) => (
-              <div key={reward.id} className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
-                <img
-                  src={reward.img}
-                  alt={reward.name}
-                  className="max-w-[300px] max-h-[300px] object-cover mb-4 rounded-lg"
-                />
-                <h4 className="text-xl font-semibold text-gray-700">{reward.name}</h4>
-                <p className="mt-2 text-gray-500">Cost: {reward.cost} points</p>
-                <p className="mt-2 text-gray-600 text-center">{reward.description}</p>
-                <div className="mt-4 flex space-x-4">
-                  <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    onClick={() => handleEditClick(reward.id)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-colors"
-                    onClick={() => handleDeleteClick(reward.id)} // Trigger delete on click
-                  >
-                    Delete
-                  </button>
+            {rewards.length > 0 ? (
+              rewards.map((reward) => (
+                <div key={reward.id.toString()} className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
+                  {/* Display image, use a default image if none is available */}
+                  <img
+                    src={reward.img || "default_reward_image.jpg"} // Fallback to default image if reward.img is empty
+                    alt={reward.name}
+                    className="max-w-[300px] max-h-[300px] object-cover mb-4 rounded-lg"
+                  />
+                  <h4 className="text-xl font-semibold text-gray-700">{reward.name}</h4>
+                  <p className="mt-2 text-gray-500">
+                    Cost: {reward.cost.toString()} points
+                  </p>
+                  <p className="mt-2 text-gray-600 text-center">{reward.description}</p>
+                  <p className="mt-2 text-gray-500">
+                    Expiration: {new Date(Number(reward.expiration) * 1000).toLocaleDateString()}
+                  </p>
+                  <div className="mt-4 flex space-x-4">
+                    <button
+                      className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      onClick={() => console.log("Edit reward", reward.id)}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-colors"
+                      onClick={() => handleDeleteClick(reward.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-center text-gray-500">No rewards available.</p>
+            )}
           </div>
         </div>
 
@@ -172,7 +175,6 @@ function VendorRewards() {
         </div>
       </div>
 
-      {/* Modal Confirmation */}
       {showModal && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
