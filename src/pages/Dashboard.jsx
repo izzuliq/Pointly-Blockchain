@@ -57,7 +57,7 @@ function Dashboard() {
       try {
         const web3 = await getWeb3();
         const accounts = await web3.eth.getAccounts();
-        const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9";
+        const contractAddress = "0x096D6bAa2375Fd1c4566a74E02dd0f32919f4a24";
         const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
 
         setAccount(accounts[0]);

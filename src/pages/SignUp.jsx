@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
 import PointlyUser from '../../build/contracts/PointlyUser.json';  // Import ABI of your contract
+import PointlyVendor from '../../build/contracts/PointlyVendor.json';  // Import ABI of your contract
 
 function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -55,7 +56,7 @@ function SignUpPage() {
       console.log("Web3 instance:", web3);
       console.log("Account:", account);
   
-      const contract = new web3.eth.Contract(PointlyUser.abi, '0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9'); // Contract address
+      const contract = new web3.eth.Contract(PointlyUser.abi, '0x096D6bAa2375Fd1c4566a74E02dd0f32919f4a24'); // Contract address
       console.log("Calling createUser method...");
   
       // Debug: Check the contract ABI and method
@@ -63,6 +64,16 @@ function SignUpPage() {
   
       await contract.methods.createUser(email, '', '', '', 'default_avatar.jpg', role)
         .send({ from: account, gas: 500000 });
+
+      if (role === 'vendor') {
+        const pointlyVendorContract = new web3.eth.Contract(PointlyVendor.abi, '0x015E7Fc393975b10a122E874d3B051b9e6fb358E'); // Replace with your vendor contract address
+        console.log("Calling createVendor method...");
+
+        await pointlyVendorContract.methods.createVendor('', '', '', '') // Adjust the arguments as required
+            .send({ from: account, gas: 500000 });
+
+        console.log("Vendor created on the blockchain!");
+        }
   
       alert('User registered on the blockchain!');
       navigate('/login'); // Redirect to login page

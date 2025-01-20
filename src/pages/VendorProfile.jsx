@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import VendorNavbar from "../components/VendorNavbar";
 import { Link } from "react-router-dom"; // Import Link for navigation
 import Web3 from "web3"; // Import Web3 for blockchain interaction
-import PointlyVendorABI from "../contracts/PointlyVendor.json"; // Import the ABI of the PointlyVendor contract
+//import PointlyVendorABI from "../contracts/PointlyVendor.json"; // Import the ABI of the PointlyVendor contract
 
 function VendorProfile() {
   const [vendorData, setVendorData] = useState(null); // Store vendor data

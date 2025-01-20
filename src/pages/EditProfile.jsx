@@ -12,7 +12,7 @@ const ipfsClient = create({
     pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
   }
 });
-
+ 
 function EditProfilePage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ function EditProfilePage() {
           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
           setAccount(accounts[0]);
   
-          const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9"; // Replace with your contract address
+          const contractAddress = "0x096D6bAa2375Fd1c4566a74E02dd0f32919f4a24"; // Replace with your contract address
           const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
           setContract(pointlyUserContract);
   
