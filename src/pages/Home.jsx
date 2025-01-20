@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import getWeb3 from "../utils/getWeb3"; // Import getWeb3
-import PointlyUser from '../../build/contracts/PointlyUser.json'; // Import ABI
+import getWeb3 from '../utils/getWeb3'; // Import getWeb3 utility
+import getContractInstance from '../utils/contract'; // Import utility for contract interaction
 import Navbar from '../components/UserNavbar'; // Import Navbar component
 import ReviewsCarousel from '../components/Review'; // Import Reviews Carousel
 import { Link } from 'react-router-dom'; // Import Link
@@ -15,11 +15,19 @@ function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadWeb3AndContract = async () => {
+    const loadContractData = async () => {
       try {
-        const web3 = await getWeb3(); // Initialize Web3
-        const accounts = await web3.eth.getAccounts(); // Get user wallet address
+        // Get Web3 instance using getWeb3
+        const web3 = await getWeb3();
+        
+        if (!web3) {
+          console.error('Web3 initialization failed!');
+          navigate('/'); // Redirect if Web3 fails to initialize
+          return;
+        }
 
+        // Request access to the user's MetaMask account
+        const accounts = await web3.eth.getAccounts();
         if (!accounts || accounts.length === 0) {
           console.warn('No MetaMask account detected. Redirecting to login.');
           navigate('/'); // Redirect if no account found
@@ -27,21 +35,12 @@ function Home() {
         }
 
         const walletAddress = accounts[0]; // Use the first account as the wallet address
-        const networkId = await web3.eth.net.getId();
-        const deployedNetwork = PointlyUser.networks[networkId];
 
-        if (!deployedNetwork) {
-          console.error('Smart contract not deployed to detected network.');
-          return;
-        }
-
-        const contract = new web3.eth.Contract(
-          PointlyUser.abi,
-          deployedNetwork && deployedNetwork.address
-        );
+        // Get contract instance using getContractInstance
+        const pointlyUserInstance = await getContractInstance("PointlyUser", web3);
 
         // Fetch user details from contract
-        const userData = await contract.methods.getUser(walletAddress).call();
+        const userData = await pointlyUserInstance.methods.getUser(walletAddress).call();
         if (userData.exists) {
           setIsAuthenticated(true);
           setUserId(walletAddress);
@@ -53,12 +52,12 @@ function Home() {
           navigate('/'); // Redirect if user does not exist
         }
       } catch (error) {
-        console.error("Error loading Web3 or contract:", error);
+        console.error("Error loading contract data:", error);
         navigate('/'); // Redirect if error occurs
       }
     };
 
-    loadWeb3AndContract();
+    loadContractData();
   }, [navigate]);
 
   return (
@@ -118,13 +117,12 @@ function Home() {
         <h2 className="text-3xl mt-5 font-bold text-purple-dark text-center">Hear What Our Users Have To Say!</h2>
         <ReviewsCarousel />
         
-        
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         {/* Call to Action */}
         <div className="mt-5 text-center">
           <h2 className="text-3xl font-bold text-purple-dark">Start Earning Points with Pointly Today!</h2>
-          <p className="mt-4 text-lg text-gray-700">Start make the most out of your daily transaction right now!</p>
+          <p className="mt-4 text-lg text-gray-700">Start making the most out of your daily transactions right now!</p>
           <button className="mt-6 px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors">
             <Link to="/dashboard">Get Started</Link>
           </button>

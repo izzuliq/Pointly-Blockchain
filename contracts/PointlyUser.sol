@@ -148,8 +148,7 @@ contract PointlyUser {
         string memory email,
         string memory phone,
         string memory addressDetails,
-        string memory profileImage,
-        string memory role
+        string memory profileImage
     ) public {
         require(users[msg.sender].exists, "User does not exist");
 
@@ -159,7 +158,6 @@ contract PointlyUser {
         users[msg.sender].phone = phone;
         users[msg.sender].addressDetails = addressDetails;
         users[msg.sender].profileImage = profileImage;
-        users[msg.sender].role = role;
 
         // Emit the update event
         emit UserUpdated(msg.sender);

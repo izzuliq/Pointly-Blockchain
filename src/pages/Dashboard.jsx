@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import getWeb3 from "../utils/getWeb3";
+import getContractInstance from "../utils/contract";
 import Navbar from "../components/UserNavbar";
-import PointlyUser from '../../build/contracts/PointlyUser.json';
 
 function Dashboard() {
   const [account, setAccount] = useState(null);
@@ -57,15 +57,18 @@ function Dashboard() {
       try {
         const web3 = await getWeb3();
         const accounts = await web3.eth.getAccounts();
-        const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9";
-        const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
+
+        // Use getContractInstance to fetch the contract instance
+        const pointlyUserContract = await getContractInstance("PointlyUser");
 
         setAccount(accounts[0]);
         setContract(pointlyUserContract);
 
+        // Fetch user data from contract
         await fetchUserData(accounts[0], pointlyUserContract);
         setLoading(false);
       } catch (err) {
+        console.error("Error initializing web3 or contract:", err);
         setLoading(false);
       }
     };

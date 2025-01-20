@@ -1,57 +1,71 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/UserNavbar";
-import Web3 from "web3";
-import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
-import { create } from 'ipfs-http-client';
-import { useNavigate } from "react-router-dom"; // Import useNavigate
-
-// Set up the Pinata IPFS client
-const ipfsClient = create({
-  url: 'https://api.pinata.cloud/pinning/pinFileToIPFS', // Pinata IPFS endpoint
-  headers: {
-    pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
-  }
-});
+import { useNavigate } from "react-router-dom";
+import getContractInstance from "../utils/contract";
+import getWeb3 from "../utils/getWeb3";
+import { uploadToIPFS } from "../utils/ipfs";
 
 function EditProfilePage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
-  const [profileImage, setProfileImage] = useState(""); // Store the IPFS CID
-  const [role, setRole] = useState("");
+  const [profileImageCID, setProfileImageCID] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
   const [account, setAccount] = useState(null);
   const [contract, setContract] = useState(null);
+  const [isMetaMaskAvailable, setIsMetaMaskAvailable] = useState(false);
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   useEffect(() => {
     const initWeb3 = async () => {
-      if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        
-        // Request access to the user's Ethereum accounts
-        try {
-          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-          setAccount(accounts[0]);
-  
-          const contractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9"; // Replace with your contract address
-          const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
-          setContract(pointlyUserContract);
-  
-          if (accounts[0] && pointlyUserContract) {
-            fetchUserProfile(accounts[0], pointlyUserContract);
-          }
-        } catch (err) {
-          console.error("Error requesting accounts:", err);
+      try {
+        const web3 = await getWeb3(); // Fetch Web3 instance
+        if (!web3) {
+          alert("MetaMask not detected. Please install MetaMask to use this DApp.");
+          return;
         }
-      } else {
-        console.error("Ethereum wallet not detected. Please install MetaMask.");
+
+        setIsMetaMaskAvailable(true);
+
+        const accounts = await web3.eth.getAccounts();
+        if (accounts.length === 0) {
+          alert("Please connect your MetaMask wallet.");
+          return;
+        }
+
+        setAccount(accounts[0]);
+
+        const pointlyUserContract = await getContractInstance("PointlyUser");
+        setContract(pointlyUserContract);
+
+        if (accounts[0] && pointlyUserContract) {
+          fetchUserProfile(accounts[0], pointlyUserContract);
+        }
+
+        // Listen for account or chain changes
+        window.ethereum.on("accountsChanged", (accounts) => {
+          if (accounts.length > 0) {
+            setAccount(accounts[0]);
+            fetchUserProfile(accounts[0], pointlyUserContract);
+          } else {
+            setAccount(null);
+            alert("Disconnected from MetaMask. Please reconnect.");
+          }
+        });
+
+        window.ethereum.on("chainChanged", () => {
+          window.location.reload(); // Reload on chain change to reinitialize DApp
+        });
+      } catch (err) {
+        console.error("Error initializing Web3 or fetching contract:", err);
+        alert("Failed to initialize Web3. Check your MetaMask connection.");
       }
     };
-  
+
     initWeb3();
-  }, []);  
+  }, []);
 
   const fetchUserProfile = async (userAddress, contract) => {
     try {
@@ -60,8 +74,7 @@ function EditProfilePage() {
       setEmail(userProfile.email);
       setPhone(userProfile.phone);
       setAddress(userProfile.addressDetails);
-      setProfileImage(userProfile.profileImage);
-      setRole(userProfile.role);
+      setProfileImageCID(userProfile.profileImage);
     } catch (err) {
       console.error("Error fetching user data:", err);
     }
@@ -69,45 +82,35 @@ function EditProfilePage() {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      try {
-        // Prepare the file for upload
-        const formData = new FormData();
-        formData.append('file', file);
-        
-        // Send the file to Pinata using the correct endpoint and headers
-        const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
-          method: 'POST',
-          headers: {
-            pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
-            pinata_secret_api_key: '66001fa51b401321cfcda182b365f7e279a18a4f3f0f139ed689b608e0e2cf72', // Replace with your Pinata secret API key
-          },
-          body: formData,
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to upload image');
-        }
-  
-        const result = await response.json();
-        const imageUrl = `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
-        setProfileImage(imageUrl); // Set the image URL
-      } catch (err) {
-        console.error("Error uploading image to IPFS via Pinata:", err);
-      }
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const ipfsUrl = await uploadToIPFS(file);
+      setProfileImageCID(ipfsUrl); // Update the CID with the IPFS URL
+    } catch (error) {
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setIsUploading(false);
     }
   };
 
   const handleSave = async () => {
-    try {
-      const updatedData = await contract.methods.updateUser(name, email, phone, address, profileImage, role).send({ from: account });
-      alert("Profile updated successfully!");
+    if (!isMetaMaskAvailable) {
+      alert("MetaMask not detected. Please install or enable MetaMask.");
+      return;
+    }
 
-      // Redirect to the profile page after successful update
-      navigate("/profile"); // This will navigate to the /profile route
+    try {
+      await contract.methods
+        .updateUser(name, email, phone, address, profileImageCID)
+        .send({ from: account });
+
+      alert("Profile updated successfully!");
+      navigate("/profile");
     } catch (error) {
       console.error("Error updating profile:", error);
-      alert("Failed to update profile.");
+      alert("Failed to update profile. Ensure your MetaMask wallet is connected.");
     }
   };
 
@@ -122,7 +125,11 @@ function EditProfilePage() {
 
         <div className="mt-8 flex flex-col items-center">
           <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
-            <img src={profileImage || 'default_avatar.jpg'} alt="Profile" className="w-full h-full object-cover" />
+            <img
+              src={profileImageCID || "default_avatar.jpg"}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
           </div>
 
           <div className="w-full mb-6">
@@ -173,24 +180,17 @@ function EditProfilePage() {
               onChange={handleImageUpload}
               className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100"
             />
-          </div>
-
-          <div className="w-full mb-6">
-            <label className="block text-xl text-purple-dark">Role</label>
-            <input
-              type="text"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
-            />
+            {isUploading && <p className="text-sm text-gray-500 mt-2">Uploading image...</p>}
           </div>
 
           <button
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
             onClick={handleSave}
+            disabled={isUploading}
           >
             Save Changes
           </button>
+
         </div>
       </div>
     </>
