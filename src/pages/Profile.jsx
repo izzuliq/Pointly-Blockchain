@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import getWeb3 from "../utils/getWeb3"; // Import getWeb3 utility
+import getContractInstance from "../utils/contract"; // Import the contract details utility
 import Navbar from "../components/UserNavbar";
-import Web3 from "web3";
-import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
 
 function ProfilePage() {
   const [userData, setUserData] = useState({
@@ -24,30 +24,51 @@ function ProfilePage() {
 
   useEffect(() => {
     const initWeb3 = async () => {
-      if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
-        await window.ethereum.enable();
+      try {
+        const web3 = await getWeb3(); // Use getWeb3 utility to get Web3 instance
+        console.log("Web3 instance:", web3);
+
+        if (!web3) {
+          setError("Failed to initialize Web3.");
+          setLoading(false);
+          return;
+        }
+
         const accounts = await web3.eth.getAccounts();
+        console.log("MetaMask accounts:", accounts);
+
+        if (accounts.length === 0) {
+          setError("No MetaMask account found.");
+          setLoading(false);
+          return;
+        }
+
         setAccount(accounts[0]);
 
-        const contractAddress = "0x096D6bAa2375Fd1c4566a74E02dd0f32919f4a24"; // Replace with your contract address
-        const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
-        setContract(pointlyUserContract);
-
-        if (accounts[0] && pointlyUserContract) {
-          fetchUserProfile(accounts[0], pointlyUserContract);
+        const contractInstance = await getContractInstance("PointlyUser");
+        if (!contractInstance) {
+          setError("Failed to load PointlyUser contract.");
+          setLoading(false);
+          return;
         }
-      } else {
-        console.error("Ethereum wallet not detected. Please install MetaMask.");
+
+        setContract(contractInstance);
+        await fetchUserProfile(accounts[0], contractInstance);
+      } catch (error) {
+        console.error("Error initializing Web3 or contract:", error);
+        setError("Failed to initialize Web3 or contract.");
+        setLoading(false);
       }
     };
 
     initWeb3();
-  }, [navigate, account, contract]);
+  }, [navigate]);
 
   const fetchUserProfile = async (userAddress, contract) => {
     try {
       const userProfile = await contract.methods.getUser(userAddress).call();
+      console.log("Fetched user profile:", userProfile);
+
       setUserData({
         name: userProfile.name || "N/A",
         email: userProfile.email || "N/A",
@@ -77,7 +98,11 @@ function ProfilePage() {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="text-center text-red-500 font-semibold">
+        <p>{error}</p>
+      </div>
+    );
   }
 
   return (
@@ -102,35 +127,19 @@ function ProfilePage() {
             />
           </div>
 
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Name</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.name}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Email</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.email}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Phone</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.phone}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Address</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.address}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Tier</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.tier}</p>
-          </div>
-
-          <div className="w-full mb-6 text-center">
-            <label className="block text-2xl font-cabin text-purple-dark">Role</label>
-            <p className="mt-2 text-gray-800 text-xl">{userData.role}</p>
-          </div>
+          {[
+            { label: "Name", value: userData.name },
+            { label: "Email", value: userData.email },
+            { label: "Phone", value: userData.phone },
+            { label: "Address", value: userData.address },
+            { label: "Tier", value: userData.tier },
+            { label: "Role", value: userData.role },
+          ].map(({ label, value }) => (
+            <div key={label} className="w-full mb-6 text-center">
+              <label className="block text-2xl font-cabin text-purple-dark">{label}</label>
+              <p className="mt-2 text-gray-800 text-xl">{value}</p>
+            </div>
+          ))}
 
           <Link to="/EditProfile">
             <button className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors">

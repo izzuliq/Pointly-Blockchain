@@ -2,28 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/UserNavbar";
 import getWeb3 from "../utils/getWeb3.js";
-import Rewards from '../../build/contracts/Rewards.json';
-import PointlyUser from '../../build/contracts/PointlyUser.json';
+import getContractInstance from "../utils/contract";
 
 function RewardsPage() {
   const [rewards, setRewards] = useState([]); // State to hold rewards data
   const [points, setPoints] = useState({ total: 0, available: 0 }); // State for points data
   const [loading, setLoading] = useState(true); // State for loading status
-  const [web3, setWeb3] = useState(null);
   const [account, setAccount] = useState(null);
   const [rewardsContract, setRewardsContract] = useState(null);
   const [userContract, setUserContract] = useState(null);
   const navigate = useNavigate();
 
-  const rewardsAddress = "0x9387B2477E77b7a68e74ff1a058BE3Df35aBC457";
-  const userContractAddress = "0x8D67D204b25ccA0EA4Dcb249C5bFeA6Ef54C8AD9";
-
   useEffect(() => {
     const initializeWeb3 = async () => {
       try {
         const web3Instance = await getWeb3();
-        setWeb3(web3Instance);
-
         const accounts = await web3Instance.eth.getAccounts();
         if (accounts.length > 0) {
           setAccount(accounts[0]);
@@ -31,10 +24,11 @@ function RewardsPage() {
           alert("No accounts found. Please connect to MetaMask.");
         }
 
-        const rewardsInstance = new web3Instance.eth.Contract(Rewards.abi, rewardsAddress);
-        setRewardsContract(rewardsInstance);
+        // Use getContractInstance to fetch contract instances
+        const rewardsInstance = await getContractInstance("Rewards");
+        const userInstance = await getContractInstance("PointlyUser");
 
-        const userInstance = new web3Instance.eth.Contract(PointlyUser.abi, userContractAddress);
+        setRewardsContract(rewardsInstance);
         setUserContract(userInstance);
 
         await fetchPointsData(userInstance, accounts[0]);

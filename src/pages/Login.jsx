@@ -1,69 +1,98 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
-import PointlyUser from '../../build/contracts/PointlyUser.json';  // Import ABI of your contract
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import getWeb3 from "../utils/getWeb3"; // Import getWeb3
+import getContractInstance from "../utils/contract"; // Adjusted import
 
 function LoginPage() {
-  const [account, setAccount] = useState(null);  // Store MetaMask account
+  const [web3, setWeb3] = useState(null); // Store Web3 instance
+  const [account, setAccount] = useState(null); // Store MetaMask account
   const [loading, setLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Initialize Web3 and connect to MetaMask
+    const initWeb3 = async () => {
+      try {
+        const web3Instance = await getWeb3(); // Use getWeb3 to initialize Web3
+        setWeb3(web3Instance);
+
+        const accounts = await web3Instance.eth.getAccounts(); // Get accounts
+        setAccount(accounts[0]); // Set default account
+      } catch (error) {
+        console.error("Failed to initialize Web3:", error);
+        alert("Please connect your MetaMask wallet.");
+      }
+    };
+
+    initWeb3();
+
+    return () => {
+      if (window.ethereum) {
+        window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
+        window.ethereum.removeListener("chainChanged", handleChainChanged);
+      }
+    };
+  }, []);
+
+  const handleAccountsChanged = (accounts) => {
+    if (accounts.length > 0) {
+      setAccount(accounts[0]); // Update account state
+    } else {
+      alert("Please connect your MetaMask wallet!");
+    }
+  };
+
+  const handleChainChanged = () => {
+    alert("Network changed! Please reconnect your wallet.");
+    window.location.reload(); // Reload the page to reflect network changes
+  };
+
   const handleMetaMaskLogin = async () => {
-    setLoading(true);  // Start loading
-  
+    setLoading(true); // Start loading
+
     try {
-      console.log("Attempting to connect to MetaMask...");
-  
-      // Connect to Web3 and MetaMask
-      const web3 = await getWeb3();
-      console.log("Web3 initialized:", web3); // Debugging Web3
-  
-      const accounts = await web3.eth.getAccounts();
-      console.log("MetaMask Accounts:", accounts); // Debugging accounts
-  
-      if (accounts.length === 0) {
-        alert('Please connect MetaMask!');
+      if (!web3) {
+        alert("Web3 is not initialized. Please reload the page.");
         return;
       }
-  
-      const userAccount = accounts[0];  // MetaMask account
-      setAccount(userAccount);  // Store account in state
-  
-      // Initialize the contract
-      const contractAddress = '0x096D6bAa2375Fd1c4566a74E02dd0f32919f4a24'; // Replace with your contract address
-      const contract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
-  
-      console.log("Contract initialized:", contract); // Debugging contract
-  
+
+      console.log("Attempting to connect to MetaMask...");
+      const accounts = await web3.eth.requestAccounts(); // Connect to MetaMask
+      const userAccount = accounts[0];
+      setAccount(userAccount); // Set account state
+
+      // Fetch the PointlyUser contract instance
+      const contract = await getContractInstance("PointlyUser");
+      console.log("Contract instance:", contract); // Debugging contract
+
+      // Fetch user data from the blockchain
       const user = await contract.methods.getUser(userAccount).call();
       console.log("User details:", user);
-      console.log("User role:", user.role); // Log role value for debugging
-  
-      if (user.exists === true || user.exists === 'true' || user.exists === 1) {
+
+      if (user.exists === true || user.exists === "true" || user.exists === 1) {
         alert(`Welcome back! You are logged in as a ${user.tier} member.`);
-        sessionStorage.setItem('userAccount', userAccount);
-        sessionStorage.setItem('userRole', user.role);
-  
+        sessionStorage.setItem("userAccount", userAccount);
+        sessionStorage.setItem("userRole", user.role);
+
         // Redirect based on role
-        if (user.role === 'user') {
-          navigate('/home');
-        } else if (user.role === 'vendor') {
-          navigate('/vendor-home');
+        if (user.role === "user") {
+          navigate("/home");
+        } else if (user.role === "vendor") {
+          navigate("/vendor-home");
         } else {
-          alert('Unknown user role.');
-          navigate('/'); // Redirect to homepage or error page
+          alert("Unknown user role.");
+          navigate("/"); // Redirect to homepage or error page
         }
       } else {
-        alert('You are not registered. Please sign up first!');
+        alert("You are not registered. Please sign up first!");
       }
     } catch (error) {
       console.error("Error fetching user data:", error);
-      alert('You are not registered. Please sign up first!');
+      alert("Something went wrong during login. Please try again.");
     } finally {
-      setLoading(false);  // End loading
+      setLoading(false); // Stop loading
     }
   };
-  
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple font-cabin">
@@ -83,7 +112,7 @@ function LoginPage() {
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
             disabled={loading} // Disable button when loading
           >
-            {loading ? 'Logging in...' : 'Login with MetaMask'}
+            {loading ? "Logging in..." : "Login with MetaMask"}
           </button>
 
           {loading && (
@@ -97,7 +126,9 @@ function LoginPage() {
 
           <p className="mt-4 text-center font-cabin">
             Don't have an account?{" "}
-            <a href="/" className="text-purple">Sign up here</a>
+            <a href="/signup" className="text-purple">
+              Sign up here
+            </a>
           </p>
         </form>
       </div>

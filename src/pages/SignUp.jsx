@@ -1,111 +1,102 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import getWeb3 from '../utils/getWeb3.js';  // Import getWeb3 utility
-import PointlyUser from '../../build/contracts/PointlyUser.json';  // Import ABI of your contract
-import PointlyVendor from '../../build/contracts/PointlyVendor.json';  // Import ABI of your contract
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import getWeb3 from "../utils/getWeb3"; // Import the getWeb3 function
+import getContractInstance from "../utils/contract"; // Adjusted import
 
 function SignUpPage() {
-  const [email, setEmail] = useState('');
-  const [role, setRole] = useState('user'); // Default role is 'user'
+  const [email, setEmail] = useState("");
+  const [role, setRole] = useState("user"); // Default role is 'user'
   const [loading, setLoading] = useState(false);
   const [account, setAccount] = useState(null); // State to store MetaMask account
-  const [web3, setWeb3] = useState(null); // Store Web3 instance
+  const [web3, setWeb3] = useState(null); // State to store web3 instance
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if MetaMask is available and listen for account changes
-    if (window.ethereum) {
-      console.log("MetaMask detected.");
-      window.ethereum.on('accountsChanged', handleAccountsChanged); // Listen for account change
-      window.ethereum.on('chainChanged', handleChainChanged); // Listen for network change
-    } else {
-      console.log("MetaMask not detected. Please install MetaMask.");
-    }
+    const initWeb3 = async () => {
+      try {
+        const web3Instance = await getWeb3(); // Initialize Web3 using getWeb3 utility
+        setWeb3(web3Instance);
+
+        const accounts = await web3Instance.eth.getAccounts(); // Fetch connected accounts
+        if (accounts.length > 0) {
+          setAccount(accounts[0]);
+        } else {
+          alert("No accounts found. Please connect your MetaMask wallet.");
+        }
+
+        // Handle account or chain changes
+        window.ethereum.on("accountsChanged", handleAccountsChanged);
+        window.ethereum.on("chainChanged", handleChainChanged);
+      } catch (error) {
+        console.error("Failed to initialize Web3:", error);
+        alert("Please connect your MetaMask wallet to proceed.");
+      }
+    };
+
+    initWeb3();
+
     return () => {
       if (window.ethereum) {
-        window.ethereum.removeListener('accountsChanged', handleAccountsChanged);
-        window.ethereum.removeListener('chainChanged', handleChainChanged);
+        window.ethereum.removeListener("accountsChanged", handleAccountsChanged);
+        window.ethereum.removeListener("chainChanged", handleChainChanged);
       }
     };
   }, []);
 
   const handleAccountsChanged = (accounts) => {
     if (accounts.length > 0) {
-      console.log("MetaMask account changed:", accounts[0]);
-      setAccount(accounts[0]);  // Update the account
+      setAccount(accounts[0]); // Update the account
     } else {
-      alert('Please connect your MetaMask wallet!');
+      alert("Please connect your MetaMask wallet!");
     }
   };
 
   const handleChainChanged = () => {
-    alert('Network changed! Please reconnect your wallet.');
+    alert("Network changed! Please reconnect your wallet.");
+    window.location.reload(); // Reload the page to reflect network change
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (!account || !web3) {
-      alert('Please connect your MetaMask wallet!');
+
+    if (!account) {
+      alert("Please connect your MetaMask wallet!");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
-      console.log("Web3 instance:", web3);
-      console.log("Account:", account);
-  
-      const contract = new web3.eth.Contract(PointlyUser.abi, '0x096D6bAa2375Fd1c4566a74E02dd0f32919f4a24'); // Contract address
-      console.log("Calling createUser method...");
-  
-      // Debug: Check the contract ABI and method
-      console.log(contract.methods.createUser(email, '', '', '', 'default_avatar.jpg', role));
-  
-      await contract.methods.createUser(email, '', '', '', 'default_avatar.jpg', role)
+      // Get the PointlyUser contract instance using getContractInstance
+      const pointlyUserInstance = await getContractInstance("PointlyUser");
+
+      if (!pointlyUserInstance) {
+        throw new Error("Failed to get contract instance.");
+      }
+
+      // Log the contract instance methods
+      console.log("Contract instance:", pointlyUserInstance);
+      console.log("Contract methods:", pointlyUserInstance.methods); // Log available methods
+
+      // Ensure createUser exists as a method
+      if (typeof pointlyUserInstance.methods.createUser !== "function") {
+        throw new Error("createUser method is not available on the contract.");
+      }
+
+      // Call the createUser method on the contract
+      await pointlyUserInstance.methods
+        .createUser(email, "", "", "", "default_avatar.jpg", role)
         .send({ from: account, gas: 500000 });
 
-      if (role === 'vendor') {
-        const pointlyVendorContract = new web3.eth.Contract(PointlyVendor.abi, '0x015E7Fc393975b10a122E874d3B051b9e6fb358E'); // Replace with your vendor contract address
-        console.log("Calling createVendor method...");
-
-        await pointlyVendorContract.methods.createVendor('', '', '', '') // Adjust the arguments as required
-            .send({ from: account, gas: 500000 });
-
-        console.log("Vendor created on the blockchain!");
-        }
-  
-      alert('User registered on the blockchain!');
-      navigate('/login'); // Redirect to login page
+      alert("User registered on the blockchain!");
+      navigate("/login"); // Redirect to login page
     } catch (err) {
-      console.error('Error during signup:', err);
+      console.error("Error during signup:", err);
       alert(`Something went wrong during registration: ${err.message}`);
     } finally {
       setLoading(false);
     }
-  };  
-
-  const handleMetaMaskConnect = async () => {
-    console.log("Attempting to connect to MetaMask...");
-    try {
-      const web3Instance = await getWeb3();  // Get Web3 instance
-      console.log("Web3 instance created:", web3Instance);
-
-      // Set web3 instance in state
-      setWeb3(web3Instance);
-
-      const accounts = await web3Instance.eth.getAccounts();
-      if (accounts.length > 0) {
-        console.log("Connected account:", accounts[0]);
-        setAccount(accounts[0]);  // Store account
-      } else {
-        alert("No accounts found.");
-      }
-    } catch (error) {
-      console.error("Error in handleMetaMaskConnect:", error);
-      alert("Failed to connect to MetaMask.");
-    }
-  };  
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-start bg-purple">
@@ -119,7 +110,9 @@ function SignUpPage() {
         <h2 className="text-3xl font-semibold text-gray-800 text-center font-cabin">Sign Up</h2>
         <form onSubmit={handleSubmit} className="mt-8 flex flex-col">
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="email">Email</label>
+            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="email">
+              Email
+            </label>
             <input
               type="email"
               id="email"
@@ -132,7 +125,9 @@ function SignUpPage() {
           </div>
 
           <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">Select Role</label>
+            <label className="block text-lg text-gray-700 text-center font-cabin" htmlFor="role">
+              Select Role
+            </label>
             <select
               id="role"
               value={role}
@@ -146,19 +141,11 @@ function SignUpPage() {
           </div>
 
           <button
-            type="button"
-            onClick={handleMetaMaskConnect}
-            className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
-          >
-            {account ? `Connected: ${account}` : 'Connect MetaMask'}
-          </button>
-
-          <button
             type="submit"
             className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors mt-4"
-            disabled={loading || !account || !web3}
+            disabled={loading || !account}
           >
-            {loading ? 'Signing Up...' : 'Sign Up'}
+            {loading ? "Signing Up..." : "Sign Up"}
           </button>
 
           {loading && (
@@ -168,8 +155,10 @@ function SignUpPage() {
           )}
 
           <p className="mt-4 text-center font-cabin">
-            Already have an account?{' '}
-            <a href="/login" className="text-purple">Log in here</a>
+            Already have an account?{" "}
+            <a href="/login" className="text-purple">
+              Log in here
+            </a>
           </p>
         </form>
       </div>
