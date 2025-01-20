@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Ensure this import is here
 import VendorNavbar from "../components/VendorNavbar";
 import getWeb3 from "../utils/getWeb3.js";
 import getContractInstance from "../utils/contract";
 
 function VendorRewards() {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Initialize navigate hook
   const [rewards, setRewards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [account, setAccount] = useState(null);
@@ -69,7 +69,7 @@ function VendorRewards() {
       setError("Failed to fetch rewards. Please try again.");
       setLoading(false);
     }
-  };  
+  };
 
   const deleteReward = async (rewardId) => {
     try {
@@ -101,6 +101,10 @@ function VendorRewards() {
 
   const handleAddNewReward = () => {
     navigate("/vendor-create-reward");
+  };
+
+  const handleEditReward = (rewardId) => {
+    navigate(`/vendor-reward-details/${rewardId}`); // Navigate to reward details page
   };
 
   if (loading) {
@@ -146,13 +150,13 @@ function VendorRewards() {
                   <div className="mt-4 flex space-x-4">
                     <button
                       className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      onClick={() => console.log("Edit reward", reward.id)}
+                      onClick={() => handleEditReward(reward.id.toString())} // Handle Edit
                     >
                       Edit
                     </button>
                     <button
                       className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition-colors"
-                      onClick={() => handleDeleteClick(reward.id)}
+                      onClick={() => handleDeleteClick(reward.id.toString())}
                     >
                       Delete
                     </button>
