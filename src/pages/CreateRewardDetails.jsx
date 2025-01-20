@@ -72,7 +72,7 @@ function CreateRewardDetails() {
 
       // Send transaction to create a new reward in the smart contract
       const transaction = await contract.methods
-        .addReward(name, description, cost, img, expirationTimestamp, terms)
+        .addReward(name, description, cost, img, expirationTimestamp, terms.join("\n"))
         .send({ from: account });
 
       if (transaction.status) {
