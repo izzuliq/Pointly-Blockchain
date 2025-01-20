@@ -1,55 +1,67 @@
 import React, { useState, useEffect } from "react";
 import VendorNavbar from "../components/VendorNavbar";
-import { Link } from "react-router-dom"; // Import Link for navigation
-import Web3 from "web3"; // Import Web3 for blockchain interaction
-//import PointlyVendorABI from "../contracts/PointlyVendor.json"; // Import the ABI of the PointlyVendor contract
+import { Link, useNavigate } from "react-router-dom";
+import Web3 from "web3";
+import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
 
 function VendorProfile() {
-  const [vendorData, setVendorData] = useState(null); // Store vendor data
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    profileImage: "",
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  // Smart contract and Web3 setup
-  const web3 = new Web3(window.ethereum);
-  const contractAddress = "YOUR_CONTRACT_ADDRESS"; // Replace with actual contract address
-  const contract = new web3.eth.Contract(PointlyVendorABI, contractAddress);
+  const navigate = useNavigate();
+  const [account, setAccount] = useState(null);
+  const [contract, setContract] = useState(null);
 
   useEffect(() => {
-    const fetchVendorData = async () => {
-      try {
-        const accounts = await web3.eth.requestAccounts();
-        const vendorAddress = accounts[0]; // Use the current user's address
+    const initWeb3 = async () => {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        await window.ethereum.enable();
+        const accounts = await web3.eth.getAccounts();
+        setAccount(accounts[0]);
 
-        // Fetch vendor details from the smart contract
-        const vendorDetails = await contract.methods.getVendor(vendorAddress).call();
+        const contractAddress = "0x10e72FfCCaF54273011Df2E5dc732E6409404f07"; // Replace with your contract address
+        const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
+        setContract(pointlyUserContract);
 
-        setVendorData({
-          name: vendorDetails.name,
-          email: vendorDetails.email,
-          phone: vendorDetails.phone,
-          businessAddress: vendorDetails.businessAddress,
-          totalRedemptions: vendorDetails.totalRedemptions,
-          activePromotions: vendorDetails.activePromotions,
-          revenueGenerated: vendorDetails.revenueGenerated,
-          upcomingPromotions: vendorDetails.upcomingPromotions,
-          exists: vendorDetails.exists,
-        });
-
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching vendor data:", err);
-        setError("Failed to fetch vendor data.");
-        setLoading(false);
+        if (accounts[0] && pointlyUserContract) {
+          fetchUserProfile(accounts[0], pointlyUserContract);
+        }
+      } else {
+        console.error("Ethereum wallet not detected. Please install MetaMask.");
       }
     };
 
-    fetchVendorData();
-  }, []);
+    initWeb3();
+  }, [navigate, account, contract]);
+
+  const fetchUserProfile = async (userAddress, contract) => {
+    try {
+      const userProfile = await contract.methods.getUser(userAddress).call();
+      setUserData({
+        name: userProfile.name || "N/A",
+        email: userProfile.email || "N/A",
+        phone: userProfile.phone || "N/A",
+        address: userProfile.addressDetails || "N/A",
+        profileImage: userProfile.profileImage || "default_avatar.jpg",
+      });
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
+      setError("Failed to fetch profile data.");
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-100">
-        {/* Spinner for loading */}
         <div className="flex flex-col items-center">
           <div className="border-t-4 border-purple-600 w-16 h-16 border-solid rounded-full animate-spin"></div>
           <p className="mt-4 text-xl text-gray-600">Loading...</p>
@@ -59,88 +71,59 @@ function VendorProfile() {
   }
 
   if (error) {
-    return <div>{error}</div>; // Display error message if API fails
-  }
-
-  if (!vendorData.exists) {
-    return (
-      <div>
-        <p className="text-center text-xl text-red-600">
-          Vendor profile not found. Please register.
-        </p>
-        <Link to="/vendor-register">
-          <button className="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors">
-            Register Vendor
-          </button>
-        </Link>
-      </div>
-    );
+    return <div>{error}</div>;
   }
 
   return (
-    <div>
+    <>
       <VendorNavbar />
       <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto font-cabin">
         <h2 className="text-3xl font-cabin text-gray-800 text-center">
           Vendor Profile
         </h2>
         <p className="mt-2 text-gray-600 text-center">
-          View and manage your vendor details.
+          View and manage your account details.
         </p>
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
-        {/* Vendor Profile Section */}
-        <div className="mt-8">
-          <h3 className="text-2xl font-semibold text-purple-dark text-center mb-4">
-            Vendor Profile
-          </h3>
-
-          <div className="text-center">
-            {/* Vendor Name */}
-            <div className="w-full mb-6">
-              <label className="block text-xl font-cabin text-purple-dark">
-                Name
-              </label>
-              <p className="mt-2 text-gray-800 text-xl">{vendorData.name}</p>
-            </div>
-
-            {/* Vendor Email */}
-            <div className="w-full mb-6">
-              <label className="block text-xl font-cabin text-purple-dark">
-                Email
-              </label>
-              <p className="mt-2 text-gray-800 text-xl">{vendorData.email}</p>
-            </div>
-
-            {/* Vendor Phone */}
-            <div className="w-full mb-6">
-              <label className="block text-xl font-cabin text-purple-dark">
-                Phone
-              </label>
-              <p className="mt-2 text-gray-800 text-xl">{vendorData.phone}</p>
-            </div>
-
-            {/* Business Address */}
-            <div className="w-full mb-6">
-              <label className="block text-xl font-cabin text-purple-dark">
-                Business Address
-              </label>
-              <p className="mt-2 text-gray-800 text-xl">{vendorData.businessAddress}</p>
-            </div>
-
-            {/* Edit Vendor Profile Button */}
-            <div className="mt-4 text-center">
-              <Link to="/vendor-edit-profile">
-                <button className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors">
-                  Edit Vendor Profile
-                </button>
-              </Link>
-            </div>
+        <div className="mt-8 flex flex-col items-center">
+          <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
+            <img
+              src={userData.profileImage}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
           </div>
+
+          <div className="w-full mb-6 text-center">
+            <label className="block text-2xl font-cabin text-purple-dark">Name</label>
+            <p className="mt-2 text-gray-800 text-xl">{userData.name}</p>
+          </div>
+
+          <div className="w-full mb-6 text-center">
+            <label className="block text-2xl font-cabin text-purple-dark">Email</label>
+            <p className="mt-2 text-gray-800 text-xl">{userData.email}</p>
+          </div>
+
+          <div className="w-full mb-6 text-center">
+            <label className="block text-2xl font-cabin text-purple-dark">Phone</label>
+            <p className="mt-2 text-gray-800 text-xl">{userData.phone}</p>
+          </div>
+
+          <div className="w-full mb-6 text-center">
+            <label className="block text-2xl font-cabin text-purple-dark">Address</label>
+            <p className="mt-2 text-gray-800 text-xl">{userData.address}</p>
+          </div>
+
+          <Link to="/vendor-edit-company">
+            <button className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors">
+              Edit Profile
+            </button>
+          </Link>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

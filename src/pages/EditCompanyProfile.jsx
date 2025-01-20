@@ -1,101 +1,193 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import VendorNavbar from "../components/VendorNavbar";
+import Web3 from "web3";
+import PointlyUser from "../../build/contracts/PointlyUser.json"; // Import ABI of PointlyUser.sol
+import { create } from 'ipfs-http-client';
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+
+// Set up the Pinata IPFS client
+const ipfsClient = create({
+  url: 'https://api.pinata.cloud/pinning/pinFileToIPFS', // Pinata IPFS endpoint
+  headers: {
+    pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
+  }
+});
 
 function VendorEditCompanyPage() {
-  const [companyName, setCompanyName] = useState("KFC Malaysia Sdn Bhd");
-  const [companyAddress, setCompanyAddress] = useState("Level Ground Floor, Tower 1, V Square @ PJ City Centre, Jln Utara, Section 52, 46100 Petaling Jaya, Selangor");
-  const [companyIndustry, setCompanyIndustry] = useState("Foods & Beverages");
-  const [companyLogo, setCompanyLogo] = useState("https://via.placeholder.com/150");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [profileImage, setProfileImage] = useState(""); // Store the IPFS CID
+  const [role, setRole] = useState("");
+  const [account, setAccount] = useState(null);
+  const [contract, setContract] = useState(null);
 
-  const handleLogoChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCompanyLogo(reader.result); // Update company logo to the selected image
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL (base64)
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  useEffect(() => {
+    const initWeb3 = async () => {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        
+        // Request access to the user's Ethereum accounts
+        try {
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          setAccount(accounts[0]);
+  
+          const contractAddress = "0x10e72FfCCaF54273011Df2E5dc732E6409404f07"; // Replace with your contract address
+          const pointlyUserContract = new web3.eth.Contract(PointlyUser.abi, contractAddress);
+          setContract(pointlyUserContract);
+  
+          if (accounts[0] && pointlyUserContract) {
+            fetchUserProfile(accounts[0], pointlyUserContract);
+          }
+        } catch (err) {
+          console.error("Error requesting accounts:", err);
+        }
+      } else {
+        console.error("Ethereum wallet not detected. Please install MetaMask.");
+      }
+    };
+  
+    initWeb3();
+  }, []);  
+
+  const fetchUserProfile = async (userAddress, contract) => {
+    try {
+      const userProfile = await contract.methods.getUser(userAddress).call();
+      setName(userProfile.name);
+      setEmail(userProfile.email);
+      setPhone(userProfile.phone);
+      setAddress(userProfile.addressDetails);
+      setProfileImage(userProfile.profileImage);
+      setRole(userProfile.role);
+    } catch (err) {
+      console.error("Error fetching user data:", err);
     }
   };
 
-  const handleSave = () => {
-    // Handle saving of updated details (image and text fields)
-    alert("Company profile updated!");
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        // Prepare the file for upload
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        // Send the file to Pinata using the correct endpoint and headers
+        const response = await fetch('https://api.pinata.cloud/pinning/pinFileToIPFS', {
+          method: 'POST',
+          headers: {
+            pinata_api_key: '6acc3acafb6a1f19f825', // Replace with your Pinata API key
+            pinata_secret_api_key: '66001fa51b401321cfcda182b365f7e279a18a4f3f0f139ed689b608e0e2cf72', // Replace with your Pinata secret API key
+          },
+          body: formData,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to upload image');
+        }
+  
+        const result = await response.json();
+        const imageUrl = `https://gateway.pinata.cloud/ipfs/${result.IpfsHash}`;
+        setProfileImage(imageUrl); // Set the image URL
+      } catch (err) {
+        console.error("Error uploading image to IPFS via Pinata:", err);
+      }
+    }
+  };
+
+  const handleSave = async () => {
+    try {
+      const updatedData = await contract.methods.updateUser(name, email, phone, address, profileImage, role).send({ from: account });
+      alert("Profile updated successfully!");
+
+      // Redirect to the profile page after successful update
+      navigate("/vendor-profile"); // This will navigate to the /profile route
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile.");
+    }
   };
 
   return (
     <>
       <VendorNavbar />
       <div className="p-6 bg-white shadow-md rounded-lg max-w-xl mx-auto text-center font-cabin">
-        <h2 className="text-3xl font-cabin text-gray-800 text-center">Edit Company Profile</h2>
-        <p className="mt-2 text-gray-600 text-center">Update your company details below.</p>
+        <h2 className="text-3xl font-cabin text-gray-800 text-center">Edit Vendor Profile</h2>
+        <p className="mt-2 text-gray-600 text-center">Update your account details below.</p>
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
         <div className="mt-8 flex flex-col items-center">
-          {/* Company Logo */}
-          <div className="w-24 h-24 mb-4 rounded-full overflow-hidden">
-            <img
-              src={companyLogo}  // Display the company logo (either default or uploaded)
-              alt="Company Logo"
-              className="w-full h-full object-cover"
+          <div className="max-w-[200px] max-h-[200px] mb-6 rounded-full overflow-hidden border-4 border-gold-dark shadow-lg">
+            <img src={profileImage || 'default_avatar.jpg'} alt="Profile" className="w-full h-full object-cover" />
+          </div>
+
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
             />
           </div>
 
-          {/* Logo Upload Input */}
           <div className="w-full mb-6">
-            <label className="block text-lg text-gray-700" htmlFor="company-logo">Company Logo</label>
+            <label className="block text-xl text-purple-dark">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
+            />
+          </div>
+
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Phone</label>
+            <input
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
+            />
+          </div>
+
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Address</label>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
+            />
+          </div>
+
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Company Image</label>
             <input
               type="file"
-              id="company-logo"
-              onChange={handleLogoChange}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100"
             />
           </div>
 
-          {/* Company Name Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="company-name">Company Name</label>
+          <div className="w-full mb-6">
+            <label className="block text-xl text-purple-dark">Role</label>
             <input
               type="text"
-              id="company-name"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter company name"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full mt-2 py-3 px-4 border rounded-lg bg-gray-100 text-center"
             />
           </div>
 
-          {/* Company Address Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="company-address">Address</label>
-            <input
-              type="text"
-              id="company-address"
-              value={companyAddress}
-              onChange={(e) => setCompanyAddress(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter company address"
-            />
-          </div>
-
-          {/* Company Industry Input */}
-          <div className="w-full mb-4">
-            <label className="block text-lg text-gray-700" htmlFor="company-industry">Industry</label>
-            <input
-              type="text"
-              id="company-industry"
-              value={companyIndustry}
-              onChange={(e) => setCompanyIndustry(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg text-center"
-              placeholder="Enter company industry"
-            />
-          </div>
-
-          {/* Save Button */}
           <button
+            className="px-6 py-3 bg-gold-dark text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
             onClick={handleSave}
-            className="px-6 py-3 bg-purple text-white font-semibold rounded-lg hover:bg-purple-dark transition-colors"
           >
             Save Changes
           </button>
