@@ -1,6 +1,7 @@
 import Web3 from "web3";
 import PointlyUserABI from "../../build/contracts/PointlyUser.json";
 import RewardsABI from "../../build/contracts/Rewards.json";
+import PointlyVendorABI from "../../build/contracts/PointlyVendor.json";
 import CONFIG from "../../migrations/config.js";
 
 const getContractInstance = async (contractName) => {
@@ -34,6 +35,9 @@ const getContractInstance = async (contractName) => {
       break;
     case "Rewards":
       abi = RewardsABI.abi;
+      break;
+    case "PointlyVendor":
+      abi = PointlyVendorABI.abi;
       break;
     default:
       console.error(`ABI for ${contractName} not found.`);

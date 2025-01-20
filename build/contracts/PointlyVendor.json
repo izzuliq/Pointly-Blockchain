@@ -3264,20 +3264,20 @@
   "sourceMap": "60:3230:1:-:0;;;963:88;;;;;;;;;;996:10;988:5;;:18;;;;;;;;;;;;;;;;;;60:3230;;;;;;",
   "deployedSourceMap": "60:3230:1:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1722:602;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;;;;;;;;;;:::i;:::-;;;;;;;;1295:380;;;:::i;:::-;;137:20;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;3145:142;;;:::i;:::-;;2374:727;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;1722:602;1863:24;1902;1941;1980:26;2021:11;1816:13;1170:7;:22;1178:13;1170:22;;;;;;;;;;;;;;;:29;;;;;;;;;;;;1162:63;;;;;;;;;;;;:::i;:::-;;;;;;;;;2060:20:::1;2083:7;:22;2091:13;2083:22;;;;;;;;;;;;;;;2060:45;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;::::0;::::1;;;2138:6;:23;;;2176:6;:23;;;2214:6;:23;;;2252:6;:25;;;2292:6;:13;;;2116:200;;;;;;;;;;;1722:602:::0;;;;;;;;:::o;1295:380::-;1346:7;:19;1354:10;1346:19;;;;;;;;;;;;;;;:26;;;;;;;;;;;;1345:27;1337:65;;;;;;;;;;;;:::i;:::-;;;;;;;;;1437:184;;;;;;;;1477:1;1437:184;;;;1511:1;1437:184;;;;1545:1;1437:184;;;;1581:1;1437:184;;;;1605:4;1437:184;;;;;1415:7;:19;1423:10;1415:19;;;;;;;;;;;;;;;:206;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1656:10;1639:28;;;;;;;;;;;;1295:380::o;137:20::-;;;;;;;;;;;;:::o;3145:142::-;3189:10;1170:7;:22;1178:13;1170:22;;;;;;;;;;;;;;;:29;;;;;;;;;;;;1162:63;;;;;;;;;;;;:::i;:::-;;;;;;;;;3219:7:::1;:19;3227:10;3219:19;;;;;;;;;;;;;;;;3212:26:::0;::::1;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;3268:10;3254:25;;;;;;;;;;;;3145:142:::0;:::o;2374:727::-;2584:13;1170:7;:22;1178:13;1170:22;;;;;;;;;;;;;;;:29;;;;;;;;;;;;1162:63;;;;;;;;;;;;:::i;:::-;;;;;;;;;2610:21:::1;2634:7;:22;2642:13;2634:22;;;;;;;;;;;;;;;2610:46;;2696:11;2669:6;:23;;;:38;;;;;;;:::i;:::-;;;;;;;;2744:16;2718:6;:23;;:42;;;;2798:7;2771:6;:23;;;:34;;;;;;;:::i;:::-;;;;;;;;2844:18;2816:6;:25;;:46;;;;2915:13;2880:213;;;2943:6;:23;;;2981:6;:23;;;3019:6;:23;;;3057:6;:25;;;2880:213;;;;;;;;;:::i;:::-;;;;;;;;1236:1;2374:727:::0;;;;;;:::o;7:139:3:-;;91:6;78:20;69:29;;107:33;134:5;107:33;:::i;:::-;59:87;;;;:::o;152:139::-;;236:6;223:20;214:29;;252:33;279:5;252:33;:::i;:::-;204:87;;;;:::o;297:262::-;;405:2;393:9;384:7;380:23;376:32;373:2;;;421:1;418;411:12;373:2;464:1;489:53;534:7;525:6;514:9;510:22;489:53;:::i;:::-;479:63;;435:117;363:196;;;;:::o;565:844::-;;;;;;741:3;729:9;720:7;716:23;712:33;709:2;;;758:1;755;748:12;709:2;801:1;826:53;871:7;862:6;851:9;847:22;826:53;:::i;:::-;816:63;;772:117;928:2;954:53;999:7;990:6;979:9;975:22;954:53;:::i;:::-;944:63;;899:118;1056:2;1082:53;1127:7;1118:6;1107:9;1103:22;1082:53;:::i;:::-;1072:63;;1027:118;1184:2;1210:53;1255:7;1246:6;1235:9;1231:22;1210:53;:::i;:::-;1200:63;;1155:118;1312:3;1339:53;1384:7;1375:6;1364:9;1360:22;1339:53;:::i;:::-;1329:63;;1283:119;699:710;;;;;;;;:::o;1415:118::-;1502:24;1520:5;1502:24;:::i;:::-;1497:3;1490:37;1480:53;;:::o;1539:109::-;1620:21;1635:5;1620:21;:::i;:::-;1615:3;1608:34;1598:50;;:::o;1654:323::-;;1817:67;1881:2;1876:3;1817:67;:::i;:::-;1810:74;;1914:27;1910:1;1905:3;1901:11;1894:48;1968:2;1963:3;1959:12;1952:19;;1800:177;;;:::o;1983:319::-;;2146:67;2210:2;2205:3;2146:67;:::i;:::-;2139:74;;2243:23;2239:1;2234:3;2230:11;2223:44;2293:2;2288:3;2284:12;2277:19;;2129:173;;;:::o;2308:118::-;2395:24;2413:5;2395:24;:::i;:::-;2390:3;2383:37;2373:53;;:::o;2432:222::-;;2563:2;2552:9;2548:18;2540:26;;2576:71;2644:1;2633:9;2629:17;2620:6;2576:71;:::i;:::-;2530:124;;;;:::o;2660:419::-;;2864:2;2853:9;2849:18;2841:26;;2913:9;2907:4;2903:20;2899:1;2888:9;2884:17;2877:47;2941:131;3067:4;2941:131;:::i;:::-;2933:139;;2831:248;;;:::o;3085:419::-;;3289:2;3278:9;3274:18;3266:26;;3338:9;3332:4;3328:20;3324:1;3313:9;3309:17;3302:47;3366:131;3492:4;3366:131;:::i;:::-;3358:139;;3256:248;;;:::o;3510:553::-;;3725:3;3714:9;3710:19;3702:27;;3739:71;3807:1;3796:9;3792:17;3783:6;3739:71;:::i;:::-;3820:72;3888:2;3877:9;3873:18;3864:6;3820:72;:::i;:::-;3902;3970:2;3959:9;3955:18;3946:6;3902:72;:::i;:::-;3984;4052:2;4041:9;4037:18;4028:6;3984:72;:::i;:::-;3692:371;;;;;;;:::o;4069:652::-;;4306:3;4295:9;4291:19;4283:27;;4320:71;4388:1;4377:9;4373:17;4364:6;4320:71;:::i;:::-;4401:72;4469:2;4458:9;4454:18;4445:6;4401:72;:::i;:::-;4483;4551:2;4540:9;4536:18;4527:6;4483:72;:::i;:::-;4565;4633:2;4622:9;4618:18;4609:6;4565:72;:::i;:::-;4647:67;4709:3;4698:9;4694:19;4685:6;4647:67;:::i;:::-;4273:448;;;;;;;;:::o;4727:169::-;;4845:6;4840:3;4833:19;4885:4;4880:3;4876:14;4861:29;;4823:73;;;;:::o;4902:305::-;;4961:20;4979:1;4961:20;:::i;:::-;4956:25;;4995:20;5013:1;4995:20;:::i;:::-;4990:25;;5149:1;5081:66;5077:74;5074:1;5071:81;5068:2;;;5155:18;;:::i;:::-;5068:2;5199:1;5196;5192:9;5185:16;;4946:261;;;;:::o;5213:96::-;;5279:24;5297:5;5279:24;:::i;:::-;5268:35;;5258:51;;;:::o;5315:90::-;;5392:5;5385:13;5378:21;5367:32;;5357:48;;;:::o;5411:126::-;;5488:42;5481:5;5477:54;5466:65;;5456:81;;;:::o;5543:77::-;;5609:5;5598:16;;5588:32;;;:::o;5626:180::-;5674:77;5671:1;5664:88;5771:4;5768:1;5761:15;5795:4;5792:1;5785:15;5812:122;5885:24;5903:5;5885:24;:::i;:::-;5878:5;5875:35;5865:2;;5924:1;5921;5914:12;5865:2;5855:79;:::o;5940:122::-;6013:24;6031:5;6013:24;:::i;:::-;6006:5;6003:35;5993:2;;6052:1;6049;6042:12;5993:2;5983:79;:::o",
   "source": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract PointlyVendor {\r\n    // Owner of the contract (platform admin)\r\n    address public owner;\r\n\r\n    // Vendor structure for storing vendor metrics\r\n    struct Vendor {\r\n        uint256 totalRedemptions;\r\n        uint256 activePromotions;\r\n        uint256 revenueGenerated;\r\n        uint256 upcomingPromotions;\r\n        bool exists; // To check if a vendor exists\r\n    }\r\n\r\n    // Mapping of addresses to vendors\r\n    mapping(address => Vendor) private vendors;\r\n\r\n    // Events for logging actions\r\n    event VendorRegistered(address indexed vendorAddress);\r\n    event VendorMetricsUpdated(\r\n        address indexed vendorAddress,\r\n        uint256 totalRedemptions,\r\n        uint256 activePromotions,\r\n        uint256 revenueGenerated,\r\n        uint256 upcomingPromotions\r\n    );\r\n    event VendorDeleted(address indexed vendorAddress);\r\n\r\n    // Constructor to initialize the contract owner\r\n    constructor() {\r\n        owner = msg.sender; // Assign contract deployer as owner\r\n    }\r\n\r\n    // Modifier to check if the vendor exists\r\n    modifier vendorExists(address vendorAddress) {\r\n        require(vendors[vendorAddress].exists, \"Vendor does not exist\");\r\n        _;\r\n    }\r\n\r\n    // Function to register a new vendor\r\n    function createVendor() public {\r\n        require(!vendors[msg.sender].exists, \"Vendor already registered\");\r\n\r\n        vendors[msg.sender] = Vendor({\r\n            totalRedemptions: 0,\r\n            activePromotions: 0,\r\n            revenueGenerated: 0,\r\n            upcomingPromotions: 0,\r\n            exists: true\r\n        });\r\n\r\n        emit VendorRegistered(msg.sender);\r\n    }\r\n\r\n    // Function to get vendor metrics\r\n    function getVendor(address vendorAddress)\r\n        public\r\n        view\r\n        vendorExists(vendorAddress)\r\n        returns (\r\n            uint256 totalRedemptions,\r\n            uint256 activePromotions,\r\n            uint256 revenueGenerated,\r\n            uint256 upcomingPromotions,\r\n            bool exists\r\n        )\r\n    {\r\n        Vendor memory vendor = vendors[vendorAddress];\r\n        return (\r\n            vendor.totalRedemptions,\r\n            vendor.activePromotions,\r\n            vendor.revenueGenerated,\r\n            vendor.upcomingPromotions,\r\n            vendor.exists\r\n        );\r\n    }\r\n\r\n    // Function to update vendor metrics\r\n    function updateMetrics(\r\n        address vendorAddress,\r\n        uint256 redemptions,\r\n        uint256 promotionsActive,\r\n        uint256 revenue,\r\n        uint256 promotionsUpcoming\r\n    ) public vendorExists(vendorAddress) {\r\n        Vendor storage vendor = vendors[vendorAddress];\r\n\r\n        vendor.totalRedemptions += redemptions;\r\n        vendor.activePromotions = promotionsActive;\r\n        vendor.revenueGenerated += revenue;\r\n        vendor.upcomingPromotions = promotionsUpcoming;\r\n\r\n        emit VendorMetricsUpdated(\r\n            vendorAddress,\r\n            vendor.totalRedemptions,\r\n            vendor.activePromotions,\r\n            vendor.revenueGenerated,\r\n            vendor.upcomingPromotions\r\n        );\r\n    }\r\n\r\n    // Function to delete a vendor\r\n    function deleteVendor() public vendorExists(msg.sender) {\r\n        delete vendors[msg.sender];\r\n        emit VendorDeleted(msg.sender);\r\n    }\r\n}\r\n",
-  "sourcePath": "C:\\Users\\77izz\\Pointly-Blockchain\\Pointly-Blockchain\\contracts\\PointlyVendor.sol",
+  "sourcePath": "C:\\Users\\azriy\\Pointly-Blockchain\\contracts\\PointlyVendor.sol",
   "ast": {
     "absolutePath": "project:/contracts/PointlyVendor.sol",
     "exportedSymbols": {
       "PointlyVendor": [
-        666
+        656
       ]
     },
-    "id": 667,
+    "id": 657,
     "license": "MIT",
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 455,
+        "id": 445,
         "literals": [
           "solidity",
           "^",
@@ -3293,9 +3293,9 @@
         "contractDependencies": [],
         "contractKind": "contract",
         "fullyImplemented": true,
-        "id": 666,
+        "id": 656,
         "linearizedBaseContracts": [
-          666
+          656
         ],
         "name": "PointlyVendor",
         "nodeType": "ContractDefinition",
@@ -3303,11 +3303,11 @@
           {
             "constant": false,
             "functionSelector": "8da5cb5b",
-            "id": 457,
+            "id": 447,
             "mutability": "mutable",
             "name": "owner",
             "nodeType": "VariableDeclaration",
-            "scope": 666,
+            "scope": 656,
             "src": "137:20:1",
             "stateVariable": true,
             "storageLocation": "default",
@@ -3316,7 +3316,7 @@
               "typeString": "address"
             },
             "typeName": {
-              "id": 456,
+              "id": 446,
               "name": "address",
               "nodeType": "ElementaryTypeName",
               "src": "137:7:1",
@@ -3330,15 +3330,15 @@
           },
           {
             "canonicalName": "PointlyVendor.Vendor",
-            "id": 468,
+            "id": 458,
             "members": [
               {
                 "constant": false,
-                "id": 459,
+                "id": 449,
                 "mutability": "mutable",
                 "name": "totalRedemptions",
                 "nodeType": "VariableDeclaration",
-                "scope": 468,
+                "scope": 458,
                 "src": "243:24:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -3347,7 +3347,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 458,
+                  "id": 448,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "243:7:1",
@@ -3360,11 +3360,11 @@
               },
               {
                 "constant": false,
-                "id": 461,
+                "id": 451,
                 "mutability": "mutable",
                 "name": "activePromotions",
                 "nodeType": "VariableDeclaration",
-                "scope": 468,
+                "scope": 458,
                 "src": "278:24:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -3373,7 +3373,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 460,
+                  "id": 450,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "278:7:1",
@@ -3386,11 +3386,11 @@
               },
               {
                 "constant": false,
-                "id": 463,
+                "id": 453,
                 "mutability": "mutable",
                 "name": "revenueGenerated",
                 "nodeType": "VariableDeclaration",
-                "scope": 468,
+                "scope": 458,
                 "src": "313:24:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -3399,7 +3399,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 462,
+                  "id": 452,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "313:7:1",
@@ -3412,11 +3412,11 @@
               },
               {
                 "constant": false,
-                "id": 465,
+                "id": 455,
                 "mutability": "mutable",
                 "name": "upcomingPromotions",
                 "nodeType": "VariableDeclaration",
-                "scope": 468,
+                "scope": 458,
                 "src": "348:26:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -3425,7 +3425,7 @@
                   "typeString": "uint256"
                 },
                 "typeName": {
-                  "id": 464,
+                  "id": 454,
                   "name": "uint256",
                   "nodeType": "ElementaryTypeName",
                   "src": "348:7:1",
@@ -3438,11 +3438,11 @@
               },
               {
                 "constant": false,
-                "id": 467,
+                "id": 457,
                 "mutability": "mutable",
                 "name": "exists",
                 "nodeType": "VariableDeclaration",
-                "scope": 468,
+                "scope": 458,
                 "src": "385:11:1",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -3451,7 +3451,7 @@
                   "typeString": "bool"
                 },
                 "typeName": {
-                  "id": 466,
+                  "id": 456,
                   "name": "bool",
                   "nodeType": "ElementaryTypeName",
                   "src": "385:4:1",
@@ -3465,28 +3465,28 @@
             ],
             "name": "Vendor",
             "nodeType": "StructDefinition",
-            "scope": 666,
+            "scope": 656,
             "src": "218:217:1",
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 473,
+            "id": 463,
             "mutability": "mutable",
             "name": "vendors",
             "nodeType": "VariableDeclaration",
-            "scope": 666,
+            "scope": 656,
             "src": "483:42:1",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
               "typeString": "mapping(address => struct PointlyVendor.Vendor)"
             },
             "typeName": {
-              "id": 472,
+              "id": 462,
               "keyType": {
-                "id": 469,
+                "id": 459,
                 "name": "address",
                 "nodeType": "ElementaryTypeName",
                 "src": "491:7:1",
@@ -3498,23 +3498,23 @@
               "nodeType": "Mapping",
               "src": "483:26:1",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                 "typeString": "mapping(address => struct PointlyVendor.Vendor)"
               },
               "valueType": {
-                "id": 471,
+                "id": 461,
                 "nodeType": "UserDefinedTypeName",
                 "pathNode": {
-                  "id": 470,
+                  "id": 460,
                   "name": "Vendor",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 468,
+                  "referencedDeclaration": 458,
                   "src": "502:6:1"
                 },
-                "referencedDeclaration": 468,
+                "referencedDeclaration": 458,
                 "src": "502:6:1",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                  "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                   "typeString": "struct PointlyVendor.Vendor"
                 }
               }
@@ -3523,21 +3523,21 @@
           },
           {
             "anonymous": false,
-            "id": 477,
+            "id": 467,
             "name": "VendorRegistered",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 476,
+              "id": 466,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 475,
+                  "id": 465,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "vendorAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 477,
+                  "scope": 467,
                   "src": "592:29:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3546,7 +3546,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 474,
+                    "id": 464,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "592:7:1",
@@ -3565,21 +3565,21 @@
           },
           {
             "anonymous": false,
-            "id": 489,
+            "id": 479,
             "name": "VendorMetricsUpdated",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 488,
+              "id": 478,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 479,
+                  "id": 469,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "vendorAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 489,
+                  "scope": 479,
                   "src": "666:29:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3588,7 +3588,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 478,
+                    "id": 468,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "666:7:1",
@@ -3602,12 +3602,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 481,
+                  "id": 471,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "totalRedemptions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 489,
+                  "scope": 479,
                   "src": "706:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3616,7 +3616,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 480,
+                    "id": 470,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "706:7:1",
@@ -3629,12 +3629,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 483,
+                  "id": 473,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "activePromotions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 489,
+                  "scope": 479,
                   "src": "741:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3643,7 +3643,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 482,
+                    "id": 472,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "741:7:1",
@@ -3656,12 +3656,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 485,
+                  "id": 475,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "revenueGenerated",
                   "nodeType": "VariableDeclaration",
-                  "scope": 489,
+                  "scope": 479,
                   "src": "776:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3670,7 +3670,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 484,
+                    "id": 474,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "776:7:1",
@@ -3683,12 +3683,12 @@
                 },
                 {
                   "constant": false,
-                  "id": 487,
+                  "id": 477,
                   "indexed": false,
                   "mutability": "mutable",
                   "name": "upcomingPromotions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 489,
+                  "scope": 479,
                   "src": "811:26:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3697,7 +3697,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 486,
+                    "id": 476,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "811:7:1",
@@ -3715,21 +3715,21 @@
           },
           {
             "anonymous": false,
-            "id": 493,
+            "id": 483,
             "name": "VendorDeleted",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 492,
+              "id": 482,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 491,
+                  "id": 481,
                   "indexed": true,
                   "mutability": "mutable",
                   "name": "vendorAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 493,
+                  "scope": 483,
                   "src": "871:29:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3738,7 +3738,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 490,
+                    "id": 480,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "871:7:1",
@@ -3757,23 +3757,23 @@
           },
           {
             "body": {
-              "id": 501,
+              "id": 491,
               "nodeType": "Block",
               "src": "977:74:1",
               "statements": [
                 {
                   "expression": {
-                    "id": 499,
+                    "id": 489,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
-                      "id": 496,
+                      "id": 486,
                       "name": "owner",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 457,
+                      "referencedDeclaration": 447,
                       "src": "988:5:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -3784,7 +3784,7 @@
                     "operator": "=",
                     "rightHandSide": {
                       "expression": {
-                        "id": 497,
+                        "id": 487,
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
@@ -3795,7 +3795,7 @@
                           "typeString": "msg"
                         }
                       },
-                      "id": 498,
+                      "id": 488,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
@@ -3814,31 +3814,31 @@
                       "typeString": "address"
                     }
                   },
-                  "id": 500,
+                  "id": 490,
                   "nodeType": "ExpressionStatement",
                   "src": "988:18:1"
                 }
               ]
             },
-            "id": 502,
+            "id": 492,
             "implemented": true,
             "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 494,
+              "id": 484,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "974:2:1"
             },
             "returnParameters": {
-              "id": 495,
+              "id": 485,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "977:0:1"
             },
-            "scope": 666,
+            "scope": 656,
             "src": "963:88:1",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -3846,7 +3846,7 @@
           },
           {
             "body": {
-              "id": 515,
+              "id": 505,
               "nodeType": "Block",
               "src": "1151:94:1",
               "statements": [
@@ -3856,24 +3856,24 @@
                       {
                         "expression": {
                           "baseExpression": {
-                            "id": 507,
+                            "id": 497,
                             "name": "vendors",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 473,
+                            "referencedDeclaration": 463,
                             "src": "1170:7:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                               "typeString": "mapping(address => struct PointlyVendor.Vendor storage ref)"
                             }
                           },
-                          "id": 509,
+                          "id": 499,
                           "indexExpression": {
-                            "id": 508,
+                            "id": 498,
                             "name": "vendorAddress",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 504,
+                            "referencedDeclaration": 494,
                             "src": "1178:13:1",
                             "typeDescriptions": {
                               "typeIdentifier": "t_address",
@@ -3887,18 +3887,18 @@
                           "nodeType": "IndexAccess",
                           "src": "1170:22:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                            "typeIdentifier": "t_struct$_Vendor_$458_storage",
                             "typeString": "struct PointlyVendor.Vendor storage ref"
                           }
                         },
-                        "id": 510,
+                        "id": 500,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "exists",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 467,
+                        "referencedDeclaration": 457,
                         "src": "1170:29:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -3907,7 +3907,7 @@
                       },
                       {
                         "hexValue": "56656e646f7220646f6573206e6f74206578697374",
-                        "id": 511,
+                        "id": 501,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -3933,7 +3933,7 @@
                           "typeString": "literal_string \"Vendor does not exist\""
                         }
                       ],
-                      "id": 506,
+                      "id": 496,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -3947,7 +3947,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 512,
+                    "id": 502,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3962,31 +3962,31 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 513,
+                  "id": 503,
                   "nodeType": "ExpressionStatement",
                   "src": "1162:63:1"
                 },
                 {
-                  "id": 514,
+                  "id": 504,
                   "nodeType": "PlaceholderStatement",
                   "src": "1236:1:1"
                 }
               ]
             },
-            "id": 516,
+            "id": 506,
             "name": "vendorExists",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 505,
+              "id": 495,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 504,
+                  "id": 494,
                   "mutability": "mutable",
                   "name": "vendorAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 516,
+                  "scope": 506,
                   "src": "1128:21:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3995,7 +3995,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 503,
+                    "id": 493,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1128:7:1",
@@ -4016,7 +4016,7 @@
           },
           {
             "body": {
-              "id": 547,
+              "id": 537,
               "nodeType": "Block",
               "src": "1326:349:1",
               "statements": [
@@ -4024,7 +4024,7 @@
                   "expression": {
                     "arguments": [
                       {
-                        "id": 525,
+                        "id": 515,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -4036,21 +4036,21 @@
                         "subExpression": {
                           "expression": {
                             "baseExpression": {
-                              "id": 520,
+                              "id": 510,
                               "name": "vendors",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 473,
+                              "referencedDeclaration": 463,
                               "src": "1346:7:1",
                               "typeDescriptions": {
-                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                                 "typeString": "mapping(address => struct PointlyVendor.Vendor storage ref)"
                               }
                             },
-                            "id": 523,
+                            "id": 513,
                             "indexExpression": {
                               "expression": {
-                                "id": 521,
+                                "id": 511,
                                 "name": "msg",
                                 "nodeType": "Identifier",
                                 "overloadedDeclarations": [],
@@ -4061,7 +4061,7 @@
                                   "typeString": "msg"
                                 }
                               },
-                              "id": 522,
+                              "id": 512,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": false,
@@ -4081,18 +4081,18 @@
                             "nodeType": "IndexAccess",
                             "src": "1346:19:1",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                              "typeIdentifier": "t_struct$_Vendor_$458_storage",
                               "typeString": "struct PointlyVendor.Vendor storage ref"
                             }
                           },
-                          "id": 524,
+                          "id": 514,
                           "isConstant": false,
                           "isLValue": true,
                           "isPure": false,
                           "lValueRequested": false,
                           "memberName": "exists",
                           "nodeType": "MemberAccess",
-                          "referencedDeclaration": 467,
+                          "referencedDeclaration": 457,
                           "src": "1346:26:1",
                           "typeDescriptions": {
                             "typeIdentifier": "t_bool",
@@ -4106,7 +4106,7 @@
                       },
                       {
                         "hexValue": "56656e646f7220616c72656164792072656769737465726564",
-                        "id": 526,
+                        "id": 516,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -4132,7 +4132,7 @@
                           "typeString": "literal_string \"Vendor already registered\""
                         }
                       ],
-                      "id": 519,
+                      "id": 509,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
@@ -4146,7 +4146,7 @@
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 527,
+                    "id": 517,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -4161,34 +4161,34 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 528,
+                  "id": 518,
                   "nodeType": "ExpressionStatement",
                   "src": "1337:65:1"
                 },
                 {
                   "expression": {
-                    "id": 540,
+                    "id": 530,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "baseExpression": {
-                        "id": 529,
+                        "id": 519,
                         "name": "vendors",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 473,
+                        "referencedDeclaration": 463,
                         "src": "1415:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                           "typeString": "mapping(address => struct PointlyVendor.Vendor storage ref)"
                         }
                       },
-                      "id": 532,
+                      "id": 522,
                       "indexExpression": {
                         "expression": {
-                          "id": 530,
+                          "id": 520,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
@@ -4199,7 +4199,7 @@
                             "typeString": "msg"
                           }
                         },
-                        "id": 531,
+                        "id": 521,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -4219,7 +4219,7 @@
                       "nodeType": "IndexAccess",
                       "src": "1415:19:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                        "typeIdentifier": "t_struct$_Vendor_$458_storage",
                         "typeString": "struct PointlyVendor.Vendor storage ref"
                       }
                     },
@@ -4229,7 +4229,7 @@
                       "arguments": [
                         {
                           "hexValue": "30",
-                          "id": 534,
+                          "id": 524,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4245,7 +4245,7 @@
                         },
                         {
                           "hexValue": "30",
-                          "id": 535,
+                          "id": 525,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4261,7 +4261,7 @@
                         },
                         {
                           "hexValue": "30",
-                          "id": 536,
+                          "id": 526,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4277,7 +4277,7 @@
                         },
                         {
                           "hexValue": "30",
-                          "id": 537,
+                          "id": 527,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4293,7 +4293,7 @@
                         },
                         {
                           "hexValue": "74727565",
-                          "id": 538,
+                          "id": 528,
                           "isConstant": false,
                           "isLValue": false,
                           "isPure": true,
@@ -4331,18 +4331,18 @@
                             "typeString": "bool"
                           }
                         ],
-                        "id": 533,
+                        "id": 523,
                         "name": "Vendor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 468,
+                        "referencedDeclaration": 458,
                         "src": "1437:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_type$_t_struct$_Vendor_$468_storage_ptr_$",
+                          "typeIdentifier": "t_type$_t_struct$_Vendor_$458_storage_ptr_$",
                           "typeString": "type(struct PointlyVendor.Vendor storage pointer)"
                         }
                       },
-                      "id": 539,
+                      "id": 529,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": true,
@@ -4359,17 +4359,17 @@
                       "src": "1437:184:1",
                       "tryCall": false,
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                        "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                         "typeString": "struct PointlyVendor.Vendor memory"
                       }
                     },
                     "src": "1415:206:1",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                      "typeIdentifier": "t_struct$_Vendor_$458_storage",
                       "typeString": "struct PointlyVendor.Vendor storage ref"
                     }
                   },
-                  "id": 541,
+                  "id": 531,
                   "nodeType": "ExpressionStatement",
                   "src": "1415:206:1"
                 },
@@ -4378,7 +4378,7 @@
                     "arguments": [
                       {
                         "expression": {
-                          "id": 543,
+                          "id": 533,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
@@ -4389,7 +4389,7 @@
                             "typeString": "msg"
                           }
                         },
-                        "id": 544,
+                        "id": 534,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -4410,18 +4410,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 542,
+                      "id": 532,
                       "name": "VendorRegistered",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 477,
+                      "referencedDeclaration": 467,
                       "src": "1639:16:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 545,
+                    "id": 535,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -4436,32 +4436,32 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 546,
+                  "id": 536,
                   "nodeType": "EmitStatement",
                   "src": "1634:33:1"
                 }
               ]
             },
             "functionSelector": "596d0e7f",
-            "id": 548,
+            "id": 538,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "createVendor",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 517,
+              "id": 507,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1316:2:1"
             },
             "returnParameters": {
-              "id": 518,
+              "id": 508,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1326:0:1"
             },
-            "scope": 666,
+            "scope": 656,
             "src": "1295:380:1",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -4469,70 +4469,70 @@
           },
           {
             "body": {
-              "id": 585,
+              "id": 575,
               "nodeType": "Block",
               "src": "2049:275:1",
               "statements": [
                 {
                   "assignments": [
-                    568
+                    558
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 568,
+                      "id": 558,
                       "mutability": "mutable",
                       "name": "vendor",
                       "nodeType": "VariableDeclaration",
-                      "scope": 585,
+                      "scope": 575,
                       "src": "2060:20:1",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                        "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                         "typeString": "struct PointlyVendor.Vendor"
                       },
                       "typeName": {
-                        "id": 567,
+                        "id": 557,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 566,
+                          "id": 556,
                           "name": "Vendor",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 468,
+                          "referencedDeclaration": 458,
                           "src": "2060:6:1"
                         },
-                        "referencedDeclaration": 468,
+                        "referencedDeclaration": 458,
                         "src": "2060:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                          "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                           "typeString": "struct PointlyVendor.Vendor"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 572,
+                  "id": 562,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 569,
+                      "id": 559,
                       "name": "vendors",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 473,
+                      "referencedDeclaration": 463,
                       "src": "2083:7:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                         "typeString": "mapping(address => struct PointlyVendor.Vendor storage ref)"
                       }
                     },
-                    "id": 571,
+                    "id": 561,
                     "indexExpression": {
-                      "id": 570,
+                      "id": 560,
                       "name": "vendorAddress",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 550,
+                      "referencedDeclaration": 540,
                       "src": "2091:13:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -4546,7 +4546,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2083:22:1",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                      "typeIdentifier": "t_struct$_Vendor_$458_storage",
                       "typeString": "struct PointlyVendor.Vendor storage ref"
                     }
                   },
@@ -4558,25 +4558,25 @@
                     "components": [
                       {
                         "expression": {
-                          "id": 573,
+                          "id": 563,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 568,
+                          "referencedDeclaration": 558,
                           "src": "2138:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                             "typeString": "struct PointlyVendor.Vendor memory"
                           }
                         },
-                        "id": 574,
+                        "id": 564,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "totalRedemptions",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 459,
+                        "referencedDeclaration": 449,
                         "src": "2138:23:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4585,25 +4585,25 @@
                       },
                       {
                         "expression": {
-                          "id": 575,
+                          "id": 565,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 568,
+                          "referencedDeclaration": 558,
                           "src": "2176:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                             "typeString": "struct PointlyVendor.Vendor memory"
                           }
                         },
-                        "id": 576,
+                        "id": 566,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "activePromotions",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 461,
+                        "referencedDeclaration": 451,
                         "src": "2176:23:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4612,25 +4612,25 @@
                       },
                       {
                         "expression": {
-                          "id": 577,
+                          "id": 567,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 568,
+                          "referencedDeclaration": 558,
                           "src": "2214:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                             "typeString": "struct PointlyVendor.Vendor memory"
                           }
                         },
-                        "id": 578,
+                        "id": 568,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "revenueGenerated",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 463,
+                        "referencedDeclaration": 453,
                         "src": "2214:23:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4639,25 +4639,25 @@
                       },
                       {
                         "expression": {
-                          "id": 579,
+                          "id": 569,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 568,
+                          "referencedDeclaration": 558,
                           "src": "2252:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                             "typeString": "struct PointlyVendor.Vendor memory"
                           }
                         },
-                        "id": 580,
+                        "id": 570,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "upcomingPromotions",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 455,
                         "src": "2252:25:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -4666,25 +4666,25 @@
                       },
                       {
                         "expression": {
-                          "id": 581,
+                          "id": 571,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 568,
+                          "referencedDeclaration": 558,
                           "src": "2292:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_memory_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_memory_ptr",
                             "typeString": "struct PointlyVendor.Vendor memory"
                           }
                         },
-                        "id": 582,
+                        "id": 572,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "exists",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 467,
+                        "referencedDeclaration": 457,
                         "src": "2292:13:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
@@ -4692,7 +4692,7 @@
                         }
                       }
                     ],
-                    "id": 583,
+                    "id": 573,
                     "isConstant": false,
                     "isInlineArray": false,
                     "isLValue": false,
@@ -4705,26 +4705,26 @@
                       "typeString": "tuple(uint256,uint256,uint256,uint256,bool)"
                     }
                   },
-                  "functionReturnParameters": 565,
-                  "id": 584,
+                  "functionReturnParameters": 555,
+                  "id": 574,
                   "nodeType": "Return",
                   "src": "2116:200:1"
                 }
               ]
             },
             "functionSelector": "0bc0f7d3",
-            "id": 586,
+            "id": 576,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 553,
+                    "id": 543,
                     "name": "vendorAddress",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 550,
+                    "referencedDeclaration": 540,
                     "src": "1816:13:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -4732,12 +4732,12 @@
                     }
                   }
                 ],
-                "id": 554,
+                "id": 544,
                 "modifierName": {
-                  "id": 552,
+                  "id": 542,
                   "name": "vendorExists",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 516,
+                  "referencedDeclaration": 506,
                   "src": "1803:12:1"
                 },
                 "nodeType": "ModifierInvocation",
@@ -4747,16 +4747,16 @@
             "name": "getVendor",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 551,
+              "id": 541,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 550,
+                  "id": 540,
                   "mutability": "mutable",
                   "name": "vendorAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 586,
+                  "scope": 576,
                   "src": "1741:21:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4765,7 +4765,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 549,
+                    "id": 539,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1741:7:1",
@@ -4781,16 +4781,16 @@
               "src": "1740:23:1"
             },
             "returnParameters": {
-              "id": 565,
+              "id": 555,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 556,
+                  "id": 546,
                   "mutability": "mutable",
                   "name": "totalRedemptions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 586,
+                  "scope": 576,
                   "src": "1863:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4799,7 +4799,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 555,
+                    "id": 545,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1863:7:1",
@@ -4812,11 +4812,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 558,
+                  "id": 548,
                   "mutability": "mutable",
                   "name": "activePromotions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 586,
+                  "scope": 576,
                   "src": "1902:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4825,7 +4825,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 557,
+                    "id": 547,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1902:7:1",
@@ -4838,11 +4838,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 560,
+                  "id": 550,
                   "mutability": "mutable",
                   "name": "revenueGenerated",
                   "nodeType": "VariableDeclaration",
-                  "scope": 586,
+                  "scope": 576,
                   "src": "1941:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4851,7 +4851,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 559,
+                    "id": 549,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1941:7:1",
@@ -4864,11 +4864,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 562,
+                  "id": 552,
                   "mutability": "mutable",
                   "name": "upcomingPromotions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 586,
+                  "scope": 576,
                   "src": "1980:26:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4877,7 +4877,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 561,
+                    "id": 551,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "1980:7:1",
@@ -4890,11 +4890,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 564,
+                  "id": 554,
                   "mutability": "mutable",
                   "name": "exists",
                   "nodeType": "VariableDeclaration",
-                  "scope": 586,
+                  "scope": 576,
                   "src": "2021:11:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -4903,7 +4903,7 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 563,
+                    "id": 553,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
                     "src": "2021:4:1",
@@ -4917,7 +4917,7 @@
               ],
               "src": "1848:195:1"
             },
-            "scope": 666,
+            "scope": 656,
             "src": "1722:602:1",
             "stateMutability": "view",
             "virtual": false,
@@ -4925,70 +4925,70 @@
           },
           {
             "body": {
-              "id": 645,
+              "id": 635,
               "nodeType": "Block",
               "src": "2599:502:1",
               "statements": [
                 {
                   "assignments": [
-                    604
+                    594
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 604,
+                      "id": 594,
                       "mutability": "mutable",
                       "name": "vendor",
                       "nodeType": "VariableDeclaration",
-                      "scope": 645,
+                      "scope": 635,
                       "src": "2610:21:1",
                       "stateVariable": false,
                       "storageLocation": "storage",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                        "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                         "typeString": "struct PointlyVendor.Vendor"
                       },
                       "typeName": {
-                        "id": 603,
+                        "id": 593,
                         "nodeType": "UserDefinedTypeName",
                         "pathNode": {
-                          "id": 602,
+                          "id": 592,
                           "name": "Vendor",
                           "nodeType": "IdentifierPath",
-                          "referencedDeclaration": 468,
+                          "referencedDeclaration": 458,
                           "src": "2610:6:1"
                         },
-                        "referencedDeclaration": 468,
+                        "referencedDeclaration": 458,
                         "src": "2610:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                          "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                           "typeString": "struct PointlyVendor.Vendor"
                         }
                       },
                       "visibility": "internal"
                     }
                   ],
-                  "id": 608,
+                  "id": 598,
                   "initialValue": {
                     "baseExpression": {
-                      "id": 605,
+                      "id": 595,
                       "name": "vendors",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 473,
+                      "referencedDeclaration": 463,
                       "src": "2634:7:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                        "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                         "typeString": "mapping(address => struct PointlyVendor.Vendor storage ref)"
                       }
                     },
-                    "id": 607,
+                    "id": 597,
                     "indexExpression": {
-                      "id": 606,
+                      "id": 596,
                       "name": "vendorAddress",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 588,
+                      "referencedDeclaration": 578,
                       "src": "2642:13:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_address",
@@ -5002,7 +5002,7 @@
                     "nodeType": "IndexAccess",
                     "src": "2634:22:1",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                      "typeIdentifier": "t_struct$_Vendor_$458_storage",
                       "typeString": "struct PointlyVendor.Vendor storage ref"
                     }
                   },
@@ -5011,32 +5011,32 @@
                 },
                 {
                   "expression": {
-                    "id": 613,
+                    "id": 603,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 609,
+                        "id": 599,
                         "name": "vendor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 604,
+                        "referencedDeclaration": 594,
                         "src": "2669:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                          "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                           "typeString": "struct PointlyVendor.Vendor storage pointer"
                         }
                       },
-                      "id": 611,
+                      "id": 601,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "totalRedemptions",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 459,
+                      "referencedDeclaration": 449,
                       "src": "2669:23:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5046,11 +5046,11 @@
                     "nodeType": "Assignment",
                     "operator": "+=",
                     "rightHandSide": {
-                      "id": 612,
+                      "id": 602,
                       "name": "redemptions",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 590,
+                      "referencedDeclaration": 580,
                       "src": "2696:11:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5063,38 +5063,38 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 614,
+                  "id": 604,
                   "nodeType": "ExpressionStatement",
                   "src": "2669:38:1"
                 },
                 {
                   "expression": {
-                    "id": 619,
+                    "id": 609,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 615,
+                        "id": 605,
                         "name": "vendor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 604,
+                        "referencedDeclaration": 594,
                         "src": "2718:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                          "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                           "typeString": "struct PointlyVendor.Vendor storage pointer"
                         }
                       },
-                      "id": 617,
+                      "id": 607,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "activePromotions",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 461,
+                      "referencedDeclaration": 451,
                       "src": "2718:23:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5104,11 +5104,11 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 618,
+                      "id": 608,
                       "name": "promotionsActive",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 592,
+                      "referencedDeclaration": 582,
                       "src": "2744:16:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5121,38 +5121,38 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 620,
+                  "id": 610,
                   "nodeType": "ExpressionStatement",
                   "src": "2718:42:1"
                 },
                 {
                   "expression": {
-                    "id": 625,
+                    "id": 615,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 621,
+                        "id": 611,
                         "name": "vendor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 604,
+                        "referencedDeclaration": 594,
                         "src": "2771:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                          "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                           "typeString": "struct PointlyVendor.Vendor storage pointer"
                         }
                       },
-                      "id": 623,
+                      "id": 613,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "revenueGenerated",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 463,
+                      "referencedDeclaration": 453,
                       "src": "2771:23:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5162,11 +5162,11 @@
                     "nodeType": "Assignment",
                     "operator": "+=",
                     "rightHandSide": {
-                      "id": 624,
+                      "id": 614,
                       "name": "revenue",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 594,
+                      "referencedDeclaration": 584,
                       "src": "2798:7:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5179,38 +5179,38 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 626,
+                  "id": 616,
                   "nodeType": "ExpressionStatement",
                   "src": "2771:34:1"
                 },
                 {
                   "expression": {
-                    "id": 631,
+                    "id": 621,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "expression": {
-                        "id": 627,
+                        "id": 617,
                         "name": "vendor",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 604,
+                        "referencedDeclaration": 594,
                         "src": "2816:6:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                          "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                           "typeString": "struct PointlyVendor.Vendor storage pointer"
                         }
                       },
-                      "id": 629,
+                      "id": 619,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": true,
                       "memberName": "upcomingPromotions",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 465,
+                      "referencedDeclaration": 455,
                       "src": "2816:25:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5220,11 +5220,11 @@
                     "nodeType": "Assignment",
                     "operator": "=",
                     "rightHandSide": {
-                      "id": 630,
+                      "id": 620,
                       "name": "promotionsUpcoming",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 596,
+                      "referencedDeclaration": 586,
                       "src": "2844:18:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_uint256",
@@ -5237,7 +5237,7 @@
                       "typeString": "uint256"
                     }
                   },
-                  "id": 632,
+                  "id": 622,
                   "nodeType": "ExpressionStatement",
                   "src": "2816:46:1"
                 },
@@ -5245,11 +5245,11 @@
                   "eventCall": {
                     "arguments": [
                       {
-                        "id": 634,
+                        "id": 624,
                         "name": "vendorAddress",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 588,
+                        "referencedDeclaration": 578,
                         "src": "2915:13:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -5258,25 +5258,25 @@
                       },
                       {
                         "expression": {
-                          "id": 635,
+                          "id": 625,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 604,
+                          "referencedDeclaration": 594,
                           "src": "2943:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                             "typeString": "struct PointlyVendor.Vendor storage pointer"
                           }
                         },
-                        "id": 636,
+                        "id": 626,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "totalRedemptions",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 459,
+                        "referencedDeclaration": 449,
                         "src": "2943:23:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -5285,25 +5285,25 @@
                       },
                       {
                         "expression": {
-                          "id": 637,
+                          "id": 627,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 604,
+                          "referencedDeclaration": 594,
                           "src": "2981:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                             "typeString": "struct PointlyVendor.Vendor storage pointer"
                           }
                         },
-                        "id": 638,
+                        "id": 628,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "activePromotions",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 461,
+                        "referencedDeclaration": 451,
                         "src": "2981:23:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -5312,25 +5312,25 @@
                       },
                       {
                         "expression": {
-                          "id": 639,
+                          "id": 629,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 604,
+                          "referencedDeclaration": 594,
                           "src": "3019:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                             "typeString": "struct PointlyVendor.Vendor storage pointer"
                           }
                         },
-                        "id": 640,
+                        "id": 630,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "revenueGenerated",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 463,
+                        "referencedDeclaration": 453,
                         "src": "3019:23:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -5339,25 +5339,25 @@
                       },
                       {
                         "expression": {
-                          "id": 641,
+                          "id": 631,
                           "name": "vendor",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 604,
+                          "referencedDeclaration": 594,
                           "src": "3057:6:1",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_struct$_Vendor_$468_storage_ptr",
+                            "typeIdentifier": "t_struct$_Vendor_$458_storage_ptr",
                             "typeString": "struct PointlyVendor.Vendor storage pointer"
                           }
                         },
-                        "id": 642,
+                        "id": 632,
                         "isConstant": false,
                         "isLValue": true,
                         "isPure": false,
                         "lValueRequested": false,
                         "memberName": "upcomingPromotions",
                         "nodeType": "MemberAccess",
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 455,
                         "src": "3057:25:1",
                         "typeDescriptions": {
                           "typeIdentifier": "t_uint256",
@@ -5388,18 +5388,18 @@
                           "typeString": "uint256"
                         }
                       ],
-                      "id": 633,
+                      "id": 623,
                       "name": "VendorMetricsUpdated",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 489,
+                      "referencedDeclaration": 479,
                       "src": "2880:20:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$_t_uint256_$_t_uint256_$_t_uint256_$_t_uint256_$returns$__$",
                         "typeString": "function (address,uint256,uint256,uint256,uint256)"
                       }
                     },
-                    "id": 643,
+                    "id": 633,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -5414,25 +5414,25 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 644,
+                  "id": 634,
                   "nodeType": "EmitStatement",
                   "src": "2875:218:1"
                 }
               ]
             },
             "functionSelector": "e41f6e5f",
-            "id": 646,
+            "id": 636,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": [
                   {
-                    "id": 599,
+                    "id": 589,
                     "name": "vendorAddress",
                     "nodeType": "Identifier",
                     "overloadedDeclarations": [],
-                    "referencedDeclaration": 588,
+                    "referencedDeclaration": 578,
                     "src": "2584:13:1",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
@@ -5440,12 +5440,12 @@
                     }
                   }
                 ],
-                "id": 600,
+                "id": 590,
                 "modifierName": {
-                  "id": 598,
+                  "id": 588,
                   "name": "vendorExists",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 516,
+                  "referencedDeclaration": 506,
                   "src": "2571:12:1"
                 },
                 "nodeType": "ModifierInvocation",
@@ -5455,16 +5455,16 @@
             "name": "updateMetrics",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 597,
+              "id": 587,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 588,
+                  "id": 578,
                   "mutability": "mutable",
                   "name": "vendorAddress",
                   "nodeType": "VariableDeclaration",
-                  "scope": 646,
+                  "scope": 636,
                   "src": "2407:21:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5473,7 +5473,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 587,
+                    "id": 577,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "2407:7:1",
@@ -5487,11 +5487,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 590,
+                  "id": 580,
                   "mutability": "mutable",
                   "name": "redemptions",
                   "nodeType": "VariableDeclaration",
-                  "scope": 646,
+                  "scope": 636,
                   "src": "2439:19:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5500,7 +5500,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 589,
+                    "id": 579,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "2439:7:1",
@@ -5513,11 +5513,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 592,
+                  "id": 582,
                   "mutability": "mutable",
                   "name": "promotionsActive",
                   "nodeType": "VariableDeclaration",
-                  "scope": 646,
+                  "scope": 636,
                   "src": "2469:24:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5526,7 +5526,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 591,
+                    "id": 581,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "2469:7:1",
@@ -5539,11 +5539,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 594,
+                  "id": 584,
                   "mutability": "mutable",
                   "name": "revenue",
                   "nodeType": "VariableDeclaration",
-                  "scope": 646,
+                  "scope": 636,
                   "src": "2504:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5552,7 +5552,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 593,
+                    "id": 583,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "2504:7:1",
@@ -5565,11 +5565,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 596,
+                  "id": 586,
                   "mutability": "mutable",
                   "name": "promotionsUpcoming",
                   "nodeType": "VariableDeclaration",
-                  "scope": 646,
+                  "scope": 636,
                   "src": "2530:26:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -5578,7 +5578,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 595,
+                    "id": 585,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "2530:7:1",
@@ -5593,12 +5593,12 @@
               "src": "2396:167:1"
             },
             "returnParameters": {
-              "id": 601,
+              "id": 591,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "2599:0:1"
             },
-            "scope": 666,
+            "scope": 656,
             "src": "2374:727:1",
             "stateMutability": "nonpayable",
             "virtual": false,
@@ -5606,13 +5606,13 @@
           },
           {
             "body": {
-              "id": 664,
+              "id": 654,
               "nodeType": "Block",
               "src": "3201:86:1",
               "statements": [
                 {
                   "expression": {
-                    "id": 657,
+                    "id": 647,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -5623,21 +5623,21 @@
                     "src": "3212:26:1",
                     "subExpression": {
                       "baseExpression": {
-                        "id": 653,
+                        "id": 643,
                         "name": "vendors",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 473,
+                        "referencedDeclaration": 463,
                         "src": "3219:7:1",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$468_storage_$",
+                          "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Vendor_$458_storage_$",
                           "typeString": "mapping(address => struct PointlyVendor.Vendor storage ref)"
                         }
                       },
-                      "id": 656,
+                      "id": 646,
                       "indexExpression": {
                         "expression": {
-                          "id": 654,
+                          "id": 644,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
@@ -5648,7 +5648,7 @@
                             "typeString": "msg"
                           }
                         },
-                        "id": 655,
+                        "id": 645,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -5668,7 +5668,7 @@
                       "nodeType": "IndexAccess",
                       "src": "3219:19:1",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Vendor_$468_storage",
+                        "typeIdentifier": "t_struct$_Vendor_$458_storage",
                         "typeString": "struct PointlyVendor.Vendor storage ref"
                       }
                     },
@@ -5677,7 +5677,7 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 658,
+                  "id": 648,
                   "nodeType": "ExpressionStatement",
                   "src": "3212:26:1"
                 },
@@ -5686,7 +5686,7 @@
                     "arguments": [
                       {
                         "expression": {
-                          "id": 660,
+                          "id": 650,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
@@ -5697,7 +5697,7 @@
                             "typeString": "msg"
                           }
                         },
-                        "id": 661,
+                        "id": 651,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -5718,18 +5718,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 659,
+                      "id": 649,
                       "name": "VendorDeleted",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 493,
+                      "referencedDeclaration": 483,
                       "src": "3254:13:1",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 662,
+                    "id": 652,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -5744,14 +5744,14 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 663,
+                  "id": 653,
                   "nodeType": "EmitStatement",
                   "src": "3249:30:1"
                 }
               ]
             },
             "functionSelector": "b1d9623e",
-            "id": 665,
+            "id": 655,
             "implemented": true,
             "kind": "function",
             "modifiers": [
@@ -5759,7 +5759,7 @@
                 "arguments": [
                   {
                     "expression": {
-                      "id": 649,
+                      "id": 639,
                       "name": "msg",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
@@ -5770,7 +5770,7 @@
                         "typeString": "msg"
                       }
                     },
-                    "id": 650,
+                    "id": 640,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -5784,12 +5784,12 @@
                     }
                   }
                 ],
-                "id": 651,
+                "id": 641,
                 "modifierName": {
-                  "id": 648,
+                  "id": 638,
                   "name": "vendorExists",
                   "nodeType": "IdentifierPath",
-                  "referencedDeclaration": 516,
+                  "referencedDeclaration": 506,
                   "src": "3176:12:1"
                 },
                 "nodeType": "ModifierInvocation",
@@ -5799,25 +5799,25 @@
             "name": "deleteVendor",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 647,
+              "id": 637,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "3166:2:1"
             },
             "returnParameters": {
-              "id": 652,
+              "id": 642,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "3201:0:1"
             },
-            "scope": 666,
+            "scope": 656,
             "src": "3145:142:1",
             "stateMutability": "nonpayable",
             "virtual": false,
             "visibility": "public"
           }
         ],
-        "scope": 667,
+        "scope": 657,
         "src": "60:3230:1"
       }
     ],
@@ -5831,12 +5831,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0x015E7Fc393975b10a122E874d3B051b9e6fb358E",
-      "transactionHash": "0x3c85dd56561960ab48275518b8877a7d53ae847e0904218e5ae934f9808a338a"
+      "address": "0xA060c62581A19FFC877159bAE129D28F74865b88",
+      "transactionHash": "0xfee3b07f9124ddbe3f4a7e86780af566518f811da96ecb7695881c919459011c"
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2025-01-20T01:11:56.757Z",
+  "updatedAt": "2025-01-20T05:39:58.078Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",

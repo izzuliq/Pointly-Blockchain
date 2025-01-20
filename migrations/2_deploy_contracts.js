@@ -19,6 +19,11 @@ module.exports = async function (deployer, network) {
   const rewardsInstance = await Rewards.deployed();
   addresses.Rewards = rewardsInstance.address;
 
+  // Deploy PointlyVendor contract
+  await deployer.deploy(PointlyVendor);
+  const pointlyVendorInstance = await PointlyVendor.deployed();
+  addresses.PointlyVendor = pointlyVendorInstance.address;
+
   // Log the addresses object for debugging
   console.log("Contract addresses:", addresses);
 
