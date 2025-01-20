@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import Web3 from "web3";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import RewardsABI from "../../build/contracts/Rewards.json";
 
 // ABI of the deployed Rewards contract (make sure to update with your ABI)
-const RewardsABI = [ "../../build/contracts/Rewards.json" ];
-const contractAddress = "0xa45d988da532AA71Ba0B091355242D2f515Ae458"; // Replace with your contract address
+const contractAddress = "0x0b2D248A1F1d03f3a949982876A074fa716A4f52"; // Replace with your contract address
 
 function CreateRewardDetails() {
   const [rewardInfo, setRewardInfo] = useState({
@@ -34,18 +34,18 @@ function CreateRewardDetails() {
           setAccount(accounts[0]);
 
           // Initialize contract
-          const contractInstance = new web3Instance.eth.Contract(RewardsABI, contractAddress);
+          const contractInstance = new web3Instance.eth.Contract(RewardsABI.abi, contractAddress);
           setContract(contractInstance);
         } catch (error) {
           console.error("Error initializing Web3 or MetaMask:", error);
           toast.error("Error initializing Web3 or MetaMask. Please try again.", {
-            position: toast.POSITION.TOP_CENTER,
+            position: "top-center",
             autoClose: 3000,
           });
         }
       } else {
         toast.error("MetaMask is not installed.", {
-          position: toast.POSITION.TOP_CENTER,
+          position: "top-center",
           autoClose: 3000,
         });
       }
@@ -56,7 +56,7 @@ function CreateRewardDetails() {
   const handleSave = async () => {
     if (!contract || !account) {
       toast.error("Web3 or contract not initialized.", {
-        position: toast.POSITION.TOP_CENTER,
+        position: "top-center",
         autoClose: 3000,
       });
       return;
@@ -77,12 +77,12 @@ function CreateRewardDetails() {
 
       if (transaction.status) {
         toast.success("New reward created successfully on the blockchain!", {
-          position: toast.POSITION.TOP_CENTER,
+          position: "top-center",
           autoClose: 3000,
         });
       } else {
         toast.error("Failed to create reward on the blockchain.", {
-          position: toast.POSITION.TOP_CENTER,
+          position: "top-center",
           autoClose: 3000,
         });
       }
@@ -91,7 +91,7 @@ function CreateRewardDetails() {
     } catch (error) {
       console.error("Error creating reward:", error);
       toast.error("Failed to create new reward. Please try again.", {
-        position: toast.POSITION.TOP_CENTER,
+        position: "top-center",
         autoClose: 3000,
       });
       setLoading(false);

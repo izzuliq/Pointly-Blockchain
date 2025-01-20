@@ -15,7 +15,7 @@ function VendorRewards() {
   const [rewardToDelete, setRewardToDelete] = useState(null); // Reward to delete
 
   // Replace with your deployed Rewards contract address
-  const rewardsAddress = "0xa45d988da532AA71Ba0B091355242D2f515Ae458";
+  const rewardsAddress = "0x0b2D248A1F1d03f3a949982876A074fa716A4f52";
 
   useEffect(() => {
     const initializeWeb3 = async () => {

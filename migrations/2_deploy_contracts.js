@@ -3,6 +3,7 @@ const path = require("path");
 
 const PointlyUser = artifacts.require("PointlyUser");
 const Rewards = artifacts.require("Rewards");
+const PointlyVendor = artifacts.require("PointlyVendor"); // Import the PointlyVendor contract
 
 module.exports = async function (deployer, network) {
   // Object to store contract addresses
