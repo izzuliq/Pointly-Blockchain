@@ -126,7 +126,7 @@ function LoginPage() {
 
           <p className="mt-4 text-center font-cabin">
             Don't have an account?{" "}
-            <a href="/signup" className="text-purple">
+            <a href="/" className="text-purple">
               Sign up here
             </a>
           </p>

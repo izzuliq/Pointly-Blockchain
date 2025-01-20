@@ -136,7 +136,7 @@ contract Rewards {
         require(reward.isActive, "Reward is inactive or does not exist");
         require(block.timestamp < reward.expiration, "Reward has expired");
         require(!rewardRedeemed[msg.sender][rewardId], "Reward already redeemed");
-        require(userPoints[msg.sender] >= reward.cost, "Insufficient points");
+        require(userPoints[msg.sender] > reward.cost, "Insufficient points");
 
         userPoints[msg.sender] -= reward.cost;
         rewardRedeemed[msg.sender][rewardId] = true;

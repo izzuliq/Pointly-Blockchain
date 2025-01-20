@@ -14,7 +14,6 @@ function ProfilePage() {
     tier: "",
     totalPoints: 0,
     availablePoints: 0,
-    role: "",
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,7 +75,6 @@ function ProfilePage() {
         address: userProfile.addressDetails || "N/A",
         profileImage: userProfile.profileImage || "default_avatar.jpg",
         tier: userProfile.tier || "Quartz",
-        role: userProfile.role || "User",
       });
       setLoading(false);
     } catch (err) {
@@ -133,7 +131,6 @@ function ProfilePage() {
             { label: "Phone", value: userData.phone },
             { label: "Address", value: userData.address },
             { label: "Tier", value: userData.tier },
-            { label: "Role", value: userData.role },
           ].map(({ label, value }) => (
             <div key={label} className="w-full mb-6 text-center">
               <label className="block text-2xl font-cabin text-purple-dark">{label}</label>
