@@ -3,7 +3,8 @@ const path = require("path");
 
 const PointlyUser = artifacts.require("PointlyUser");
 const Rewards = artifacts.require("Rewards");
-const PointlyVendor = artifacts.require("PointlyVendor"); // Import the PointlyVendor contract
+const PointlyVendor = artifacts.require("PointlyVendor");
+const Transaction = artifacts.require("Transaction"); // Import the Transaction contract
 
 module.exports = async function (deployer, network) {
   // Object to store contract addresses
@@ -23,6 +24,11 @@ module.exports = async function (deployer, network) {
   await deployer.deploy(PointlyVendor);
   const pointlyVendorInstance = await PointlyVendor.deployed();
   addresses.PointlyVendor = pointlyVendorInstance.address;
+
+  // Deploy Transaction contract
+  await deployer.deploy(Transaction, pointlyUserInstance.address, pointlyVendorInstance.address);
+  const transactionInstance = await Transaction.deployed();
+  addresses.Transaction = transactionInstance.address;
 
   // Log the addresses object for debugging
   console.log("Contract addresses:", addresses);

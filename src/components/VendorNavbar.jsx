@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHome, FaTachometerAlt, FaGift, FaUserAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaTachometerAlt, FaGift, FaUserAlt, FaSignOutAlt, FaExchangeAlt } from 'react-icons/fa'; // Importing the new Transaction icon
 
 function VendorNavbar() {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -45,6 +45,12 @@ function VendorNavbar() {
           </Link>
         </li>
         <li>
+          <Link to="/vendor-transaction" className="flex items-center space-x-2 hover:scale-105 transition-all duration-300">
+            <FaExchangeAlt /> {/* New icon for transaction */}
+            <span className="hidden md:inline">Transaction</span>
+          </Link>
+        </li>
+        <li>
           <button 
             onClick={() => setShowLogoutModal(true)} 
             className="flex items-center space-x-2 hover:scale-105 transition-all duration-300">
@@ -58,7 +64,7 @@ function VendorNavbar() {
       {showLogoutModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 font-cabin">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-          <h3 className="text-xl font-semibold text-gray-800 text-center">Log Out Confirmation</h3>
+            <h3 className="text-xl font-semibold text-gray-800 text-center">Log Out Confirmation</h3>
             <p className="mt-4 text-gray-600 text-center">Are you sure you want to log out of Pointly?</p>
             <div className="mt-6 flex justify-around">
               <button 

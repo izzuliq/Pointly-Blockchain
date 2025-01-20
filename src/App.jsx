@@ -19,6 +19,7 @@ import VendorProfile from "./pages/VendorProfile";
 import EditRewardDetails from "./pages/EditRewardDetails"; 
 import VendorEditAdminPage from "./pages/EditAdminProfile"; 
 import VendorEditCompanyPage from "./pages/EditCompanyProfile"; 
+import VendorTransaction from "./pages/VendorTransaction";
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
             <Route path="/vendor-reward-details/:rewardId" element={<EditRewardDetails />} />
             <Route path="/vendor-edit-admin" element={<VendorEditAdminPage />} /> {/* Edit Admin Profile Route */}
             <Route path="/vendor-edit-company" element={<VendorEditCompanyPage />} /> {/* Edit Company Profile Route */}
+            <Route path="/vendor-transactions" element={<VendorTransaction />} />
 
             {/* Catch-all route for undefined paths */}
             <Route
