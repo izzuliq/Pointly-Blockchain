@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/UserNavbar";
-import getWeb3 from "../utils/getWeb3.js";
+import getWeb3 from "../utils/getWeb3";
 import getContractInstance from "../utils/contract";
 
 function RewardsPage() {
@@ -44,14 +44,16 @@ function RewardsPage() {
   const fetchPointsData = async (contract, userAccount) => {
     try {
       const userData = await contract.methods.getUser(userAccount).call();
-      const totalPoints = BigInt(userData[6]).toString(); // Convert total points to BigInt
-      const availablePoints = BigInt(userData[7]).toString(); // Convert available points to BigInt
-
+      
+      // Ensure correct index usage.
+      const totalPoints = BigInt(userData[6]).toString(); // Total points
+      const availablePoints = BigInt(userData[7]).toString(); // Available points
+  
       setPoints({
         total: totalPoints,
         available: availablePoints,
       });
-
+  
       setLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -60,18 +62,22 @@ function RewardsPage() {
 
   const fetchRewardsData = async (contract) => {
     try {
-      const rewardCounter = await contract.methods.rewardCounter().call();
-      const allRewards = [];
-      for (let i = 1; i <= rewardCounter; i++) {
-        const reward = await contract.methods.getReward(i).call();
-        allRewards.push({
+      // Fetch all rewards at once
+      const rewards = await contract.methods.getAllRewards().call();
+      console.log("Fetched rewards:", rewards); // Log all fetched rewards
+
+      const allRewards = rewards.map((reward) => {
+        console.log(`Reward fetched: ID = ${reward.id}, Name = ${reward.name}, Cost = ${reward.cost}`); // Log each reward's details
+        return {
           id: reward.id,
           name: reward.name,
           description: reward.description,
           points: reward.cost,
           imgSrc: reward.img,
-        });
-      }
+        };
+      });
+
+      console.log("All rewards processed:", allRewards); // Log all rewards processed
       setRewards(allRewards);
     } catch (error) {
       console.error("Error fetching rewards:", error);
@@ -97,6 +103,10 @@ function RewardsPage() {
     }
   };
 
+  const handleRewardClick = (rewardId) => {
+    navigate(`/reward-details/${rewardId}`);
+  };
+
   return (
     <>
       <Navbar />
@@ -106,6 +116,7 @@ function RewardsPage() {
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
+        {/* Points Overview */}
         <div className="mt-8 bg-gold-100 p-4 rounded-lg shadow-sm w-1/2 mx-auto">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Points Overview</h3>
           <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-64">
@@ -122,23 +133,41 @@ function RewardsPage() {
 
         <hr className="my-8 w-3/4 border-t-4 border-gold-100 mx-auto mb-10 mt-10" />
 
+        {/* Available Rewards */}
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Available Rewards For You</h3>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {rewards.map((reward) => (
-              <div key={reward.id} className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
-                <img src={reward.imgSrc} alt={reward.name} className="max-w-[300px] max-h-[300px] object-cover mb-4 rounded-lg" />
-                <h4 className="text-xl font-semibold text-gray-700">{reward.name}</h4>
-                <p className="mt-2 text-gray-500">{`Cost: ${reward.points} points`}</p>
-                <p className="mt-2 text-gray-600 text-center">{reward.description}</p>
-                <button
-                  className="mt-4 w-3/4 bg-gold-dark text-white py-2 rounded-lg hover:bg-purple-dark transition-colors"
-                  onClick={() => redeemPoints(reward)}
-                >
-                  Redeem
-                </button>
-              </div>
-            ))}
+            {rewards.map((reward, index) => {
+              console.log(`Rendering reward: ID = ${reward.id}, Name = ${reward.name}, Cost = ${reward.points}`); // Log when rendering each reward
+              return (
+                <div key={`${reward.id}-${index}`} className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
+                  <img
+                    src={reward.imgSrc}
+                    alt={reward.name}
+                    className="max-w-[300px] max-h-[300px] object-cover mb-4 rounded-lg"
+                  />
+                  <h4 className="text-xl font-semibold text-gray-700">{reward.name}</h4>
+                  <p className="mt-2 text-gray-500">{`Cost: ${reward.points} points`}</p>
+                  <p className="mt-2 text-gray-600 text-center">{reward.description}</p>
+
+                  {/* Buttons for More Info and Redeem */}
+                  <div className="mt-4 flex flex-col sm:flex-row justify-center sm:space-x-4">
+                    <button
+                      className="bg-purple-700 text-white py-2 px-4 rounded-lg hover:bg-purple-800 transition-colors"
+                      onClick={() => handleRewardClick(reward.id)}
+                    >
+                      View Details
+                    </button>
+                    <button
+                      className="bg-gold-dark text-white py-2 px-4 rounded-lg hover:bg-purple-dark transition-colors"
+                      onClick={() => redeemPoints(reward)}
+                    >
+                      Redeem
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
