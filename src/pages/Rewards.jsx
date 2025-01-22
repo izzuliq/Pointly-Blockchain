@@ -45,7 +45,7 @@ function RewardsPage() {
     try {
       const userData = await contract.methods.getUser(userAccount).call();
       
-      // Ensure correct index usage.
+      // Extract points from the user data
       const totalPoints = BigInt(userData[6]).toString(); // Total points
       const availablePoints = BigInt(userData[7]).toString(); // Available points
   
@@ -85,24 +85,65 @@ function RewardsPage() {
   };
 
   const redeemPoints = async (reward) => {
-    if (points.available < reward.points) {
-      alert("You don't have enough points to redeem this reward.");
-      return;
-    }
-
     try {
-      await rewardsContract.methods.redeemReward(reward.id).send({ from: account });
+      console.log("Attempting to redeem reward:", reward);
+  
+      // Log the type of reward object and its properties
+      console.log("Reward Data Type:", typeof reward);
+      console.log("Reward ID Type:", typeof reward.id);
+      console.log("Reward Points Type:", typeof reward.points);
+  
+      // Log the type of user points available
+      console.log("User Points Available Type:", typeof points.available);
+      console.log("User Points Available:", points.available);
+  
+      // Log reward cost
+      console.log(`Reward Cost: ${Number(reward.points)}`);
+  
+      // Check if user has enough points
+      if (points.available < Number(reward.points)) {
+        alert("You don't have enough points to redeem this reward.");
+        return;
+      }
+  
+      // Ensure reward ID is a valid BigInt
+      if (typeof reward.id !== "bigint") {
+        console.error("Invalid reward ID:", reward.id);
+        alert("Invalid reward ID. It must be a BigInt.");
+        return;
+      }
+  
+      console.log(`Redeeming Reward ID: ${reward.id} with cost: ${reward.points} points`);
+  
+      // Redeem reward transaction
+      console.log("Sending transaction...");
+      const transaction = await rewardsContract.methods.redeemReward(reward.id).send({
+        from: account,
+        gas: 30000,
+      });
+  
+      console.log("Transaction successful! Receipt:", transaction);
+  
+      // Update points state
       setPoints((prev) => ({
         ...prev,
-        available: prev.available - reward.points,
+        available: prev.available - Number(reward.points),
       }));
+  
       alert("Reward redeemed successfully!");
     } catch (error) {
       console.error("Error redeeming reward:", error);
-      alert("An error occurred while redeeming the reward.");
+  
+      // Capture JSON-RPC error details
+      if (error && error.message) {
+        alert(`An error occurred: ${error.message}`);
+      } else {
+        alert("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
+  
   const handleRewardClick = (rewardId) => {
     navigate(`/reward-details/${rewardId}`);
   };
@@ -138,7 +179,6 @@ function RewardsPage() {
           <h3 className="text-lg font-semibold text-gray-800 text-center">Available Rewards For You</h3>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {rewards.map((reward, index) => {
-              console.log(`Rendering reward: ID = ${reward.id}, Name = ${reward.name}, Cost = ${reward.points}`); // Log when rendering each reward
               return (
                 <div key={`${reward.id}-${index}`} className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">
                   <img

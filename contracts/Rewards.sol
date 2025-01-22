@@ -21,8 +21,6 @@ contract Rewards {
 
     uint256 public rewardCounter;
     mapping(uint256 => Reward) public rewards;
-
-    mapping(address => uint256) public userPoints;
     mapping(address => mapping(uint256 => bool)) public rewardRedeemed;
 
     event RewardAdded(uint256 rewardId, string name, uint256 cost);
@@ -136,9 +134,12 @@ contract Rewards {
         require(reward.isActive, "Reward is inactive or does not exist");
         require(block.timestamp < reward.expiration, "Reward has expired");
         require(!rewardRedeemed[msg.sender][rewardId], "Reward already redeemed");
-        require(userPoints[msg.sender] > reward.cost, "Insufficient points");
 
-        userPoints[msg.sender] -= reward.cost;
+        uint256 userAvailablePoints = getUserAvailablePoints(msg.sender);
+        require(userAvailablePoints >= reward.cost, "Insufficient points");
+
+        // Update points in PointlyUser
+        PointlyUser(pointlyUserContract).updatePoints(msg.sender, reward.cost, false);
         rewardRedeemed[msg.sender][rewardId] = true;
 
         emit RewardRedeemed(msg.sender, rewardId);
@@ -173,9 +174,21 @@ contract Rewards {
         return redeemedRewards;
     }
 
+    // Helper function to get the user's available points from PointlyUser contract
+    function getUserAvailablePoints(address userAddress) public view returns (uint256) {
+        (, , , , , , , uint256 availablePoints, , ) = PointlyUser(pointlyUserContract).getUser(userAddress);
+        return availablePoints;
+    }
+
     // Helper function to get the user's role from PointlyUser contract
-    function getUserRole(address user) public view returns (string memory) {
-        ( , , , , , , , ,string memory role,) = PointlyUser(pointlyUserContract).getUser(user);
+    function getUserRole(address userAddress) public view returns (string memory) {
+        ( , , , , , , , ,string memory role,) = PointlyUser(pointlyUserContract).getUser(userAddress);
         return role;  // Return the role
+    }
+
+    // Points management functions for the owner
+    function addPoints(address user, uint256 points) public onlyOwner {
+        PointlyUser(pointlyUserContract).updatePoints(user, points, true);
+        emit PointsAdded(user, points);
     }
 }
