@@ -70,7 +70,7 @@ function LoginPage() {
       console.log("User details:", user);
 
       if (user.exists === true || user.exists === "true" || user.exists === 1) {
-        alert(`Welcome back! You are logged in as a ${user.tier} member.`);
+        alert(`Welcome back!`);
         sessionStorage.setItem("userAccount", userAccount);
         sessionStorage.setItem("userRole", user.role);
 

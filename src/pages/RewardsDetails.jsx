@@ -46,7 +46,7 @@ function RewardDetails() {
           if (rewardsContract && userContract && rewardIdParam) {
             await fetchRewardDetails(rewardsContract, rewardIdParam);
             await fetchUserPoints(userContract, accounts[0]);
-            await checkRedemptionStatus();
+           
           }
         } catch (error) {
           toast.error("Error initializing Web3 or MetaMask. Please try again.");
@@ -59,18 +59,7 @@ function RewardDetails() {
   }, [rewardIdParam]);
   
 
-  const checkRedemptionStatus = async () => {
-    if (contract && rewardIdParam && account) {
-      try {
-        const redeemed = await contract.methods.rewardRedeemed(account, rewardIdParam).call();
-        setIsRedeemed(redeemed);
-      } catch (error) {
-        console.error("Error checking redemption status:", error);
-        toast.error("Failed to check redemption status. Please try again.");
-      }
-    }
-  };
-  
+
 
   const fetchUserPoints = async (contract, userAccount) => {
     try {
@@ -111,12 +100,9 @@ function RewardDetails() {
     console.log("Reward ID:", rewardIdParam);
     console.log("Reward cost:", rewardInfo.cost);
     console.log("User available points:", userPoints);
-    console.log("Redemption Status: ",isRedeemed)
+    
 
-    if (isRedeemed) {
-      toast.error("You have already redeemed this reward.");
-      return;
-    }
+   
 
     try {
         setLoading(true);
@@ -141,8 +127,7 @@ function RewardDetails() {
         // Fetch updated points
         await fetchUserPoints(userContract, account);
 
-        //Set item redemption map to true
-        await contract.methods.redeemReward(rewardIdParam).send({from: account});
+       
         // Notify success
         toast.success("Reward redeemed successfully!");
         setIsRedeemed(true);
