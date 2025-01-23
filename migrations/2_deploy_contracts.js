@@ -26,7 +26,7 @@ module.exports = async function (deployer, network) {
   addresses.PointlyVendor = pointlyVendorInstance.address;
 
   // Deploy Transaction contract
-  await deployer.deploy(Transaction, pointlyUserInstance.address, pointlyVendorInstance.address);
+  await deployer.deploy(Transaction);
   const transactionInstance = await Transaction.deployed();
   addresses.Transaction = transactionInstance.address;
 
