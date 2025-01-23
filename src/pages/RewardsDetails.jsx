@@ -46,6 +46,7 @@ function RewardDetails() {
           if (rewardsContract && userContract && rewardIdParam) {
             await fetchRewardDetails(rewardsContract, rewardIdParam);
             await fetchUserPoints(userContract, accounts[0]);
+            await checkRedemptionStatus();
           }
         } catch (error) {
           toast.error("Error initializing Web3 or MetaMask. Please try again.");
@@ -56,13 +57,28 @@ function RewardDetails() {
     };
     initializeWeb3();
   }, [rewardIdParam]);
+  
+
+  const checkRedemptionStatus = async () => {
+    if (contract && rewardIdParam && account) {
+      try {
+        const redeemed = await contract.methods.rewardRedeemed(account, rewardIdParam).call();
+        setIsRedeemed(redeemed);
+      } catch (error) {
+        console.error("Error checking redemption status:", error);
+        toast.error("Failed to check redemption status. Please try again.");
+      }
+    }
+  };
+  
 
   const fetchUserPoints = async (contract, userAccount) => {
     try {
-      console.log("Fetching user points for:", userAccount);
+      console.log("Fetching user points for account:", userAccount);
       const userData = await contract.methods.getUser(userAccount).call();
-      const availablePoints = BigInt(userData[7]).toString();  // Available points
-      console.log("User available points:", availablePoints);
+      console.log("Raw data from contract:", userData);
+      const availablePoints = BigInt(userData[7]).toString();
+      console.log("Parsed available points:", availablePoints);
       setUserPoints(availablePoints);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -95,58 +111,55 @@ function RewardDetails() {
     console.log("Reward ID:", rewardIdParam);
     console.log("Reward cost:", rewardInfo.cost);
     console.log("User available points:", userPoints);
+    console.log("Redemption Status: ",isRedeemed)
+
+    if (isRedeemed) {
+      toast.error("You have already redeemed this reward.");
+      return;
+    }
 
     try {
-      setLoading(true);
+        setLoading(true);
+        
+        // Ensure the user has enough points
+        if (BigInt(userPoints) < BigInt(rewardInfo.cost)) {
+            toast.error("You do not have enough points to redeem this reward.");
+            return;
+        }
 
-      // Ensure the user has enough points
-      if (BigInt(userPoints) < BigInt(rewardInfo.cost)) {
-        toast.error("You do not have enough points to redeem this reward.");
-        return;
-      }
+        // Check contract instance
+        if (!userContract) {
+            toast.error("User contract instance is not initialized.");
+            return;
+        }
 
-      // Check contract instance
-      if (!contract) {
-        toast.error("Contract instance is not initialized.");
-        return;
-      }
+        // Deduct points
+        await userContract.methods.updatePoints(account, rewardInfo.cost, false).send({
+            from: account,
+        });
 
-      // Ensure rewardId is passed as BigInt
-      const rewardId = BigInt(rewardIdParam);
+        // Fetch updated points
+        await fetchUserPoints(userContract, account);
 
-      // Estimate gas
-      console.log("Estimating gas for redeemReward function...");
-      const estimatedGas = await contract.methods.redeemReward(rewardId).estimateGas({ from: account });
-      console.log("Estimated gas:", estimatedGas);
-
-      // Send transaction with buffer
-      console.log("Sending redemption transaction...");
-      const tx = await contract.methods.redeemReward(rewardId).send({
-        from: account,
-        gas: estimatedGas + 500000,  // Add buffer to avoid gas errors
-      });
-
-      console.log("Transaction response:", tx);
-
-      if (tx.status) {
-        setIsRedeemed(true);
+        //Set item redemption map to true
+        await contract.methods.redeemReward(rewardIdParam).send({from: account});
+        // Notify success
         toast.success("Reward redeemed successfully!");
-      } else {
-        toast.error("Transaction failed. Please try again.");
-      }
+        setIsRedeemed(true);
     } catch (error) {
-      console.error("Error during redemption:", error);
-      if (error.message.includes("revert")) {
-        toast.error("Transaction reverted. Check reward availability or user points.");
-      } else if (error.message.includes("User denied transaction signature")) {
-        toast.error("You denied the transaction.");
-      } else {
-        toast.error("An unexpected error occurred. Please try again.");
-      }
+        console.error("Error during redemption:", error);
+        if (error.message.includes("revert")) {
+            toast.error("Transaction reverted. Check reward availability or user points.");
+        } else if (error.message.includes("User denied transaction signature")) {
+            toast.error("You denied the transaction.");
+        } else {
+            toast.error("An unexpected error occurred. Please try again.");
+        }
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   const formattedExpirationDate = rewardInfo.expiration
     ? new Date(Number(rewardInfo.expiration) * 1000).toLocaleDateString()

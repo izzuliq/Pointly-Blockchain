@@ -45,7 +45,7 @@ function VendorNavbar() {
           </Link>
         </li>
         <li>
-          <Link to="/vendor-transaction" className="flex items-center space-x-2 hover:scale-105 transition-all duration-300">
+          <Link to="/vendor-transactions" className="flex items-center space-x-2 hover:scale-105 transition-all duration-300">
             <FaExchangeAlt /> {/* New icon for transaction */}
             <span className="hidden md:inline">Transaction</span>
           </Link>

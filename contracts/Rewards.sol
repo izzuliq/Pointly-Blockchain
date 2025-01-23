@@ -130,16 +130,7 @@ contract Rewards {
     }
 
     function redeemReward(uint256 rewardId) public {
-        Reward storage reward = rewards[rewardId];
-        require(reward.isActive, "Reward is inactive or does not exist");
-        require(block.timestamp < reward.expiration, "Reward has expired");
-        require(!rewardRedeemed[msg.sender][rewardId], "Reward already redeemed");
-
-        uint256 userAvailablePoints = getUserAvailablePoints(msg.sender);
-        require(userAvailablePoints >= reward.cost, "Insufficient points");
-
-        // Update points in PointlyUser
-        PointlyUser(pointlyUserContract).updatePoints(msg.sender, reward.cost, false);
+        
         rewardRedeemed[msg.sender][rewardId] = true;
 
         emit RewardRedeemed(msg.sender, rewardId);

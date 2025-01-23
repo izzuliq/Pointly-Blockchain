@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import getWeb3 from "../utils/getWeb3";  // Assuming getWeb3 handles the web3 instance creation
-import getContractInstance from "../utils/contract";  // Assuming this handles contract instantiation
+import getWeb3 from "../utils/getWeb3"; // Assuming getWeb3 handles the web3 instance creation
+import getContractInstance from "../utils/contract"; // Assuming this handles contract instantiation
 import VendorNavbar from "../components/VendorNavbar";
 
 function VendorTransaction() {
   const [account, setAccount] = useState(null);
-  const [vendorContract, setVendorContract] = useState(null);
-  const [transactionContract, setTransactionContract] = useState(null);  // Transaction contract instance
+  const [userContract, setUserContract] = useState(null); // PointlyUser contract instance
+  const [transactionContract, setTransactionContract] = useState(null); // Transaction contract instance
   const [userAddress, setUserAddress] = useState("");
   const [points, setPoints] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -21,10 +21,10 @@ function VendorTransaction() {
         const accounts = await web3.eth.getAccounts();
         setAccount(accounts[0]);
 
-        // Get vendor and transaction contract instances
-        const vendorInstance = await getContractInstance("PointlyVendor");
+        // Get user and transaction contract instances
+        const userInstance = await getContractInstance("PointlyUser");
         const transactionInstance = await getContractInstance("Transaction");
-        setVendorContract(vendorInstance);
+        setUserContract(userInstance);
         setTransactionContract(transactionInstance);
 
         setLoading(false);
@@ -48,15 +48,15 @@ function VendorTransaction() {
       setSuccessMessage("");
       setErrorMessage("");
 
-      // Ensure vendor contract and transaction contract are available
-      if (!vendorContract || !transactionContract) {
+      // Ensure user contract and transaction contract are available
+      if (!userContract || !transactionContract) {
         setErrorMessage("Contracts are not loaded.");
         return;
       }
 
-      // Add points to the user via the PointlyVendor contract
-      const result = await vendorContract.methods
-        .updateUserPoints(userAddress, points, true) // true for adding points
+      // Add points to the user via the PointlyUser contract
+      const result = await userContract.methods
+        .updatePoints(userAddress, points, true) // `true` indicates adding points
         .send({ from: account });
 
       if (result.status) {
@@ -64,17 +64,17 @@ function VendorTransaction() {
         await transactionContract.methods
           .logTransaction(
             userAddress,
-            account,  // Vendor address (assumed to be the account interacting with the contract)
+            account, // Vendor address (assumed to be the account interacting with the contract)
             points,
-            0,  // Reward ID (0 since it's just a points update)
-            "Points Update",  // Transaction type
-            true  // Success status
+            0, // Reward ID (0 since it's just a points update)
+            "Points Update", // Transaction type
+            true // Success status
           )
           .send({ from: account });
 
         setSuccessMessage(`Successfully added ${points} points to the user.`);
-        setUserAddress("");  // Clear input after success
-        setPoints(0);  // Reset points field
+        setUserAddress(""); // Clear input after success
+        setPoints(0); // Reset points field
       } else {
         setErrorMessage("Transaction failed. Please try again.");
       }
