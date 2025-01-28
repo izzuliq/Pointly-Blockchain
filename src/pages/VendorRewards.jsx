@@ -129,7 +129,7 @@ function VendorRewards() {
         <div className="mt-8">
           <h3 className="text-lg font-semibold text-gray-800 text-center">Available Rewards</h3>
           {error && <p className="text-red-500 text-center">{error}</p>}
-          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-center">
             {rewards.length > 0 ? (
               rewards.map((reward) => (
                 <div key={reward.id.toString()} className="bg-white p-4 rounded-lg shadow-xl flex flex-col items-center">

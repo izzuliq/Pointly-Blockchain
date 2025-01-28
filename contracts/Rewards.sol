@@ -21,8 +21,6 @@ contract Rewards {
 
     uint256 public rewardCounter;
     mapping(uint256 => Reward) public rewards;
-
-    mapping(address => uint256) public userPoints;
     mapping(address => mapping(uint256 => bool)) public rewardRedeemed;
 
     event RewardAdded(uint256 rewardId, string name, uint256 cost);
@@ -167,9 +165,21 @@ contract Rewards {
         return redeemedRewards;
     }
 
+    // Helper function to get the user's available points from PointlyUser contract
+    function getUserAvailablePoints(address userAddress) public view returns (uint256) {
+        (, , , , , , , uint256 availablePoints, , ) = PointlyUser(pointlyUserContract).getUser(userAddress);
+        return availablePoints;
+    }
+
     // Helper function to get the user's role from PointlyUser contract
-    function getUserRole(address user) public view returns (string memory) {
-        ( , , , , , , , ,string memory role,) = PointlyUser(pointlyUserContract).getUser(user);
+    function getUserRole(address userAddress) public view returns (string memory) {
+        ( , , , , , , , ,string memory role,) = PointlyUser(pointlyUserContract).getUser(userAddress);
         return role;  // Return the role
+    }
+
+    // Points management functions for the owner
+    function addPoints(address user, uint256 points) public onlyOwner {
+        PointlyUser(pointlyUserContract).updatePoints(user, points, true);
+        emit PointsAdded(user, points);
     }
 }

@@ -70,14 +70,16 @@ function LoginPage() {
       console.log("User details:", user);
 
       if (user.exists === true || user.exists === "true" || user.exists === 1) {
-        alert(`Welcome back!`);
+       
         sessionStorage.setItem("userAccount", userAccount);
         sessionStorage.setItem("userRole", user.role);
 
-        // Redirect based on role
+        // Handle role-based messages and redirection
         if (user.role === "user") {
+          alert(`Welcome back! You are logged in as a ${user.tier} member.`);
           navigate("/home");
         } else if (user.role === "vendor") {
+          alert(`Welcome back, our Pointly Vendor!`);
           navigate("/vendor-home");
         } else {
           alert("Unknown user role.");
@@ -91,6 +93,21 @@ function LoginPage() {
       alert("Something went wrong during login. Please try again.");
     } finally {
       setLoading(false); // Stop loading
+    }
+  };
+
+  // Function to refresh the wallet and account details
+  const refreshWallet = async () => {
+    try {
+      // Re-initialize Web3 and update account
+      const web3Instance = await getWeb3();
+      setWeb3(web3Instance);
+
+      const accounts = await web3Instance.eth.getAccounts();
+      setAccount(accounts[0]); // Update account
+    } catch (error) {
+      console.error("Error refreshing wallet:", error);
+      alert("Failed to refresh wallet. Please try again.");
     }
   };
 
@@ -113,6 +130,16 @@ function LoginPage() {
             disabled={loading} // Disable button when loading
           >
             {loading ? "Logging in..." : "Login with MetaMask"}
+          </button>
+
+          {/* Refresh Wallet Button */}
+          <button
+            type="button"
+            onClick={refreshWallet}
+            className="mt-4 px-6 py-3 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors"
+            disabled={loading}
+          >
+            Refresh Wallet
           </button>
 
           {loading && (

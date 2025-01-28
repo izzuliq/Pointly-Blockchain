@@ -56,6 +56,21 @@ function SignUpPage() {
     window.location.reload(); // Reload the page to reflect network change
   };
 
+  const handleRefreshWallet = async () => {
+    try {
+      const accounts = await web3.eth.getAccounts();
+      if (accounts.length > 0) {
+        setAccount(accounts[0]);
+        alert("Wallet connection refreshed!");
+      } else {
+        alert("No accounts found. Please connect your MetaMask wallet.");
+      }
+    } catch (error) {
+      console.error("Error refreshing wallet:", error);
+      alert("Failed to refresh wallet. Please try again.");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -146,6 +161,16 @@ function SignUpPage() {
             disabled={loading || !account}
           >
             {loading ? "Signing Up..." : "Sign Up"}
+          </button>
+
+          {/* Refresh Wallet Button */}
+          <button
+            type="button"
+            onClick={handleRefreshWallet}
+            className="px-6 py-3 bg-purple-dark text-white font-semibold rounded-lg hover:bg-purple-light mt-4"
+            disabled={loading}
+          >
+            Refresh Wallet
           </button>
 
           {loading && (
