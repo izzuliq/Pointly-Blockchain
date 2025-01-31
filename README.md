@@ -54,7 +54,7 @@ Pointly is a blockchain-based loyalty reward application designed to simplify th
 1. **Clone the Repository**:
     ```bash
     git clone https://github.com/azriy-nazariee/pointly.git
-    cd pointly
+    cd Pointly-Blockchain
     ```
 
 2. **Install Dependencies**:
